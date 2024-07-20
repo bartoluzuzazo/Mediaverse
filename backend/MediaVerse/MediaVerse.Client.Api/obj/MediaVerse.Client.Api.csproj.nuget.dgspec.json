@@ -27,7 +27,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Client.Application\\MediaVerse.Client.Application.csproj": {
+                "projectPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Client.Application\\MediaVerse.Client.Application.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -49,6 +53,10 @@
               "target": "Package",
               "version": "[8.0.7, )"
             },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
@@ -69,6 +77,204 @@
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
             },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Client.Application\\MediaVerse.Client.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Client.Application\\MediaVerse.Client.Application.csproj",
+        "projectName": "MediaVerse.Client.Application",
+        "projectPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Client.Application\\MediaVerse.Client.Application.csproj",
+        "packagesPath": "C:\\Users\\grewi\\.nuget\\packages\\",
+        "outputPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Client.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\grewi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Infrastructure\\MediaVerse.Infrastructure.csproj": {
+                "projectPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Infrastructure\\MediaVerse.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.3.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Domain\\MediaVerse.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Domain\\MediaVerse.Domain.csproj",
+        "projectName": "MediaVerse.Domain",
+        "projectPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Domain\\MediaVerse.Domain.csproj",
+        "packagesPath": "C:\\Users\\grewi\\.nuget\\packages\\",
+        "outputPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\grewi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Infrastructure\\MediaVerse.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Infrastructure\\MediaVerse.Infrastructure.csproj",
+        "projectName": "MediaVerse.Infrastructure",
+        "projectPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Infrastructure\\MediaVerse.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\grewi\\.nuget\\packages\\",
+        "outputPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\grewi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Domain\\MediaVerse.Domain.csproj": {
+                "projectPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Domain\\MediaVerse.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }

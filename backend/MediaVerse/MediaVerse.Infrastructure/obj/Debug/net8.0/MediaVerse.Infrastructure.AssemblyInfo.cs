@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MediaVerse.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7d0482e5b18105e6aab2013c28b970ee014059c0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d5f4e30c498493e5bdebeb391992d1d845a3da8e")]
 [assembly: System.Reflection.AssemblyProductAttribute("MediaVerse.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MediaVerse.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

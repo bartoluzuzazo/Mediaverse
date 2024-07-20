@@ -11,4 +11,8 @@
       <Folder Include="Repositories" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MediaVerse.Domain\MediaVerse.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="AggregatesModel" />
       <Folder Include="DomainEvents" />
       <Folder Include="Interfaces" />
       <Folder Include="SeedWork" />

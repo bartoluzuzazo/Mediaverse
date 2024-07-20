@@ -8,11 +8,17 @@
 
     <ItemGroup>
       <Folder Include="Commands" />
-      <Folder Include="Extensions" />
       <Folder Include="Helpers" />
-      <Folder Include="Mapper" />
-      <Folder Include="Queries" />
       <Folder Include="Services" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MediaVerse.Infrastructure\MediaVerse.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="MediatR" Version="12.3.0" />
     </ItemGroup>
 
 </Project>

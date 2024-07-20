@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "MediaVerse.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/MediaVerse.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MediaVerse.Domain.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "MediaVerse.Domain/1.0.0": {
+      "type": "project",
+      "path": "../MediaVerse.Domain/MediaVerse.Domain.csproj",
+      "msbuildProject": "../MediaVerse.Domain/MediaVerse.Domain.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "MediaVerse.Domain >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\grewi\\.nuget\\packages\\": {}
@@ -33,7 +52,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Domain\\MediaVerse.Domain.csproj": {
+              "projectPath": "D:\\coding\\Inżynierka\\backend\\MediaVerse\\MediaVerse.Domain\\MediaVerse.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

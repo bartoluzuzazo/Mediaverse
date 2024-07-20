@@ -1,9 +1,15 @@
+using MediaVerse.Client.Application.Extensions.MediatR;
+using MediaVerse.Client.Application.Queries.Test;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+builder.Services.RegisterMediatR(typeof(TestQuery).Assembly);
+builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
 
 var app = builder.Build();
 
@@ -20,6 +26,8 @@ var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
+
+app.MapControllers();
 
 app.MapGet("/weatherforecast", () =>
     {
