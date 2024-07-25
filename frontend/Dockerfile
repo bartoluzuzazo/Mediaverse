@@ -1,4 +1,4 @@
-FROM node:22-alpine AS build-stage
+FROM node:lts-alpine AS build-stage
 
 WORKDIR /usr/src/app
 
@@ -6,7 +6,7 @@ COPY . .
 
 RUN npm install && npm run build
 
-FROM node:22-alpine
+FROM node:lts-alpine
 
 WORKDIR /usr/src/app
 
