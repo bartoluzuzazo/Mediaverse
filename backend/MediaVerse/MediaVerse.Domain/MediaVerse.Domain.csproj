@@ -10,6 +10,12 @@
       <Folder Include="DomainEvents" />
       <Folder Include="Interfaces" />
       <Folder Include="SeedWork" />
+      <Folder Include="Specifications" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ardalis.Specification" Version="8.0.0" />
+      <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="8.0.0" />
     </ItemGroup>
 
 </Project>
