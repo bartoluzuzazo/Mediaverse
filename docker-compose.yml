@@ -1,0 +1,36 @@
+name: mediaverse
+services:
+  
+  backend:
+    restart: always
+    build:
+      context: backend/MediaVerse
+      dockerfile: MediaVerse.Client.Api/Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    environment:
+      - testdb_conn_str="User ID=postgres;Password=WeakPassword;Host=localhost;Port=5432;Database=postgres;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0"
+  
+  frontend:
+    restart: always
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173
+  
+  database:
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=WeakPassword
+    volumes:
+      - mediaverse-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5432:5432
+
+volumes:
+  mediaverse-data:
