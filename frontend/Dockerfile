@@ -21,4 +21,4 @@ USER fe_user
 
 EXPOSE 5173
 
-CMD serve -s -l 5173 dist
+ENTRYPOINT  ["serve", "-s",  "-l",  "5173",  "dist"]
