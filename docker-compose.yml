@@ -11,7 +11,7 @@ services:
     depends_on:
       - database
     environment:
-      - testdb_conn_str="User ID=postgres;Password=WeakPassword;Host=localhost;Port=5432;Database=postgres;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0"
+      - testdb_conn_str=User ID=postgres;Password=WeakPassword;Host=localhost;Port=5432;Database=postgres;Pooling=true;Min Pool Size=0;Max Pool Size=100;Connection Lifetime=0
   
   frontend:
     restart: always
