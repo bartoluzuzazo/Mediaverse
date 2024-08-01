@@ -12,12 +12,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MediaVerse.Domain\MediaVerse.Domain.csproj" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+      <ProjectReference Include="..\MediaVerse.Client.Application\MediaVerse.Client.Application.csproj" />
     </ItemGroup>
 
 </Project>
