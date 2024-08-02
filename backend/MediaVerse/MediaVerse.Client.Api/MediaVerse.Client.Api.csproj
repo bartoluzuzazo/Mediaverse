@@ -18,10 +18,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MediaVerse.Client.Application\MediaVerse.Client.Application.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Folder Include="Controllers" />
     </ItemGroup>
 
@@ -29,6 +25,10 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MediaVerse.Infrastructure\MediaVerse.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
