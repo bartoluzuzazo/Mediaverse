@@ -1,7 +1,7 @@
 using MediaVerse.Client.Application.Extensions.MediatR;
 using MediaVerse.Client.Application.Queries.Test;
 
-const string local = "localhost";
+const string defaultpolicy = "default";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -11,7 +11,7 @@ builder.Services.RegisterMediatR(typeof(TestQuery).Assembly);
 builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: local,policy =>
+    options.AddPolicy(name: defaultpolicy,policy =>
     {
         policy.WithOrigins(builder.Configuration["CORS:http"], builder.Configuration["CORS:https"])
             .AllowAnyHeader()
@@ -32,7 +32,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-app.UseCors(local);
+app.UseCors(defaultpolicy);
 
 app.MapControllers();
 
