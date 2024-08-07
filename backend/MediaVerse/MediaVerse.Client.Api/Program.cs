@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: local,policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+        policy.WithOrigins(builder.Configuration["CORS:http"], builder.Configuration["CORS:https"])
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
