@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MediaVerse.Client.Application.Commands.UserCommands;
+using MediaVerse.Client.Application.Queries.UserQueries;
 using MediaVerse.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,14 +23,20 @@ public class UserController : ControllerBase
         var response = await _mediator.Send(request);
         if (response.Exception is not null)
         {
-            return response.Exception is ConflictException ? Conflict(response.Exception) : Problem(response.Exception.ToString());
+            return response.Exception is ConflictException ? Conflict() : Problem(response.Exception.Message);
         }
-        return CreatedAtAction(nameof(LoginUser), response);
+        return CreatedAtAction(nameof(LoginUser), response.Data);
     }
     
     [HttpPost("login")]
-    public async Task<IActionResult> LoginUser()
+    public async Task<IActionResult> LoginUser(LoginUserQuery request)
     {
-        return Ok();
+        var response = await _mediator.Send(request);
+        if (response.Exception is not null)
+        {
+            return response.Exception is NotFoundException ? NotFound() : Problem(response.Exception.Message);
+        }
+
+        return Ok(response.Data);
     }
 }

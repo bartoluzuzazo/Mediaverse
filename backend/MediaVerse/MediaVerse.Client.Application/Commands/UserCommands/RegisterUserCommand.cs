@@ -9,14 +9,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MediaVerse.Client.Application.Commands.UserCommands;
 
-public record RegisterUserCommand : IRequest<CommandBaseResponse<UserRegisterResponse>>
+public record RegisterUserCommand : IRequest<BaseResponse<UserRegisterResponse>>
 {
     public string Username { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
 }
 
-public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, CommandBaseResponse<UserRegisterResponse>>
+public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, BaseResponse<UserRegisterResponse>>
 {
     private readonly IRepository<User> _userRepository;
 
@@ -25,7 +25,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, C
         _userRepository = userRepository;
     }
     
-    public async Task<CommandBaseResponse<UserRegisterResponse>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<UserRegisterResponse>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         var passwordHasher = new PasswordHasher<User>();
         var hashedPassword = passwordHasher.HashPassword(new User(), request.Password);
@@ -33,7 +33,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, C
         var spec = new UserExistsSpec(request.Username, request.Email);
         var userExists = await _userRepository.AnyAsync(spec, cancellationToken);
 
-        if (userExists) return new CommandBaseResponse<UserRegisterResponse>(new ConflictException("User already exists"));
+        if (userExists) return new BaseResponse<UserRegisterResponse>(new ConflictException("User already exists"));
         
         var user = new User()
         {
@@ -52,6 +52,6 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, C
             Username = user.Username,
             PictureId = user.ProfilePictureId
         };
-        return new CommandBaseResponse<UserRegisterResponse>(response);
+        return new BaseResponse<UserRegisterResponse>(response);
     }
 }

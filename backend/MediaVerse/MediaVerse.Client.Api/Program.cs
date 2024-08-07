@@ -39,7 +39,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseCors(defaultpolicy);
-
 app.MapControllers();
+app.UsePathBase("/api");
 
 app.Run();

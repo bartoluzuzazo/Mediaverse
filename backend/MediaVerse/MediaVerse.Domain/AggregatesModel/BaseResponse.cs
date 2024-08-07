@@ -1,13 +1,13 @@
 ﻿namespace MediaVerse.Domain.AggregatesModel;
 
-public class CommandBaseResponse<T>
+public class BaseResponse<T>
 {
-    public CommandBaseResponse(T? data)
+    public BaseResponse(T data)
     {
         Data = data;
     }
 
-    public CommandBaseResponse(Exception? exception)
+    public BaseResponse(Exception exception)
     {
         Exception = exception;
     }
