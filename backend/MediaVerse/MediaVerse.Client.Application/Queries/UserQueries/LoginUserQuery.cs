@@ -44,13 +44,15 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, BaseRespons
         if (!isVerified) return new BaseResponse<UserLoginResponse>(new NotFoundException());
 
         var tokenHandler = new JwtSecurityTokenHandler();
-
+        
         var claims = new List<Claim>()
         {
-            new ("UserId", user.Id.ToString()),
-            new ("Username", user.Username),
-            new ("Email", user.Email),
+            new (ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new (ClaimTypes.Name, user.Username),
+            new (ClaimTypes.Email, user.Email),
         };
+
+        user.Roles.Select(role => new Claim(ClaimTypes.Role, role.Name)).ToList().ForEach(claim => claims.Add(claim));
         
         var tokenDescription = new SecurityTokenDescriptor
         {

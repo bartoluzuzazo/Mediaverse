@@ -7,6 +7,6 @@ public class GetUserSpecification : Specification<User>
 {
     public GetUserSpecification(string email)
     {
-        Query.Where(u => u.Email == email);
+        Query.Where(u => u.Email == email).Include(u => u.Roles);
     }
 }

@@ -1,5 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.Queries.Test;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace MediaVerse.Client.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("test")]
+        [HttpGet("test"), Authorize(Policy = "Admin")]
         public async Task<IActionResult> Test()
         {
             return Ok(_mediator.Send(new TestQuery()));
