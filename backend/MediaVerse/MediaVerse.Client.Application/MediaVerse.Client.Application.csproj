@@ -8,17 +8,16 @@
 
     <ItemGroup>
       <Folder Include="Helpers" />
-      <Folder Include="Services" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\MediaVerse.Infrastructure\MediaVerse.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="MediatR" Version="12.3.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MediaVerse.Domain\MediaVerse.Domain.csproj" />
     </ItemGroup>
 
 </Project>

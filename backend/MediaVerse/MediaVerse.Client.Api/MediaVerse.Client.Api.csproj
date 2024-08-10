@@ -27,4 +27,8 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MediaVerse.Infrastructure\MediaVerse.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
