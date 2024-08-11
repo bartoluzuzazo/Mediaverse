@@ -1,9 +1,11 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using MediaVerse.Client.Application.Extensions.MediatR;
 using MediaVerse.Client.Application.Queries.Test;
 using MediaVerse.Domain.Interfaces;
 using MediaVerse.Infrastructure.Database;
 using MediaVerse.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,7 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+});
 builder.Services.AddDbContext<Context>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("testdb_conn_str")));
 builder.Services.RegisterMediatR(typeof(TestQuery).Assembly);
 builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
@@ -64,3 +69,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.Run();
+
+
+public partial class SlugifyParameterTransformer : IOutboundParameterTransformer
+{
+    public string? TransformOutbound(object value)
+    {
+        return value == null ? null : MyRegex().Replace(value.ToString(), "$1-$2").ToLower();
+    }
+
+    [GeneratedRegex("([a-z])([A-Z])")]
+    private static partial Regex MyRegex();
+}
