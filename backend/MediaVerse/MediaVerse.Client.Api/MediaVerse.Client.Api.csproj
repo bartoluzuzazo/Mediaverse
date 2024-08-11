@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
+      <ProjectReference Include="..\MediaVerse.Client.Application\MediaVerse.Client.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>
