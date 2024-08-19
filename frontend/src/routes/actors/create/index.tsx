@@ -3,6 +3,7 @@ import { Control, Controller, SubmitHandler, useForm } from 'react-hook-form'
 import FormButton from '../../../common/components/form/button'
 import { useMemo, useRef } from 'react'
 import defaultImgUrl from '/person-icon.png'
+import { IoIosWarning } from 'react-icons/io'
 
 interface CreateAuthorCommand {
   name: string
@@ -13,8 +14,13 @@ interface CreateAuthorCommand {
 
 export const Route = createFileRoute('/actors/create/')({
   component: () => {
-    const { register, handleSubmit, watch, control } =
-      useForm<CreateAuthorCommand>()
+    const {
+      register,
+      handleSubmit,
+      watch,
+      control,
+      formState: { errors },
+    } = useForm<CreateAuthorCommand>()
     const file = watch('profilePicture')
     const fileInputRef = useRef(null)
 
@@ -71,32 +77,49 @@ export const Route = createFileRoute('/actors/create/')({
             <label>
               Name
               <input
-                {...register('name')}
+                {...register('name', { required: 'Name is required' })}
                 className="block h-8 w-full rounded-sm border-2 border-slate-500"
                 type="text"
               />
             </label>
+            {errors.name && (
+              <div className="text-red-700">
+                <IoIosWarning /> {errors.name.message}
+              </div>
+            )}
           </div>
 
           <div className="mb-2 block">
             <label>
               Surname
               <input
-                {...register('surname')}
+                {...register('surname', { required: 'Surname is required' })}
                 className="block h-8 w-full rounded-sm border-2 border-slate-500"
                 type="text"
               />
             </label>
+            {errors.surname && (
+              <div className="text-red-700">
+                <IoIosWarning />
+                {errors.surname.message}
+              </div>
+            )}
           </div>
 
           <div className="mb-2 block">
             <label>
               Bio
               <textarea
-                {...register('bio')}
+                {...register('bio', { required: 'Bio is required' })}
                 className="block w-full rounded-sm border-2 border-slate-500"
               />
             </label>
+            {errors.bio && (
+              <div className="text-red-700">
+                <IoIosWarning className="inline" />
+                {errors.bio.message}
+              </div>
+            )}
           </div>
 
           <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
