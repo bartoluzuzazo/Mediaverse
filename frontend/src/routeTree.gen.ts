@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ActorsCreateIndexImport } from './routes/actors/create/index'
+import { Route as ActorsComponentsAuthorFormImport } from './routes/actors/components/AuthorForm'
 
 // Create Virtual Routes
 
@@ -31,6 +32,13 @@ const ActorsCreateIndexRoute = ActorsCreateIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ActorsComponentsAuthorFormRoute = ActorsComponentsAuthorFormImport.update(
+  {
+    path: '/actors/components/AuthorForm',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -40,6 +48,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/actors/components/AuthorForm': {
+      id: '/actors/components/AuthorForm'
+      path: '/actors/components/AuthorForm'
+      fullPath: '/actors/components/AuthorForm'
+      preLoaderRoute: typeof ActorsComponentsAuthorFormImport
       parentRoute: typeof rootRoute
     }
     '/actors/create/': {
@@ -56,6 +71,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  ActorsComponentsAuthorFormRoute,
   ActorsCreateIndexRoute,
 })
 
@@ -68,11 +84,15 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/actors/components/AuthorForm",
         "/actors/create/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/actors/components/AuthorForm": {
+      "filePath": "actors/components/AuthorForm.tsx"
     },
     "/actors/create/": {
       "filePath": "actors/create/index.tsx"

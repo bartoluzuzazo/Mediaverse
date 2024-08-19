@@ -24,6 +24,7 @@ public class AuthorsController : ControllerBase
         return Created(nameof(GetAuthor), new { Id = response.Data });
     }
 
+    [HttpGet]
     public async Task<IActionResult> GetAuthor()
     {
         throw new NotImplementedException();
