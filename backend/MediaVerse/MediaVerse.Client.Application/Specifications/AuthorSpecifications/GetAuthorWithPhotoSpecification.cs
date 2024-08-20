@@ -1,8 +1,7 @@
 using Ardalis.Specification;
 using MediaVerse.Domain.Entities;
-using MediaVerse.Domain.Specifications.RoleSpecifications;
 
-namespace MediaVerse.Domain.Specifications.AuthorSpecifications;
+namespace MediaVerse.Client.Application.Specifications.AuthorSpecifications;
 
 public class GetAuthorWithPhotoSpecification : Specification<Author>
 {

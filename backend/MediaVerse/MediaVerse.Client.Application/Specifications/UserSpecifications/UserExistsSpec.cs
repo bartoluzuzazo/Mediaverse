@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
 using MediaVerse.Domain.Entities;
 
-namespace MediaVerse.Domain.Specifications.UserSpecifications;
+namespace MediaVerse.Client.Application.Specifications.UserSpecifications;
 
 public class UserExistsSpec : Specification<User>
 {

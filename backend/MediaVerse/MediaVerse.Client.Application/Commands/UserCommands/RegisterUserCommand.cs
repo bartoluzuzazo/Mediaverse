@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using MediaVerse.Client.Application.DTOs.UserDTOs;
+using MediaVerse.Client.Application.Specifications.RoleSpecifications;
+using MediaVerse.Client.Application.Specifications.UserSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
-using MediaVerse.Domain.Specifications.RoleSpecifications;
-using MediaVerse.Domain.Specifications.UserSpecifications;
 using Microsoft.AspNetCore.Identity;
 
 namespace MediaVerse.Client.Application.Commands.UserCommands;

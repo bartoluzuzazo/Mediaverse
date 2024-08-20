@@ -1,10 +1,10 @@
 using MediatR;
 using MediaVerse.Client.Application.DTOs.AuthorDTOs;
+using MediaVerse.Client.Application.Specifications.AuthorSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
-using MediaVerse.Domain.Specifications.AuthorSpecifications;
 using Microsoft.AspNetCore.Http;
 
 namespace MediaVerse.Client.Application.Queries.AuthorQueries;
