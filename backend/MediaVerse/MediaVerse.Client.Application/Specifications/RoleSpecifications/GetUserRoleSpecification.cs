@@ -1,7 +1,7 @@
 using Ardalis.Specification;
 using MediaVerse.Domain.Entities;
 
-namespace MediaVerse.Domain.Specifications.RoleSpecifications;
+namespace MediaVerse.Client.Application.Specifications.RoleSpecifications;
 
 public class GetUserRoleSpecification : Specification<Role>
 {

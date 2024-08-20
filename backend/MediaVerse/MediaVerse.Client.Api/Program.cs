@@ -1,7 +1,7 @@
 using System.Text;
-using System.Text.RegularExpressions;
 using MediaVerse.Client.Application.Extensions.MediatR;
 using MediaVerse.Client.Application.Queries.Test;
+using MediaVerse.Client.Application.Services.Transformer;
 using MediaVerse.Domain.Interfaces;
 using MediaVerse.Infrastructure.Database;
 using MediaVerse.Infrastructure.Repositories;
@@ -69,15 +69,3 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.Run();
-
-
-public partial class SlugifyParameterTransformer : IOutboundParameterTransformer
-{
-    public string? TransformOutbound(object value)
-    {
-        return value == null ? null : MyRegex().Replace(value.ToString(), "$1-$2").ToLower();
-    }
-
-    [GeneratedRegex("([a-z])([A-Z])")]
-    private static partial Regex MyRegex();
-}
