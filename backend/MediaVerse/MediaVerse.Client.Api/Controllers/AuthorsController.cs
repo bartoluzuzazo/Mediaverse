@@ -1,5 +1,7 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.AuthorCommands;
+using MediaVerse.Client.Application.Queries.AuthorQueries;
+using MediaVerse.Domain.Exceptions;
 
 namespace MediaVerse.Client.Api.Controllers;
 
@@ -24,10 +26,32 @@ public class AuthorsController : ControllerBase
         return Created(nameof(GetAuthor), new { Id = response.Data });
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAuthor()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAuthor(Guid id)
     {
-        throw new NotImplementedException();
+        var query = new GetAuthorQuery()
+        {
+            Id = id
+        };
+        var response = await _mediator.Send(query);
+        if (response.Exception is NotFoundException)
+        {
+            return NotFound();
+        }
+
+        return Ok(response.Data);
     }
-    
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> PatchAuthor(Guid id, [FromForm] UpdateAuthorCommand command)
+    {
+        command.Id = id;
+        var response = await _mediator.Send(command);
+        if (response.Exception is NotFoundException)
+        {
+            return NotFound();
+        }
+
+        return Ok();
+    }
 }

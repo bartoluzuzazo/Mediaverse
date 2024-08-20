@@ -6,22 +6,27 @@ type Props<T extends FieldValues> = {
   control: UseFormReturn<T>['control']
   name: keyof T
   file: File
+  previousImageSrc?: string
 }
 
 const ProfilePicker = <T extends FieldValues>({
   control,
   name,
   file,
+  previousImageSrc,
 }: Props<T>) => {
-  const fileInputRef = useRef(null)
+  console.log(previousImageSrc)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const imageSrc = useMemo(() => {
     return file && URL.createObjectURL(file)
   }, [file])
+  const previmage =
+    previousImageSrc && 'data:image/*;base64,' + previousImageSrc
   return (
     <div className="relative w-40 md:w-52">
       <img
-        src={imageSrc || defaultImgUrl}
+        src={imageSrc || previmage || defaultImgUrl}
         className="-mt-16 aspect-square w-52 rounded-full border-4 border-white bg-slate-300 object-cover md:w-60"
         alt="profile picture"
       />
