@@ -1,22 +1,23 @@
-import { Controller, FieldValues, UseFormReturn } from 'react-hook-form'
+import { Controller, FieldValues, Path, UseFormReturn } from 'react-hook-form'
 import { useMemo, useRef } from 'react'
 import defaultImgUrl from '/person-icon.png'
 
 type Props<T extends FieldValues> = {
   control: UseFormReturn<T>['control']
-  name: keyof T
-  file: File
+  name: Path<T>
+  watch: UseFormReturn<T>['watch']
   previousImageSrc?: string
 }
 
 const ProfilePicker = <T extends FieldValues>({
   control,
   name,
-  file,
+  watch,
   previousImageSrc,
 }: Props<T>) => {
   console.log(previousImageSrc)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const file = watch(name)
 
   const imageSrc = useMemo(() => {
     return file && URL.createObjectURL(file)
@@ -27,14 +28,14 @@ const ProfilePicker = <T extends FieldValues>({
     <div className="relative w-40 md:w-52">
       <img
         src={imageSrc || previmage || defaultImgUrl}
-        className="-mt-16 aspect-square w-52 rounded-full border-4 border-white bg-slate-300 object-cover md:w-60"
+        className="-mt-16 aspect-square w-52 rounded-full border-4 border-white bg-slate-300 object-cover md:-mt-24 md:w-60"
         alt="profile picture"
       />
 
       <div className="absolute inset-0 flex items-center">
         <Controller
           control={control}
-          name={name as never}
+          name={name}
           render={({ field: { value: _value, onChange, ...field } }) => {
             return (
               <>

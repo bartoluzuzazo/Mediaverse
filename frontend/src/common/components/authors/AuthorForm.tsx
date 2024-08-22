@@ -33,7 +33,6 @@ const AuthorForm = ({ author }: Props) => {
         }
       : undefined,
   })
-  const file = watch('profilePicture')
 
   const navigate = useNavigate()
 
@@ -41,17 +40,17 @@ const AuthorForm = ({ author }: Props) => {
     if (author == null) {
       console.log('author null')
       const response = await AuthorService.postAuthor(data)
-      const id = response.data
-      await AuthorService.patchAuthor(data, id)
+      const id = response.data.id
+      await navigate({ to: `/authors/${id}` })
     } else {
       console.log('author not null')
       await AuthorService.patchAuthor(data, author.id)
-      navigate({ to: `/actors/${author.id}` })
+      await navigate({ to: `/actors/${author.id}` })
     }
   }
   return (
     <>
-      <div className="-mx-[calc(50vw-50%)] h-20 bg-violet-800"></div>
+      <div className="-mx-[calc(50vw-50%)] h-20 bg-violet-800 md:h-32"></div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -61,7 +60,7 @@ const AuthorForm = ({ author }: Props) => {
           <ProfilePicker<AuthorFormData>
             control={control}
             name={'profilePicture'}
-            file={file}
+            watch={watch}
             previousImageSrc={author?.base64Picture}
           />
           <div className="mb-2 block">
@@ -69,7 +68,7 @@ const AuthorForm = ({ author }: Props) => {
               Name
               <input
                 {...register('name', { required: 'Name is required' })}
-                className="block h-8 w-full rounded-sm border-2 border-slate-500"
+                className="block w-full rounded-md border-2 border-slate-500 p-1"
                 type="text"
               />
             </label>
@@ -85,7 +84,7 @@ const AuthorForm = ({ author }: Props) => {
               Surname
               <input
                 {...register('surname', { required: 'Surname is required' })}
-                className="block h-8 w-full rounded-sm border-2 border-slate-500"
+                className="block w-full rounded-md border-2 border-slate-500 p-1"
                 type="text"
               />
             </label>
@@ -104,7 +103,7 @@ const AuthorForm = ({ author }: Props) => {
               Bio
               <textarea
                 {...register('bio', { required: 'Bio is required' })}
-                className="block w-full rounded-sm border-2 border-slate-500"
+                className="block w-full rounded-md border-2 border-slate-500 p-1"
                 rows={20}
               />
             </label>
