@@ -14,7 +14,7 @@ public record UpdateAuthorCommand : IRequest<BaseResponse<Guid>>
     public string? Name { get; set; }
     public string? Surname { get; set; }
     public string? Bio { get; set; }
-    public IFormFile? ProfilePicture { get; set; }
+    public string? ProfilePicture { get; set; }
 }
 
 public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, BaseResponse<Guid>>
@@ -42,12 +42,7 @@ public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, B
         author.Surname = request.Surname ?? author.Surname;
         if (request.ProfilePicture is not null)
         {
-            byte[] photoData;
-            using (var memoryStream = new MemoryStream())
-            {
-                await request.ProfilePicture.CopyToAsync(memoryStream, cancellationToken);
-                photoData = memoryStream.ToArray();
-            }
+            byte[] photoData = Convert.FromBase64String(request.ProfilePicture);
 
             var profilePicture = new ProfilePicture()
             {

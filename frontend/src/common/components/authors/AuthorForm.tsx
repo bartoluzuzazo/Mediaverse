@@ -11,10 +11,11 @@ type Props = {
 }
 
 type AuthorFormData = {
+  id?: string
   name: string
   surname: string
   bio: string
-  profilePicture: File
+  profilePicture: string
 }
 const AuthorForm = ({ author }: Props) => {
   console.log(author)
@@ -27,6 +28,7 @@ const AuthorForm = ({ author }: Props) => {
   } = useForm<AuthorFormData>({
     defaultValues: author
       ? {
+          id: author.id,
           name: author.name,
           surname: author.surname,
           bio: author.bio,
@@ -45,7 +47,7 @@ const AuthorForm = ({ author }: Props) => {
     } else {
       console.log('author not null')
       await AuthorService.patchAuthor(data, author.id)
-      await navigate({ to: `/actors/${author.id}` })
+      await navigate({ to: `/authors/${author.id}` })
     }
   }
   return (
@@ -61,7 +63,7 @@ const AuthorForm = ({ author }: Props) => {
             control={control}
             name={'profilePicture'}
             watch={watch}
-            previousImageSrc={author?.base64Picture}
+            previousImageSrc={author?.profilePicture}
           />
           <div className="mb-2 block">
             <label>

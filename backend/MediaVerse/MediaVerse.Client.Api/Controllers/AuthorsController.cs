@@ -19,7 +19,7 @@ public class AuthorsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAuthor([FromForm] CreateAuthorCommand createAuthorCommand)
+    public async Task<IActionResult> CreateAuthor(CreateAuthorCommand createAuthorCommand)
     {
         var response = await _mediator.Send(createAuthorCommand);
 
@@ -43,7 +43,7 @@ public class AuthorsController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> PatchAuthor(Guid id, [FromForm] UpdateAuthorCommand command)
+    public async Task<IActionResult> PatchAuthor(Guid id, UpdateAuthorCommand command)
     {
         command.Id = id;
         var response = await _mediator.Send(command);

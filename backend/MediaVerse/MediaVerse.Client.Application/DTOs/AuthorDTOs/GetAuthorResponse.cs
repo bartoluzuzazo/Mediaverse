@@ -9,6 +9,6 @@ public class GetAuthorResponse
     public string Surname { get; set; }
     public string Bio { get; set; }
 
-    public string Base64Picture { get; set; }
+    public string ProfilePicture { get; set; }
 
 }

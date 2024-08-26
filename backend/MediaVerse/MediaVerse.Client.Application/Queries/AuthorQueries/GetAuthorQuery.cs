@@ -40,7 +40,7 @@ public class GetAuthorQueryHandler : IRequestHandler<GetAuthorQuery, BaseRespons
             Bio = author.Bio,
             Name = author.Name,
             Surname = author.Surname,
-            Base64Picture = Convert.ToBase64String(author.ProfilePicture.Picture),
+            ProfilePicture = Convert.ToBase64String(author.ProfilePicture.Picture),
         };
         return new BaseResponse<GetAuthorResponse>(authorResponse);
     }

@@ -11,7 +11,7 @@ public record CreateAuthorCommand : IRequest<BaseResponse<Guid>>
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Bio { get; set; }
-    public IFormFile ProfilePicture { get; set; }
+    public string ProfilePicture { get; set; }
 }
 
 
@@ -28,12 +28,7 @@ public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, B
 
     public async Task<BaseResponse<Guid>> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
     {
-        byte[] photoData;
-        using (var memoryStream = new MemoryStream())
-        {
-            await request.ProfilePicture.CopyToAsync(memoryStream, cancellationToken);
-            photoData = memoryStream.ToArray();
-        }
+        byte[] photoData = Convert.FromBase64String(request.ProfilePicture);
 
         var profilePicture = new ProfilePicture()
         {

@@ -1,5 +1,5 @@
 import { Controller, FieldValues, Path, UseFormReturn } from 'react-hook-form'
-import { useMemo, useRef } from 'react'
+import { useRef } from 'react'
 import defaultImgUrl from '/person-icon.png'
 
 type Props<T extends FieldValues> = {
@@ -17,17 +17,15 @@ const ProfilePicker = <T extends FieldValues>({
 }: Props<T>) => {
   console.log(previousImageSrc)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const file = watch(name)
+  const image = watch(name)
 
-  const imageSrc = useMemo(() => {
-    return file && URL.createObjectURL(file)
-  }, [file])
-  const previmage =
+  const prevImage =
     previousImageSrc && 'data:image/*;base64,' + previousImageSrc
+  const curImage = image && 'data:image/*;base64,' + image
   return (
     <div className="relative w-40 md:w-52">
       <img
-        src={imageSrc || previmage || defaultImgUrl}
+        src={curImage || prevImage || defaultImgUrl}
         className="-mt-16 aspect-square w-52 rounded-full border-4 border-white bg-slate-300 object-cover md:-mt-24 md:w-60"
         alt="profile picture"
       />
@@ -42,8 +40,19 @@ const ProfilePicker = <T extends FieldValues>({
                 <input
                   className="hidden"
                   {...field}
-                  onChange={(event) => {
-                    onChange(event.target.files![0])
+                  onChange={async (event) => {
+                    const promise = new Promise((resolve) => {
+                      const reader = new FileReader()
+                      reader.readAsDataURL(event.target.files![0])
+                      reader.onload = () => {
+                        const result = reader
+                          .result!.toString()
+                          .split('base64,')[1]
+                        console.log(result)
+                        resolve(result)
+                      }
+                    })
+                    onChange(await promise)
                   }}
                   type={'file'}
                   ref={fileInputRef}

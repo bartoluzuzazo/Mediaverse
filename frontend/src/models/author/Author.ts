@@ -3,5 +3,5 @@ export interface Author {
   name: string
   surname: string
   bio: string
-  base64Picture: string
+  profilePicture: string
 }
