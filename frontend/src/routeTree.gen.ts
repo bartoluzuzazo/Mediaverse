@@ -13,6 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthorsIdImport } from './routes/authors/$id'
+import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
+import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
 
 // Create Virtual Routes
 
@@ -25,6 +28,21 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const AuthorsIdRoute = AuthorsIdImport.update({
+  path: '/authors/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthorsCreateIndexRoute = AuthorsCreateIndexImport.update({
+  path: '/authors/create/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthorsEditIdRoute = AuthorsEditIdImport.update({
+  path: '/authors/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -36,12 +54,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/authors/$id': {
+      id: '/authors/$id'
+      path: '/authors/$id'
+      fullPath: '/authors/$id'
+      preLoaderRoute: typeof AuthorsIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/authors/edit/$id': {
+      id: '/authors/edit/$id'
+      path: '/authors/edit/$id'
+      fullPath: '/authors/edit/$id'
+      preLoaderRoute: typeof AuthorsEditIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/authors/create/': {
+      id: '/authors/create/'
+      path: '/authors/create'
+      fullPath: '/authors/create'
+      preLoaderRoute: typeof AuthorsCreateIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexLazyRoute })
+export const routeTree = rootRoute.addChildren({
+  IndexLazyRoute,
+  AuthorsIdRoute,
+  AuthorsEditIdRoute,
+  AuthorsCreateIndexRoute,
+})
 
 /* prettier-ignore-end */
 
@@ -51,11 +95,23 @@ export const routeTree = rootRoute.addChildren({ IndexLazyRoute })
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/authors/$id",
+        "/authors/edit/$id",
+        "/authors/create/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/authors/$id": {
+      "filePath": "authors/$id.tsx"
+    },
+    "/authors/edit/$id": {
+      "filePath": "authors/edit/$id.tsx"
+    },
+    "/authors/create/": {
+      "filePath": "authors/create/index.tsx"
     }
   }
 }
