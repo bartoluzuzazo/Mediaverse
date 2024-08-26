@@ -23,15 +23,12 @@ const ImagePicker = <T extends FieldValues>({
               className="hidden"
               {...field}
               onChange={async (event) => {
-                const promise = new Promise((resolve) => {
-                  const reader = new FileReader()
-                  reader.readAsDataURL(event.target.files![0])
-                  reader.onload = () => {
-                    const result = reader.result!.toString().split('base64,')[1]
-                    resolve(result)
-                  }
-                })
-                onChange(await promise)
+                const reader = new FileReader()
+                reader.readAsDataURL(event.target.files![0])
+                reader.onload = () => {
+                  const result = reader.result!.toString().split('base64,')[1]
+                  onChange(result)
+                }
               }}
               type={'file'}
               ref={fileInputRef}
