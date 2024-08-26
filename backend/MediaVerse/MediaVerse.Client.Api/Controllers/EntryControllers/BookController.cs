@@ -3,27 +3,19 @@ using MediaVerse.Client.Application.Commands.EntryCommands;
 using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.ValueObjects.Enums;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediaVerse.Client.Api.Controllers;
+namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 
 [Route("[controller]")]
 [ApiController]
 // [Authorize(Policy = "Admin")]
-public class BookController : ControllerBase
+public class BookController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public BookController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-    
     [HttpPost]
     public async Task<IActionResult> AddBook(AddBookCommand request)
     {
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
         if (response.Exception is not null) return Problem(response.Exception.Message);
         return CreatedAtAction(nameof(GetBook), response.Data);
     }
@@ -32,7 +24,7 @@ public class BookController : ControllerBase
     public async Task<IActionResult> GetBook(Guid id)
     {
         var request = new GetBookQuery(id);
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
         if (response.Exception is not null)
         {
             return response.Exception is NotFoundException ? NotFound() : Problem(response.Exception.Message);
@@ -45,7 +37,7 @@ public class BookController : ControllerBase
     {
         
         var request = new GetBookPageQuery(page, size, order, direction);
-        var response = await _mediator.Send(request);
+        var response = await mediator.Send(request);
         return Ok(response.Data);
     }
 }

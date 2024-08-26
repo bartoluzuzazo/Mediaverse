@@ -1,32 +1,29 @@
 using System.Text;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
-public record AddBookCommand : IRequest<BaseResponse<AddEntryResponse>>
+public record AddMovieCommand : IRequest<BaseResponse<AddEntryResponse>>
 {
     public string Name { get; set; }
     public string Description { get; set; }
     public DateTime Release { get; set; }
     public string CoverPhoto { get; set; }
-    public string Isbn { get; set; }
     public string Synopsis { get; set; }
     public List<Guid> GenreIds { get; set; }
 }
 
-public class AddBookCommandHandler(
-    IRepository<Book> bookRepository,
+public class AddMovieCommandHandler(
+    IRepository<Movie> movieRepository,
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> photoRepository,
-    IRepository<BookGenre> bookGenreRepository)
-    : IRequestHandler<AddBookCommand, BaseResponse<AddEntryResponse>>
+    IRepository<CinematicGenre> cinematicGenreRepository) : IRequestHandler<AddMovieCommand, BaseResponse<AddEntryResponse>>
 {
-    public async Task<BaseResponse<AddEntryResponse>> Handle(AddBookCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<AddEntryResponse>> Handle(AddMovieCommand request, CancellationToken cancellationToken)
     {
         var photo = new CoverPhoto()
         {
@@ -43,24 +40,23 @@ public class AddBookCommandHandler(
             CoverPhotoId = photo.Id
         };
         
-        var book = new Book()
+        var movie = new Movie()
         {
             Id = entry.Id,
-            Isbn = request.Isbn,
             Synopsis = request.Synopsis,
-            BookGenres = new List<BookGenre>()
+            CinematicGenres = new List<CinematicGenre>()
         };
         
         var genres = request.GenreIds.Select(async id =>
         {
-            var genre = await bookGenreRepository.GetByIdAsync(id, cancellationToken);
+            var genre = await cinematicGenreRepository.GetByIdAsync(id, cancellationToken);
             return genre;
         }).ToList();
         
         foreach (var genre in genres)
         {
             var awaited = await genre;
-            if (awaited is not null) book.BookGenres.Add(awaited);
+            if (awaited is not null) movie.CinematicGenres.Add(awaited);
         }
 
         var response = new AddEntryResponse()
@@ -71,7 +67,7 @@ public class AddBookCommandHandler(
 
         await photoRepository.AddAsync(photo, cancellationToken);
         await entryRepository.AddAsync(entry, cancellationToken);
-        await bookRepository.AddAsync(book, cancellationToken);
+        await movieRepository.AddAsync(movie, cancellationToken);
         
         return new BaseResponse<AddEntryResponse>(response);
     }
