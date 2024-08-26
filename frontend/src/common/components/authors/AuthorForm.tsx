@@ -18,13 +18,12 @@ type AuthorFormData = {
   profilePicture: string
 }
 const AuthorForm = ({ author }: Props) => {
-  console.log(author)
   const {
     register,
     handleSubmit,
     watch,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<AuthorFormData>({
     defaultValues: author
       ? {
@@ -40,12 +39,10 @@ const AuthorForm = ({ author }: Props) => {
 
   const onSubmit: SubmitHandler<AuthorFormData> = async (data) => {
     if (author == null) {
-      console.log('author null')
       const response = await AuthorService.postAuthor(data)
       const id = response.data.id
       await navigate({ to: `/authors/${id}` })
     } else {
-      console.log('author not null')
       await AuthorService.patchAuthor(data, author.id)
       await navigate({ to: `/authors/${author.id}` })
     }
@@ -118,7 +115,7 @@ const AuthorForm = ({ author }: Props) => {
           </div>
 
           <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
-            Submit
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </FormButton>
         </div>
       </form>

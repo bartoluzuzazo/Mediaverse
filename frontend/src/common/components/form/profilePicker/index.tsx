@@ -1,6 +1,6 @@
-import { Controller, FieldValues, Path, UseFormReturn } from 'react-hook-form'
-import { useRef } from 'react'
+import { FieldValues, Path, UseFormReturn } from 'react-hook-form'
 import defaultImgUrl from '/person-icon.png'
+import ImagePicker from '../imagePicker'
 
 type Props<T extends FieldValues> = {
   control: UseFormReturn<T>['control']
@@ -15,8 +15,6 @@ const ProfilePicker = <T extends FieldValues>({
   watch,
   previousImageSrc,
 }: Props<T>) => {
-  console.log(previousImageSrc)
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const image = watch(name)
 
   const prevImage =
@@ -31,42 +29,18 @@ const ProfilePicker = <T extends FieldValues>({
       />
 
       <div className="absolute inset-0 flex items-center">
-        <Controller
+        <ImagePicker<T>
           control={control}
           name={name}
-          render={({ field: { value: _value, onChange, ...field } }) => {
+          makeButton={(onClick) => {
             return (
-              <>
-                <input
-                  className="hidden"
-                  {...field}
-                  onChange={async (event) => {
-                    const promise = new Promise((resolve) => {
-                      const reader = new FileReader()
-                      reader.readAsDataURL(event.target.files![0])
-                      reader.onload = () => {
-                        const result = reader
-                          .result!.toString()
-                          .split('base64,')[1]
-                        console.log(result)
-                        resolve(result)
-                      }
-                    })
-                    onChange(await promise)
-                  }}
-                  type={'file'}
-                  ref={fileInputRef}
-                />
-                <button
-                  className="mx-auto block border-2 border-black p-2"
-                  type="button"
-                  onClick={() => {
-                    fileInputRef.current!.click()
-                  }}
-                >
-                  Upload photo
-                </button>
-              </>
+              <button
+                onClick={onClick}
+                className="mx-auto block border-2 border-black p-2"
+                type="button"
+              >
+                Upload photo
+              </button>
             )
           }}
         />
