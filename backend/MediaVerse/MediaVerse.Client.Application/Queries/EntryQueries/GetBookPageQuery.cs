@@ -24,32 +24,15 @@ public class GetBookPageQueryHandler(IRepository<Entry> entryRepository) : IRequ
         {
             var ratingAvg = entry.Ratings.IsNullOrEmpty() ? 0m : entry.Ratings.Select(r => Convert.ToDecimal(r.Grade)).Average();
 
-            var responseEntry = new GetEntryResponse()
+            var responseEntry = new GetEntryPageResponse()
             {
                 Id = entry.Id,
                 Name = entry.Name,
-                Description = entry.Description,
-                Release = entry.Release,
                 Photo = entry.CoverPhoto.Photo,
                 RatingAvg = ratingAvg,
-                Authors = entry.WorkOns.Select(wo => (wo.Author, wo.AuthorRole)).Select(ar =>
-                    new GetEntryAuthorResponse()
-                    {
-                        Id = ar.Author.Id,
-                        Name = ar.Author.Name,
-                        Surname = ar.Author.Surname,
-                        Role = ar.AuthorRole.Name
-                    }).ToList()
             };
-
-            var responseBook = new GetBookResponse()
-            {
-                Entry = responseEntry,
-                Isbn = entry.Book.Isbn,
-                Synopsis = entry.Book.Synopsis,
-                BookGenres = entry.Book.BookGenres.Select(bg => bg.Name).ToList()
-            };
-            return responseBook;
+            
+            return responseEntry;
         }).ToList();
 
         var response = new GetBookPageResponse()

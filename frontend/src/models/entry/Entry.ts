@@ -4,6 +4,5 @@ export interface Entry {
     description: string,
     photo: string,
     release: Date,
-    ratingAvg: number,
-
+    ratingAvg: number
 }
