@@ -14,6 +14,9 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as EntriesBooksIdImport } from './routes/entries/books/$id'
+import { Route as AuthorsIdImport } from './routes/authors/$id'
+import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
+import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
 
 // Create Virtual Routes
 
@@ -28,6 +31,19 @@ const IndexLazyRoute = IndexLazyImport.update({
 
 const EntriesBooksIdRoute = EntriesBooksIdImport.update({
   path: '/entries/books/$id',
+  
+const AuthorsIdRoute = AuthorsIdImport.update({
+  path: '/authors/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthorsCreateIndexRoute = AuthorsCreateIndexImport.update({
+  path: '/authors/create/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthorsEditIdRoute = AuthorsEditIdImport.update({
+  path: '/authors/edit/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -47,6 +63,25 @@ declare module '@tanstack/react-router' {
       path: '/entries/books/$id'
       fullPath: '/entries/books/$id'
       preLoaderRoute: typeof EntriesBooksIdImport
+    '/authors/$id': {
+      id: '/authors/$id'
+      path: '/authors/$id'
+      fullPath: '/authors/$id'
+      preLoaderRoute: typeof AuthorsIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/authors/edit/$id': {
+      id: '/authors/edit/$id'
+      path: '/authors/edit/$id'
+      fullPath: '/authors/edit/$id'
+      preLoaderRoute: typeof AuthorsEditIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/authors/create/': {
+      id: '/authors/create/'
+      path: '/authors/create'
+      fullPath: '/authors/create'
+      preLoaderRoute: typeof AuthorsCreateIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -57,6 +92,9 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   EntriesBooksIdRoute,
+  AuthorsIdRoute,
+  AuthorsEditIdRoute,
+  AuthorsCreateIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -69,6 +107,9 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/entries/books/$id"
+        "/authors/$id",
+        "/authors/edit/$id",
+        "/authors/create/"
       ]
     },
     "/": {
@@ -76,6 +117,14 @@ export const routeTree = rootRoute.addChildren({
     },
     "/entries/books/$id": {
       "filePath": "entries/books/$id.tsx"
+    "/authors/$id": {
+      "filePath": "authors/$id.tsx"
+    },
+    "/authors/edit/$id": {
+      "filePath": "authors/edit/$id.tsx"
+    },
+    "/authors/create/": {
+      "filePath": "authors/create/index.tsx"
     }
   }
 }

@@ -51,11 +51,11 @@ const NavBarBurger: FunctionComponent<NavBarBurgerProps> = ({
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
           exit={{ opacity: 0 }}
-          className="border-mv-slate-200 shadow-mv-slate-200 absolute bottom-[-290px] origin-top rounded-md border border-solid bg-white p-5 shadow-md"
+          className="absolute bottom-[-290px] z-40 origin-top rounded-md border border-solid border-mv-slate-200 bg-white p-5 shadow-md shadow-mv-slate-200"
         >
           <ul className="flex flex-col gap-2">
             <li className="flex flex-col">
-              <Link className="hover:text-mv-purple font-semibold text-black hover:underline">
+              <Link className="font-semibold text-black hover:text-mv-purple hover:underline">
                 {' '}
                 Quizzes
               </Link>
@@ -64,7 +64,7 @@ const NavBarBurger: FunctionComponent<NavBarBurgerProps> = ({
               </span>
             </li>
             <li className="flex flex-col">
-              <Link className="hover:text-mv-purple font-semibold text-black hover:underline">
+              <Link className="font-semibold text-black hover:text-mv-purple hover:underline">
                 Articles
               </Link>
               <span className="text-mv-slate">
@@ -72,7 +72,7 @@ const NavBarBurger: FunctionComponent<NavBarBurgerProps> = ({
               </span>
             </li>
             <li className="flex flex-col">
-              <Link className="hover:text-mv-purple font-semibold text-black hover:underline">
+              <Link className="font-semibold text-black hover:text-mv-purple hover:underline">
                 Ask Me Anything
               </Link>
               <span className="text-mv-slate">Active AMA sessions</span>
