@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as EntriesBooksIdImport } from './routes/entries/books/$id'
 import { Route as AuthorsIdImport } from './routes/authors/$id'
 import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
 import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
@@ -28,6 +29,9 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const EntriesBooksIdRoute = EntriesBooksIdImport.update({
+  path: '/entries/books/$id',
+  
 const AuthorsIdRoute = AuthorsIdImport.update({
   path: '/authors/$id',
   getParentRoute: () => rootRoute,
@@ -54,6 +58,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/entries/books/$id': {
+      id: '/entries/books/$id'
+      path: '/entries/books/$id'
+      fullPath: '/entries/books/$id'
+      preLoaderRoute: typeof EntriesBooksIdImport
     '/authors/$id': {
       id: '/authors/$id'
       path: '/authors/$id'
@@ -82,6 +91,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  EntriesBooksIdRoute,
   AuthorsIdRoute,
   AuthorsEditIdRoute,
   AuthorsCreateIndexRoute,
@@ -96,6 +106,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/entries/books/$id"
         "/authors/$id",
         "/authors/edit/$id",
         "/authors/create/"
@@ -104,6 +115,8 @@ export const routeTree = rootRoute.addChildren({
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/entries/books/$id": {
+      "filePath": "entries/books/$id.tsx"
     "/authors/$id": {
       "filePath": "authors/$id.tsx"
     },
