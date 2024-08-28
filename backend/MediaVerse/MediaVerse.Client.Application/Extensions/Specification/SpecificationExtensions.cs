@@ -34,6 +34,14 @@ public static class SpecificationExtensions
         return specificationBuilder;
     }
     
+    public static ISpecificationBuilder<Entry> Paginate(
+        this ISpecificationBuilder<Entry> specificationBuilder,
+        int page, int size)
+    {
+        specificationBuilder.Skip((page - 1) * size).Take(size);
+
+        return specificationBuilder;
+    }
     
     public static IOrderedSpecificationBuilder<T> OrderByDirection<T>(
         this ISpecificationBuilder<T> specificationBuilder,

@@ -22,7 +22,7 @@ public class GetBookQueryHandler(IRepository<Entry> entryRepository)
         var entry = await entryRepository.FirstOrDefaultAsync(spec, cancellationToken);
         if (entry is null) return new BaseResponse<GetBookResponse>(new NotFoundException());
 
-        var ratingAvg = entry.Ratings.IsNullOrEmpty() ? 0m : entry.Ratings.Select(Convert.ToDecimal).Average();
+        var ratingAvg = entry.Ratings.IsNullOrEmpty() ? 0m : entry.Ratings.Average(r => Convert.ToDecimal(r.Grade));
 
         var responseEntry = new GetEntryResponse()
         {
@@ -32,12 +32,12 @@ public class GetBookQueryHandler(IRepository<Entry> entryRepository)
             Release = entry.Release,
             Photo = entry.CoverPhoto.Photo,
             RatingAvg = ratingAvg,
-            Authors = entry.WorkOns.Select(wo => (wo.Author, wo.AuthorRole)).Select(ar => new GetEntryAuthorResponse()
+            Authors = entry.WorkOns.Select(wo => new GetEntryAuthorResponse()
             {
-                Id = ar.Author.Id,
-                Name = ar.Author.Name,
-                Surname = ar.Author.Surname,
-                Role = ar.AuthorRole.Name
+                Id = wo.Author.Id,
+                Name = wo.Author.Name,
+                Surname = wo.Author.Surname,
+                Role = wo.AuthorRole.Name
             }).ToList()
         };
         

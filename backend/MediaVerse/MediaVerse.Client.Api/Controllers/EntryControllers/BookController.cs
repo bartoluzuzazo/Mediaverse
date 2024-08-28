@@ -9,10 +9,10 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 
 [Route("[controller]")]
 [ApiController]
-// [Authorize(Policy = "Admin")]
 public class BookController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
+    // [Authorize(Policy = "Admin")]
     public async Task<IActionResult> AddBook(AddBookCommand request)
     {
         var response = await mediator.Send(request);

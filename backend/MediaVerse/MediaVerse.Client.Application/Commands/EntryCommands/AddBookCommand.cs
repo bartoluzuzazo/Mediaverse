@@ -2,6 +2,7 @@ using System.Text;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
@@ -50,18 +51,11 @@ public class AddBookCommandHandler(
             Synopsis = request.Synopsis,
             BookGenres = new List<BookGenre>()
         };
-        
-        var genres = request.GenreIds.Select(async id =>
-        {
-            var genre = await bookGenreRepository.GetByIdAsync(id, cancellationToken);
-            return genre;
-        }).ToList();
-        
-        foreach (var genre in genres)
-        {
-            var awaited = await genre;
-            if (awaited is not null) book.BookGenres.Add(awaited);
-        }
+
+        var genreSpec = new GetBookGenresByIdSpecification(request.GenreIds);
+        var genres = await bookGenreRepository.ListAsync(genreSpec, cancellationToken);
+
+        book.BookGenres = genres;
 
         var response = new AddEntryResponse()
         {

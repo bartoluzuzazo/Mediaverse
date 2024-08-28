@@ -15,6 +15,6 @@ public sealed class GetBookPageSpecification : Specification<Entry>
             .Include(e => e.Ratings)
             .Include(e => e.WorkOns).ThenInclude(w => w.Author)
             .Include(e => e.WorkOns).ThenInclude(w => w.AuthorRole)
-            .OrderEntry(order, direction).Skip((page - 1) * size).Take(size);
+            .OrderEntry(order, direction).Paginate(page, size);
     }
 }
