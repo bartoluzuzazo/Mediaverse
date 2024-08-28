@@ -21,13 +21,13 @@ public static class SpecificationExtensions
                 specificationBuilder.OrderByDirection(e => e.Name, direction);
                 break;
             case EntryOrder.Rating:
-                specificationBuilder.OrderByDirection(e => e.Ratings.Average(r => r.Grade), direction);
+                specificationBuilder.Where(e => e.Ratings.Count != 0).OrderByDirection(e => e.Ratings.Average(r => r.Grade), direction);
                 break;
             case EntryOrder.Release:
                 specificationBuilder.OrderByDirection(e => e.Release.Year, direction).ThenByDirection(e => e.Release.Month, direction).ThenByDirection(e => e.Release.Day, direction);
                 break;
             default:
-                specificationBuilder.OrderByDirection(e => e.Ratings.Average(r => r.Grade), direction);
+                specificationBuilder.Where(e => e.Ratings.Count != 0).OrderByDirection(e => e.Ratings.Average(r => r.Grade), direction);
                 break;
         }
 
