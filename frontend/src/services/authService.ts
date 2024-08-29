@@ -1,15 +1,17 @@
 import axios from 'axios'
+import { Login } from '../models/authentication/login'
+import { Register } from '../models/authentication/register'
+import { BaseResponse } from '../models/common/baseResponse'
 
 export class AuthService {
-  public static async login(username: string, password: string) {
-    return await axios.post('/user/login', { username, password })
+  public static async login(data: Login) {
+    return await axios.post<{ token: string }>(
+      '/user/login',
+      data
+    )
   }
 
-  public static async register(
-    username: string,
-    email: string,
-    password: string
-  ) {
-    return await axios.post('/user/register', { username, email, password })
+  public static async register(data: Register) {
+    return await axios.post<BaseResponse>('/user/register', data)
   }
 }

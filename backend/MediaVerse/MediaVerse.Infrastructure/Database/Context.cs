@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using MediaVerse.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace MediaVerse.Infrastructure.Database;
 
 public partial class Context : DbContext
 {
-    public Context()
-    {
-    }
-
-    public Context(DbContextOptions<Context> options)
+    private readonly IConfiguration _configuration;
+    
+    public Context(DbContextOptions<Context> options, IConfiguration configuration)
         : base(options)
     {
+        _configuration = configuration;
     }
 
     public virtual DbSet<Album> Albums { get; set; }
@@ -81,7 +81,10 @@ public partial class Context : DbContext
     public virtual DbSet<WorkOn> WorkOns { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("testdb_conn_str"));
+    {
+        optionsBuilder.UseNpgsql(_configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
+        
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
