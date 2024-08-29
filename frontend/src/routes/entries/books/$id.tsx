@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import EntryBanner from '../../../common/components/entries/entryBanner.tsx'
 import EntrySectionHeader from '../../../common/components/entries/entrySectionHeader.tsx'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { bookService } from '../../../services/bookService.ts'
 import { Book } from '../../../models/entry/book/Book.ts'
 
@@ -10,7 +10,11 @@ export const Route = createFileRoute('/entries/books/$id')({
     // const queryClient = useQueryClient()
     const { id } = Route.useParams()
 
-    const { data: book, isLoading } = useQuery({
+    const {
+      data: book,
+      isLoading,
+      refetch,
+    } = useQuery({
       queryFn: async (): Promise<Book> => {
         const res = await bookService.getBook(id)
         return res.data
@@ -22,8 +26,9 @@ export const Route = createFileRoute('/entries/books/$id')({
     }
 
     if (book == undefined) {
-      return <div>An impossible error occured</div>
+      return <div>An error occured</div>
     }
+    console.log(book.entry.usersRating)
 
     const info = [book.entry.release.toString(), ...book.bookGenres]
     return (

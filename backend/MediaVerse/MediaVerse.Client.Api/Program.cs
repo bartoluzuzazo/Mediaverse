@@ -2,9 +2,11 @@ using System.Text;
 using MediaVerse.Client.Application.Extensions.MediatR;
 using MediaVerse.Client.Application.Queries.Test;
 using MediaVerse.Client.Application.Services.Transformer;
+using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Domain.Interfaces;
 using MediaVerse.Infrastructure.Database;
 using MediaVerse.Infrastructure.Repositories;
+using MediaVerse.Infrastructure.UserAccessor;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +24,8 @@ builder.Services.AddDbContext<Context>(options => options.UseNpgsql(builder.Conf
 builder.Services.RegisterMediatR(typeof(TestQuery).Assembly);
 builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserAccessor, HttpUserAccessor>();
 
 builder.Services.AddCors(o =>
 {
