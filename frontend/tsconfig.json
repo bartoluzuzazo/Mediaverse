@@ -1,5 +1,11 @@
 {
   "files": [],
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@models/*": ["models/*"]
+    }
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"

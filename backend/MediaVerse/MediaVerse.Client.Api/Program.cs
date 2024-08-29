@@ -18,7 +18,7 @@ builder.Services.AddControllers(options =>
 {
     options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
 });
-builder.Services.AddDbContext<Context>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("testdb_conn_str")));
+builder.Services.AddDbContext<Context>(options => options.UseNpgsql(builder.Configuration["ConnectionStrings.DefaultConnection"]));
 builder.Services.RegisterMediatR(typeof(TestQuery).Assembly);
 builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));

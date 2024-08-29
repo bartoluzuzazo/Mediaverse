@@ -51,7 +51,7 @@ const NavBarBurger: FunctionComponent<NavBarBurgerProps> = ({
           animate={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
           exit={{ opacity: 0 }}
-          className="absolute bottom-[-290px] z-40 origin-top rounded-md border border-solid border-mv-slate-200 bg-white p-5 shadow-md shadow-mv-slate-200"
+          className="absolute top-[80px] z-40 origin-top rounded-md border border-solid border-mv-slate-200 bg-white p-5 shadow-md shadow-mv-slate-200"
         >
           <ul className="flex flex-col gap-2">
             <li className="flex flex-col">
