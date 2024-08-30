@@ -6,11 +6,10 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Entry } from '../../../models/entry/Entry.ts'
-import { useState } from 'react'
 import { ratingService } from '../../../services/ratingService.ts'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { Rating } from '../../../models/entry/rating/Rating.ts'
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
+import RatingPicker from './RatingPicker.tsx'
 
 interface WithEntry {
   entry: Entry
@@ -21,20 +20,17 @@ type Props<T extends WithEntry> = {
   refetch: (options?: RefetchOptions) => Promise<QueryObserverResult<T, Error>>
 }
 
-const RatingPicker = <T extends WithEntry>({ entryId }: Props<T>) => {
-  const [newRating, setNewRating] = useState<null | number>(null)
+const EntryRatingPicker = <T extends WithEntry>({ entryId }: Props<T>) => {
   const { data: usersRating, isLoading } = useQuery({
     queryKey: ['GET_USERS_RATING'],
     queryFn: async () => {
       try {
         const response = await ratingService.getRating(entryId)
         return response.data
-      } catch (error: unknown | AxiosError) {
+      } catch (error: unknown) {
         if (!axios.isAxiosError(error) || error.response?.status != 404) {
-          console.log('other error')
           throw error
         }
-        console.log('our error')
         const rating: Rating = { entryId: entryId }
         return rating
       }
@@ -64,37 +60,8 @@ const RatingPicker = <T extends WithEntry>({ entryId }: Props<T>) => {
   if (isLoading) {
     return <div>Loading...</div>
   }
-  const displayedRating = newRating || usersRating?.grade
-  const avaiableGrades = [...Array(11).keys()].slice(1)
 
-  return (
-    <div className="mb-4 mt-10 flex flex-col gap-4 text-xl font-bold md:flex-row md:gap-8">
-      <div>Rate it:</div>
-      <div
-        className="flex text-3xl text-violet-900 hover:text-violet-700 min-[360px]:text-4xl"
-        onMouseLeave={() => setNewRating(null)}
-      >
-        {avaiableGrades.map((num) => {
-          return (
-            <div
-              key={num}
-              onMouseEnter={() => setNewRating(num)}
-              onClick={() => onClick(num)}
-            >
-              {displayedRating && num <= displayedRating ? (
-                <AiFillStar />
-              ) : (
-                <AiOutlineStar />
-              )}
-            </div>
-          )
-        })}
-      </div>
-      <div className="md:ml-auto">
-        {displayedRating ? `Rating: ${displayedRating}/10` : 'No rating yet'}
-      </div>
-    </div>
-  )
+  return <RatingPicker onClick={onClick} previousGrade={usersRating?.grade} />
 }
 
-export default RatingPicker
+export default EntryRatingPicker

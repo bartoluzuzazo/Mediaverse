@@ -4,7 +4,7 @@ import EntrySectionHeader from '../../../common/components/entries/entrySectionH
 import { useQuery } from '@tanstack/react-query'
 import { bookService } from '../../../services/bookService.ts'
 import { Book } from '../../../models/entry/book/Book.ts'
-import RatingPicker from '../../../common/components/RatingPicker'
+import EntryRatingPicker from '../../../common/components/entryRatingPicker'
 
 export const Route = createFileRoute('/entries/books/$id')({
   component: () => {
@@ -35,7 +35,7 @@ export const Route = createFileRoute('/entries/books/$id')({
     return (
       <>
         <EntryBanner entry={book.entry} info={info} type={'Book'} />
-        <RatingPicker<Book> entryId={book.entry.id} refetch={refetch} />
+        <EntryRatingPicker<Book> entryId={book.entry.id} refetch={refetch} />
         <EntrySectionHeader title={'Description'} />
         <div className="p-4">{book.entry.description}</div>
         <EntrySectionHeader title={'Authors'} />
