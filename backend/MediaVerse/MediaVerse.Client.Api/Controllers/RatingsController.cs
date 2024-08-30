@@ -44,7 +44,7 @@ public class RatingsController : BaseController
             return ResolveException(result.Exception);
         }
 
-        return CreatedAtAction(nameof(GetUsersRating), result.Data);
+        return Created();
     }
 
     [HttpPut("ratings/{id}")]

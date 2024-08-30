@@ -20,7 +20,6 @@ public record UpdateRatingCommand : IRequest<BaseResponse<GetRatingResponse>>
 
     public Guid EntryId { get; set; }
 
-    public DateTime Modifiedat { get; set; }
 }
 
 public class UpdateRatingCommandHandler : IRequestHandler<UpdateRatingCommand, BaseResponse<GetRatingResponse>>

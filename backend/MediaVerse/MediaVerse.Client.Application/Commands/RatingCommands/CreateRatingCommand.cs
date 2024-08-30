@@ -17,7 +17,6 @@ public record CreateRatingCommand : IRequest<BaseResponse<GetRatingResponse>>
 
     public Guid EntryId { get; set; }
 
-    public DateTime Modifiedat { get; set; }
 }
 
 public class CreateRatingCommandHandler : IRequestHandler<CreateRatingCommand, BaseResponse<GetRatingResponse>>
@@ -68,6 +67,7 @@ public class CreateRatingCommandHandler : IRequestHandler<CreateRatingCommand, B
 
         var rating = new Rating()
         {
+            Id = Guid.NewGuid(),
             Entry = entry,
             User = user,
             Modifiedat = DateTime.Now,
