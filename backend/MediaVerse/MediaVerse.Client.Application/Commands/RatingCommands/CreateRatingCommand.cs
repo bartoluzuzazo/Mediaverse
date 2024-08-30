@@ -14,7 +14,6 @@ public record CreateRatingCommand : IRequest<BaseResponse<GetRatingResponse>>
 {
     public int Grade { get; set; }
 
-    public Guid UserId { get; set; }
 
     public Guid EntryId { get; set; }
 
@@ -48,9 +47,9 @@ public class CreateRatingCommandHandler : IRequestHandler<CreateRatingCommand, B
 
         var userSpecification = new GetUserSpecification(email);
         var user = await _userRepository.FirstOrDefaultAsync(userSpecification);
-        if (user is null || user.Id != request.UserId)
+        if (user is null)
         {
-            return new BaseResponse<GetRatingResponse>(new ForbiddenException());
+            return new BaseResponse<GetRatingResponse>(new NotFoundException());
         }
 
         var entry = await _entryRepository.GetByIdAsync(request.EntryId, cancellationToken);
@@ -59,7 +58,7 @@ public class CreateRatingCommandHandler : IRequestHandler<CreateRatingCommand, B
             return new BaseResponse<GetRatingResponse>(new NotFoundException());
         }
 
-        var ratingSpecification = new GetRatingByIdsSpecification(request.UserId, request.EntryId);
+        var ratingSpecification = new GetRatingByIdsSpecification(user.Id, request.EntryId);
 
         var ratingFromDb = await _ratingRepository.FirstOrDefaultAsync(ratingSpecification, cancellationToken);
         if (ratingFromDb is not null)

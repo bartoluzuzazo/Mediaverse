@@ -1,18 +1,15 @@
-using System.Diagnostics;
 using MediatR;
 using MediaVerse.Client.Application.Commands.RatingCommands;
 using MediaVerse.Client.Application.Queries.RatingQueries;
-using MediaVerse.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaVerse.Client.Api.Controllers;
 
-[Route("entities/[controller]")]
 [ApiController]
 [Authorize]
-public class RatingsController : ControllerBase
+[Route("")]
+public class RatingsController : BaseController
 {
     private readonly IMediator _mediator;
 
@@ -22,77 +19,42 @@ public class RatingsController : ControllerBase
     }
 
 
-    [HttpGet("users-rating")]
+    [HttpGet("entries/{entryGuid}/ratings/users-rating")]
     public async Task<IActionResult> GetUsersRating(Guid entryGuid)
     {
         var query = new GetUsersRatingQuery(entryGuid);
 
         var result = await _mediator.Send(query);
 
-        if (result.Exception is NotFoundException)
+        if (result.Exception is not null)
         {
-            return NotFound();
-        }
-
-        if (result.Exception is ProblemException)
-        {
-            return Problem();
+            return ResolveException(result.Exception);
         }
 
         return Ok(result.Data);
     }
 
-    [HttpPost]
+    [HttpPost("entries/{entryGuid}/ratings")]
     public async Task<IActionResult> CreateRating(CreateRatingCommand createRatingCommand)
     {
         var result = await _mediator.Send(createRatingCommand);
 
-        if (result.Exception is NotFoundException)
+        if (result.Exception is not null)
         {
-            return NotFound();
-        }
-
-        if (result.Exception is ProblemException)
-        {
-            return Problem();
-        }
-
-        if (result.Exception is ForbiddenException)
-        {
-            return Forbid();
-        }
-
-        if (result.Exception is ConflictException)
-        {
-            return Conflict();
+            return ResolveException(result.Exception);
         }
 
         return CreatedAtAction(nameof(GetUsersRating), result.Data);
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateRating(UpdateRatingCommand updateRatingCommand)
+    [HttpPut("ratings/{id}")]
+    public async Task<IActionResult> UpdateRating(Guid id, UpdateRatingCommand updateRatingCommand)
     {
         var result = await _mediator.Send(updateRatingCommand);
 
-        if (result.Exception is ConflictException)
+        if (result.Exception is not null)
         {
-            return Conflict();
-        }
-
-        if (result.Exception is NotFoundException)
-        {
-            return NotFound();
-        }
-
-        if (result.Exception is ProblemException)
-        {
-            return Problem();
-        }
-
-        if (result.Exception is ForbiddenException)
-        {
-            return Forbid();
+            return ResolveException(result.Exception);
         }
 
         return Ok(result.Data);

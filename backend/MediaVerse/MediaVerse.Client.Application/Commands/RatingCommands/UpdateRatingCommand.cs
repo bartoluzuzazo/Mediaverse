@@ -2,6 +2,7 @@ using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.RatingDTOs;
 using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Client.Application.Specifications.RatingSpecifications;
+using MediaVerse.Client.Application.Specifications.UserSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
@@ -16,7 +17,6 @@ public record UpdateRatingCommand : IRequest<BaseResponse<GetRatingResponse>>
 
     public int Grade { get; set; }
 
-    public Guid UserId { get; set; }
 
     public Guid EntryId { get; set; }
 
@@ -42,17 +42,19 @@ public class UpdateRatingCommandHandler : IRequestHandler<UpdateRatingCommand, B
     public async Task<BaseResponse<GetRatingResponse>> Handle(UpdateRatingCommand request,
         CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
-
         var userEmail = _userAccessor.Email;
         if (userEmail == null)
         {
             return new BaseResponse<GetRatingResponse>(new ProblemException());
         }
 
-        if (user is null || user.Email != userEmail)
+        var specification = new GetUserSpecification(userEmail);
+        var user = await _userRepository.FirstOrDefaultAsync(specification, cancellationToken);
+
+
+        if (user is null)
         {
-            return new BaseResponse<GetRatingResponse>(new ForbiddenException());
+            return new BaseResponse<GetRatingResponse>(new NotFoundException());
         }
 
 
@@ -62,19 +64,20 @@ public class UpdateRatingCommandHandler : IRequestHandler<UpdateRatingCommand, B
             return new BaseResponse<GetRatingResponse>(new NotFoundException());
         }
 
-        if (rating.EntryId != request.EntryId || rating.UserId != request.UserId)
+        if (rating.UserId != user.Id)
         {
-            var byRelatedIdsSpec = new GetRatingByIdsSpecification(request.UserId, request.EntryId);
+            return new BaseResponse<GetRatingResponse>(new ForbiddenException());
+        }
+
+        if (rating.EntryId != request.EntryId)
+        {
+            var byRelatedIdsSpec = new GetRatingByIdsSpecification(user.Id, request.EntryId);
             var conflictingRating = await _ratingRepository.FirstOrDefaultAsync(byRelatedIdsSpec);
             if (conflictingRating is not null)
             {
                 return new BaseResponse<GetRatingResponse>(new ConflictException());
             }
-            
-        }
 
-        if (rating.EntryId != request.EntryId)
-        {
             var entry = await _entryRepository.GetByIdAsync(request.EntryId, cancellationToken);
             if (entry is null)
             {
