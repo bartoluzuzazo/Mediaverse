@@ -19,6 +19,6 @@ RUN adduser -D fe_user
 
 USER fe_user
 
-EXPOSE 5173
+EXPOSE 3000
 
-ENTRYPOINT  ["serve", "-s",  "-l",  "5173",  "dist"]
+ENTRYPOINT  ["serve", "-s",  "-l",  "3000",  "dist"]
