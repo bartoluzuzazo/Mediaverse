@@ -25,7 +25,7 @@ public class GetUsersRatingHandler(IRepository<Rating> ratingRepository, IUserAc
             return new BaseResponse<GetRatingResponse>(new ProblemException());
         }
 
-        var spec = new GetRatingByUserNameSpecification(email);
+        var spec = new GetRatingByEmailAndEntryId(email, request.EntryGuid);
         var rating = await ratingRepository.FirstOrDefaultAsync(spec, cancellationToken);
         if (rating == null)
         {

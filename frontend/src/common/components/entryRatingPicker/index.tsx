@@ -1,28 +1,16 @@
-import {
-  QueryObserverResult,
-  RefetchOptions,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query'
-import { Entry } from '../../../models/entry/Entry.ts'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ratingService } from '../../../services/ratingService.ts'
 import axios from 'axios'
 import { Rating } from '../../../models/entry/rating/Rating.ts'
 import RatingPicker from './RatingPicker.tsx'
 
-interface WithEntry {
-  entry: Entry
-}
-
-type Props<T extends WithEntry> = {
+type Props = {
   entryId: string
-  refetch: (options?: RefetchOptions) => Promise<QueryObserverResult<T, Error>>
 }
 
-const EntryRatingPicker = <T extends WithEntry>({ entryId }: Props<T>) => {
+const EntryRatingPicker = ({ entryId }: Props) => {
   const { data: usersRating, isLoading } = useQuery({
-    queryKey: ['GET_USERS_RATING'],
+    queryKey: ['GET_USERS_RATING', entryId],
     queryFn: async () => {
       try {
         const response = await ratingService.getRating(entryId)
@@ -47,8 +35,8 @@ const EntryRatingPicker = <T extends WithEntry>({ entryId }: Props<T>) => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['GET_USERS_RATING'] })
-      queryClient.invalidateQueries({ queryKey: ['GET_BOOK'] })
+      queryClient.invalidateQueries({ queryKey: ['GET_USERS_RATING', entryId] })
+      queryClient.invalidateQueries({ queryKey: ['GET_BOOK', entryId] })
     },
   })
 

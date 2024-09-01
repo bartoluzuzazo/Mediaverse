@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediaVerse.Client.Api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
+
 public abstract class BaseController : ControllerBase
 {
     protected IActionResult ResolveException(Exception exception)
