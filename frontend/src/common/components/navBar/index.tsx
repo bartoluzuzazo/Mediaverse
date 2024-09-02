@@ -1,13 +1,12 @@
+import { Link } from '@tanstack/react-router'
 import { FunctionComponent, useEffect, useState } from 'react'
-import FormInput from '../form/input'
 import { FaSearch } from 'react-icons/fa'
 import { RxHamburgerMenu } from 'react-icons/rx'
+import { useAuthContext } from '../../../context/auth/useAuthContext'
 import FormButton from '../form/button'
-import NavBarBurger from './navBarBurger'
-import { Link } from '@tanstack/react-router'
+import FormInput from '../form/input'
 import AuthPanel from './authPanel'
-import { useLocalStorage } from 'usehooks-ts'
-import axios from 'axios'
+import NavBarBurger from './navBarBurger'
 
 interface NavBarProps {}
 
@@ -15,16 +14,13 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
   const [isBurgerOpen, setBurgerOpen] = useState(false)
   const [isAuthPanelOpen, setAuthPanelOpen] = useState(false)
 
-  const [token, setToken] = useLocalStorage<string | undefined>(
-    'token',
-    undefined
-  )
+  const authContext = useAuthContext()
 
   useEffect(() => {
-    if (token) {
+    if (authContext?.token) {
       setAuthPanelOpen(false)
     }
-  }, [token])
+  }, [authContext?.token])
 
   return (
     <div className="flex h-[90px] w-full items-center justify-between px-[40px] shadow-xl">
@@ -48,12 +44,11 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
         />
       </div>
       <div className="relative w-[200px]">
-        {token ? (
+        {authContext?.token ? (
           <FormButton
             buttonProps={{
               onClick: () => {
-                setToken('')
-                axios.defaults.headers.common['Authorization'] = ''
+                authContext?.removeToken()
               },
             }}
           >

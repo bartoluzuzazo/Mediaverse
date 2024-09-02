@@ -1,26 +1,24 @@
 import { useMutation } from '@tanstack/react-query'
 import { FunctionComponent } from 'react'
 import { useForm } from 'react-hook-form'
+import { useAuthContext } from '../../../context/auth/useAuthContext'
 import { Login } from '../../../models/authentication/login'
 import { AuthService } from '../../../services/authService'
 import FormButton from '../form/button'
 import FormInput from '../form/input'
 import { AuthFormProps } from './authForm'
-import { useLocalStorage } from 'usehooks-ts'
-import axios from 'axios'
 
 const LoginForm: FunctionComponent<AuthFormProps> = ({
   setLoginPanelVisible,
 }) => {
   const { register, handleSubmit } = useForm<Login>()
 
-  const [, setToken] = useLocalStorage<string | undefined>('token', undefined)
+  const authContext = useAuthContext()
 
   const loginMutation = useMutation({
     mutationFn: async (data: Login) => await AuthService.login(data),
     onSuccess({ data }) {
-      setToken(data.token)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
+      authContext?.setToken(data.token)
     },
   })
 
