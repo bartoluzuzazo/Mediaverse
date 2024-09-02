@@ -7,6 +7,7 @@ import axios from 'axios'
 
 import './index.css'
 import 'react-multi-carousel/lib/styles.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const queryClient = new QueryClient()
 
