@@ -34,7 +34,10 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
           className="burger-icon size-7 pt-1 text-mv-gray hover:cursor-pointer"
           onClick={() => setBurgerOpen((prev) => !prev)}
         />
-        <Link className="select-none text-2xl font-semibold text-mv-purple visited:text-mv-purple hover:text-mv-purple">
+        <Link
+          className="select-none text-2xl font-semibold text-mv-purple visited:text-mv-purple hover:text-mv-purple"
+          to="/"
+        >
           MediaVerse
         </Link>
       </div>

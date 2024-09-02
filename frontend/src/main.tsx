@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import axios from 'axios'
+
+import './index.css'
+import 'react-multi-carousel/lib/styles.css'
 
 const queryClient = new QueryClient()
 
