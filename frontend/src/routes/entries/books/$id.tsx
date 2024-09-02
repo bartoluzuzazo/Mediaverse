@@ -2,16 +2,16 @@ import { createFileRoute } from '@tanstack/react-router'
 import EntryBanner from '../../../common/components/entries/entryBanner.tsx'
 import EntrySectionHeader from '../../../common/components/entries/entrySectionHeader.tsx'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
-import { bookService } from '../../../services/bookService.ts'
-import { Book } from '../../../models/entry/book/Book.ts'
+import { BookService } from '../../../services/bookService.ts'
 import EntryRatingPicker from '../../../common/components/entryRatingPicker'
 import { useLocalStorage } from 'usehooks-ts'
+import { Book } from '../../../models/entry/book/index.ts'
 
 const bookQueryOptions = (id: string) => {
   return queryOptions({
     queryKey: ['GET_BOOK', id],
     queryFn: async (): Promise<Book> => {
-      const res = await bookService.getBook(id)
+      const res = await BookService.getBook(id)
       return res.data
     },
   })

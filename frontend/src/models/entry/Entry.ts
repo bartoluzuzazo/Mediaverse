@@ -9,7 +9,6 @@ export interface Entry {
   ratingAvg: number
   usersRating?: Rating
 }
-<<<<<<< HEAD
 
 export enum EntryOrder {
   Rating,
@@ -17,5 +16,3 @@ export enum EntryOrder {
   Release,
   Id,
 }
-=======
->>>>>>> origin/main
