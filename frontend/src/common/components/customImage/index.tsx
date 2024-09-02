@@ -6,11 +6,9 @@ import { MdNoPhotography } from 'react-icons/md'
 interface CustomImageProps extends ImgProps {}
 
 const CustomImage: FunctionComponent<CustomImageProps> = ({ src, ...rest }) => {
-  const srcList = Array.isArray(src) ? [...src] : [src]
-
   return (
     <Img
-      src={[...srcList, '']}
+      src={src}
       loader={<Skeleton className="h-full w-full" />}
       unloader={
         <div className="flex h-full w-full flex-col items-center justify-center border border-solid border-black text-black">
