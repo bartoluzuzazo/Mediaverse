@@ -9,3 +9,10 @@ export interface Entry {
   ratingAvg: number
   usersRating?: Rating
 }
+
+export enum EntryOrder {
+  Rating,
+  Name,
+  Release,
+  Id,
+}
