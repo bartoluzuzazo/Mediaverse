@@ -19,7 +19,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       return (
         <>
           <NavBar />
-          <div className="mx-auto max-w-[60rem]">
+          <div className="mx-auto max-w-[70rem]">
             <Outlet />
           </div>
           <TanStackRouterDevtools />

@@ -42,7 +42,7 @@ const LoginForm: FunctionComponent<AuthFormProps> = ({
       />
       <FormInput
         inputProps={{
-          type: 'text',
+          type: 'password',
           placeholder: 'password',
           ...register('password', { required: 'password is required' }),
         }}

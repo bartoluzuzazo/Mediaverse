@@ -31,7 +31,7 @@ public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, B
     public async Task<BaseResponse<Guid>> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
     {
         var specification = new GetAuthorWithPhotoSpecification(request.Id);
-        var author = await _authorRepository.FirstOrDefaultAsync(specification);
+        var author = await _authorRepository.FirstOrDefaultAsync(specification, cancellationToken);
         if (author is null)
         {
             return new BaseResponse<Guid>(new NotFoundException());
@@ -42,7 +42,7 @@ public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, B
         author.Surname = request.Surname ?? author.Surname;
         if (request.ProfilePicture is not null)
         {
-            byte[] photoData = Convert.FromBase64String(request.ProfilePicture);
+            var photoData = Convert.FromBase64String(request.ProfilePicture);
 
             var profilePicture = new ProfilePicture()
             {

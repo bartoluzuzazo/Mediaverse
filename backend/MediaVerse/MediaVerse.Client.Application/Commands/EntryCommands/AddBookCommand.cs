@@ -27,14 +27,15 @@ public class AddBookCommandHandler(
     IRepository<BookGenre> bookGenreRepository)
     : IRequestHandler<AddBookCommand, BaseResponse<AddEntryResponse>>
 {
-    public async Task<BaseResponse<AddEntryResponse>> Handle(AddBookCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<AddEntryResponse>> Handle(AddBookCommand request,
+        CancellationToken cancellationToken)
     {
         var photo = new CoverPhoto()
         {
             Id = Guid.NewGuid(),
-            Photo = Encoding.ASCII.GetBytes(request.CoverPhoto),
+            Photo = Convert.FromBase64String(request.CoverPhoto),
         };
-        
+
         var entry = new Entry()
         {
             Id = Guid.NewGuid(),
@@ -43,7 +44,7 @@ public class AddBookCommandHandler(
             Release = DateOnly.FromDateTime(request.Release),
             CoverPhotoId = photo.Id
         };
-        
+
         var book = new Book()
         {
             Id = entry.Id,
@@ -66,7 +67,7 @@ public class AddBookCommandHandler(
         await photoRepository.AddAsync(photo, cancellationToken);
         await entryRepository.AddAsync(entry, cancellationToken);
         await bookRepository.AddAsync(book, cancellationToken);
-        
+
         return new BaseResponse<AddEntryResponse>(response);
     }
 }

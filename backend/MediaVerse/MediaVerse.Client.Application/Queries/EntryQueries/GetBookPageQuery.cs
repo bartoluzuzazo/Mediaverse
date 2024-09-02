@@ -11,24 +11,24 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Queries.EntryQueries;
 
-public record GetBookPageQuery(int page, int size, EntryOrder order, OrderDirection direction) : IRequest<BaseResponse<GetBookPageResponse>>;
+public record GetBookPageQuery(int Page, int Size, EntryOrder Order, OrderDirection Direction) : IRequest<BaseResponse<GetBookPageResponse>>;
 
 public class GetBookPageQueryHandler(IRepository<Entry> entryRepository) : IRequestHandler<GetBookPageQuery, BaseResponse<GetBookPageResponse>>
 {
     public async Task<BaseResponse<GetBookPageResponse>> Handle(GetBookPageQuery request, CancellationToken cancellationToken)
     {
-        var spec = new GetBookPageSpecification(request.page, request.size, request.order, request.direction);
+        var spec = new GetBookPageSpecification(request.Page, request.Size, request.Order, request.Direction);
         var list = await entryRepository.ListAsync(spec, cancellationToken);
 
         var books = list.Select(entry =>
         {
-            var ratingAvg = entry.Ratings.IsNullOrEmpty() ? 0m : entry.Ratings.Select(r => Convert.ToDecimal(r.Grade)).Average();
+            var ratingAvg = entry.Ratings.IsNullOrEmpty() ? 0m : entry.Ratings.Average(r => Convert.ToDecimal(r.Grade));
 
             var responseEntry = new GetEntryPageResponse()
             {
                 Id = entry.Id,
                 Name = entry.Name,
-                Photo = entry.CoverPhoto.Photo,
+                Photo = Convert.ToBase64String(entry.CoverPhoto.Photo),
                 RatingAvg = ratingAvg,
             };
             
