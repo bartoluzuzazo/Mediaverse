@@ -11,7 +11,7 @@ public class GetBookByIdSpecification : Specification<Entry>
             .Include(e => e.Book).ThenInclude(b => b.BookGenres)
             .Include(e => e.CoverPhoto)
             .Include(e => e.Ratings)
-            .Include(e => e.WorkOns).ThenInclude(w => w.Author)
+            .Include(e => e.WorkOns).ThenInclude(w => w.Author).ThenInclude(a => a.ProfilePicture)
             .Include(e => e.WorkOns).ThenInclude(w => w.AuthorRole);
     }
 }

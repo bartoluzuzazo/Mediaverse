@@ -24,21 +24,28 @@ public class GetBookQueryHandler(IRepository<Entry> entryRepository)
 
         var ratingAvg = entry.Ratings.IsNullOrEmpty() ? 0m : entry.Ratings.Average(r => Convert.ToDecimal(r.Grade));
 
+        var workons = entry.WorkOns.GroupBy(wo => wo.AuthorRole.Name)
+            .Select(group => new GetEntryAuthorGroupResponse()
+            {
+                Role = group.Key,
+                Authors = group.Select(wo => new GetEntryAuthorResponse()
+                {
+                    Id = wo.Author.Id,
+                    Name = wo.Author.Name,
+                    Surname = wo.Author.Surname,
+                    ProfilePicture = wo.Author.ProfilePicture.Picture
+                }).ToList()
+            }).ToList();
+        
         var responseEntry = new GetEntryResponse()
         {
             Id = entry.Id,
             Name = entry.Name,
             Description = entry.Description,
             Release = entry.Release,
-            Photo = entry.CoverPhoto.Photo,
+            Photo = Convert.ToBase64String(entry.CoverPhoto.Photo),
             RatingAvg = ratingAvg,
-            Authors = entry.WorkOns.Select(wo => new GetEntryAuthorResponse()
-            {
-                Id = wo.Author.Id,
-                Name = wo.Author.Name,
-                Surname = wo.Author.Surname,
-                Role = wo.AuthorRole.Name
-            }).ToList()
+            Authors = workons
         };
         
         var responseBook = new GetBookResponse()

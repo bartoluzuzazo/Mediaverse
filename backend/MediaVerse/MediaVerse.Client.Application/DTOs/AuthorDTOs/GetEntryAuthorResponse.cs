@@ -8,5 +8,5 @@ public class GetEntryAuthorResponse
 
     public string Surname { get; set; }
 
-    public string Role { get; set; }
+    public byte[] ProfilePicture { get; set; }
 }

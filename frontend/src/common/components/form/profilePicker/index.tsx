@@ -36,7 +36,7 @@ const ProfilePicker = <T extends FieldValues>({
             return (
               <button
                 onClick={onClick}
-                className="mx-auto block border-2 border-black p-2"
+                className="mx-auto block border-2 border-black p-2 bg-white"
                 type="button"
               >
                 Upload photo

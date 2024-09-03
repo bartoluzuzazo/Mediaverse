@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AuthorService } from '../../services/AuthorService.ts'
 import { Author } from '../../models/author/Author.ts'
+import EntrySectionHeader from '../../common/components/entries/entrySectionHeader.tsx'
+import AuthorEntryPreview from '../../common/components/authors/Entry/AuthorEntryPreview.tsx'
 
 export const Route = createFileRoute('/authors/$id')({
   loader: async ({ params }) => {
@@ -29,6 +31,12 @@ export const Route = createFileRoute('/authors/$id')({
 
           <div className="flex-1 md:ml-20">{author.bio}</div>
         </div>
+        {author.workOns.map((group) => (
+          <>
+            <EntrySectionHeader title={group.role} />
+            {group.entries.map(e => <div className="p-2"><AuthorEntryPreview entry={e}/></div>)}
+          </>
+        ))}
       </>
     )
   },
