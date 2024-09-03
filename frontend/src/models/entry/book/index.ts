@@ -9,7 +9,7 @@ export interface Book {
 }
 
 export interface GetBooksRequest extends PaginateRequest {
-  entryOrder: EntryOrder
+  order: EntryOrder
   direction: OrderDirection
 }
 
