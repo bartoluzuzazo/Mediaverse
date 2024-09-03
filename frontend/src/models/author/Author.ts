@@ -3,11 +3,11 @@ export interface Author {
   name: string
   surname: string
   bio: string
-  workOns: WorkOnGroup[]
+  workOns: AuthorWorkOnGroup[]
   profilePicture: string
 }
 
-interface WorkOnGroup {
+interface AuthorWorkOnGroup {
   role: string,
   entries: AuthorEntry[]
 }

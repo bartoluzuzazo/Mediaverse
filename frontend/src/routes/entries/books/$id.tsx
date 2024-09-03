@@ -2,11 +2,12 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { FunctionComponent } from 'react'
 import EntryBanner from '../../../common/components/entries/entryBanner.tsx'
-import EntrySectionHeader from '../../../common/components/entries/entrySectionHeader.tsx'
 import EntryRatingPicker from '../../../common/components/entryRatingPicker'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
-import { Book } from '../../../models/entry/book/index.ts'
+import { Book } from '../../../models/entry/book'
 import { BookService } from '../../../services/bookService.ts'
+import EntryAuthorPreview from '../../../common/components/entries/entryAuthorPreview.tsx'
+import SectionHeader from '../../../common/components/entries/sectionHeader.tsx'
 
 interface BookEntryComponentProps {}
 
@@ -22,11 +23,10 @@ const bookQueryOptions = (id: string) => {
 
 const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
   const authContext = useAuthContext()
-
   const id = Route.useParams().id
   const bookQuery = useSuspenseQuery(bookQueryOptions(id))
   const book = bookQuery.data
-  const info = [book.entry.release.toString(), ...book.bookGenres]
+  const info = [book.entry.release.toString(), book.isbn, ...book.bookGenres]
 
   return (
     <>
@@ -34,9 +34,16 @@ const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
       {authContext?.isAuthenticated ? (
         <EntryRatingPicker entryId={book.entry.id} />
       ) : null}
-      <EntrySectionHeader title={'Description'} />
+      <SectionHeader title={'Description'} />
       <div className="p-4">{book.entry.description}</div>
-      <EntrySectionHeader title={'Authors'} />
+      {book.entry.authors.map((group) => (
+        <>
+          <SectionHeader title={group.role} />
+          {group.authors.map(a => <div className="p-2"><EntryAuthorPreview author={a}/></div>)}
+        </>
+      ))}
+      <SectionHeader title={'Synopsis'} />
+      <div className="p-4">{book.synopsis}</div>
     </>
   )
 }

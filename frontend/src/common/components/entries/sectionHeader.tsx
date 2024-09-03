@@ -4,7 +4,7 @@ interface props {
   title: string
 }
 
-const entrySectionHeader: FunctionComponent<props> = ({ title }) => {
+const SectionHeader: FunctionComponent<props> = ({ title }) => {
   return (
     <>
       <h3 className="text-slate-500 text-xl p-4 font-bold">
@@ -16,4 +16,4 @@ const entrySectionHeader: FunctionComponent<props> = ({ title }) => {
   )
 }
 
-export default entrySectionHeader
+export default SectionHeader

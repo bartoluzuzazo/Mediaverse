@@ -27,7 +27,7 @@ export const Route = createFileRoute('/')({
           await BookService.getBooks({
             page: 1,
             size: 10,
-            entryOrder: EntryOrder.Rating,
+            order: EntryOrder.Rating,
             direction: OrderDirection.Descending,
           }),
       }),
@@ -37,7 +37,7 @@ export const Route = createFileRoute('/')({
           await BookService.getBooks({
             page: 1,
             size: 10,
-            entryOrder: EntryOrder.Release,
+            order: EntryOrder.Release,
             direction: OrderDirection.Descending,
           }),
       }),

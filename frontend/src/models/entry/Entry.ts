@@ -8,6 +8,7 @@ export interface Entry {
   release: Date
   ratingAvg: number
   usersRating?: Rating
+  authors: EntryWorkOnGroup[]
 }
 
 export enum EntryOrder {
@@ -15,4 +16,16 @@ export enum EntryOrder {
   Name,
   Release,
   Id,
+}
+
+interface EntryWorkOnGroup{
+  role: string,
+  authors: EntryAuthor[]
+}
+
+export interface EntryAuthor{
+  id: string,
+  name: string,
+  surname: string,
+  profilePicture: string
 }

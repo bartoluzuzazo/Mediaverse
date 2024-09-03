@@ -1,6 +1,4 @@
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import NavBar from '../common/components/navBar'
 import { QueryClient } from '@tanstack/react-query'
 import AuthContextProvider from '../context/auth'
@@ -14,8 +12,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           <div className="mx-auto max-w-[70rem]">
             <Outlet />
           </div>
-          <TanStackRouterDevtools />
-          <ReactQueryDevtools />
         </AuthContextProvider>
       )
     },
