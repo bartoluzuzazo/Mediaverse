@@ -16,6 +16,7 @@ import { Route as AuthorsIdImport } from './routes/authors/$id'
 import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
 import { Route as EntriesBooksIdImport } from './routes/entries/books/$id'
 import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
+import { Route as EntriesBooksCreateIndexImport } from './routes/entries/books/create/index'
 
 // Create/Update Routes
 
@@ -41,6 +42,11 @@ const EntriesBooksIdRoute = EntriesBooksIdImport.update({
 
 const AuthorsEditIdRoute = AuthorsEditIdImport.update({
   path: '/authors/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EntriesBooksCreateIndexRoute = EntriesBooksCreateIndexImport.update({
+  path: '/entries/books/create/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -83,6 +89,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorsCreateIndexImport
       parentRoute: typeof rootRoute
     }
+    '/entries/books/create/': {
+      id: '/entries/books/create/'
+      path: '/entries/books/create'
+      fullPath: '/entries/books/create'
+      preLoaderRoute: typeof EntriesBooksCreateIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -94,6 +107,7 @@ export const routeTree = rootRoute.addChildren({
   AuthorsEditIdRoute,
   EntriesBooksIdRoute,
   AuthorsCreateIndexRoute,
+  EntriesBooksCreateIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -108,7 +122,8 @@ export const routeTree = rootRoute.addChildren({
         "/authors/$id",
         "/authors/edit/$id",
         "/entries/books/$id",
-        "/authors/create/"
+        "/authors/create/",
+        "/entries/books/create/"
       ]
     },
     "/": {
@@ -125,6 +140,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/authors/create/": {
       "filePath": "authors/create/index.tsx"
+    },
+    "/entries/books/create/": {
+      "filePath": "entries/books/create/index.tsx"
     }
   }
 }

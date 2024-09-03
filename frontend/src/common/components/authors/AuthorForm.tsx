@@ -72,8 +72,9 @@ const AuthorForm = ({ author }: Props) => {
               />
             </label>
             {errors.name && (
-              <div className="text-red-700">
-                <IoIosWarning /> {errors.name.message}
+              <div className="text-red-700 flex flex-row">
+                <IoIosWarning />
+                <div>{errors.name.message}</div>
               </div>
             )}
           </div>
@@ -88,9 +89,9 @@ const AuthorForm = ({ author }: Props) => {
               />
             </label>
             {errors.surname && (
-              <div className="text-red-700">
+              <div className="text-red-700 flex flex-row">
                 <IoIosWarning />
-                {errors.surname.message}
+                <div>{errors.surname.message}</div>
               </div>
             )}
           </div>
@@ -107,9 +108,9 @@ const AuthorForm = ({ author }: Props) => {
               />
             </label>
             {errors.bio && (
-              <div className="text-red-700">
-                <IoIosWarning className="inline" />
-                {errors.bio.message}
+              <div className="text-red-700 flex flex-row">
+                <IoIosWarning />
+                <div>{errors.bio.message}</div>
               </div>
             )}
           </div>

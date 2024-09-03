@@ -13,6 +13,7 @@ const EntryBanner: FunctionComponent<props> = ({ entry, info, type }) => {
     <>
       <div className="-mx-[calc(50vw-50%)] h-20 bg-violet-100 md:h-40">
         <div className="flex justify-around items-center">
+          <div></div>
           <div className="flex flex-col">
             <div className="font-bold flex-row flex center p-4 items-center">
               <h1 className="font-italic p-2">

@@ -9,19 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 [Route("[controller]")]
 [ApiController]
-public class AuthorsController : ControllerBase
+public class AuthorsController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator;
-
-    public AuthorsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpPost]
     public async Task<IActionResult> CreateAuthor(CreateAuthorCommand createAuthorCommand)
     {
-        var response = await _mediator.Send(createAuthorCommand);
+        var response = await mediator.Send(createAuthorCommand);
 
         return Created(nameof(GetAuthor), new { Id = response.Data });
     }
@@ -33,7 +26,7 @@ public class AuthorsController : ControllerBase
         {
             Id = id
         };
-        var response = await _mediator.Send(query);
+        var response = await mediator.Send(query);
         if (response.Exception is NotFoundException)
         {
             return NotFound();
@@ -46,7 +39,7 @@ public class AuthorsController : ControllerBase
     public async Task<IActionResult> PatchAuthor(Guid id, UpdateAuthorCommand command)
     {
         command.Id = id;
-        var response = await _mediator.Send(command);
+        var response = await mediator.Send(command);
         if (response.Exception is NotFoundException)
         {
             return NotFound();

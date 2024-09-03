@@ -12,9 +12,9 @@ public class GetEntryResponse
 
     public DateOnly Release { get; set; }
     
-    public byte[] Photo { get; set; } = null!;
+    public string Photo { get; set; } = null!;
 
     public decimal RatingAvg { get; set; }
 
-    public List<GetEntryAuthorResponse> Authors { get; set; }
+    public List<GetEntryAuthorGroupResponse> Authors { get; set; }
 }
