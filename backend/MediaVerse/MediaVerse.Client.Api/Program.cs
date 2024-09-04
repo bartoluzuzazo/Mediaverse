@@ -4,6 +4,7 @@ using MediaVerse.Client.Application.Queries.Test;
 using MediaVerse.Client.Application.Services.Transformer;
 using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Domain.Interfaces;
+using MediaVerse.Host.Extensions;
 using MediaVerse.Infrastructure.Database;
 using MediaVerse.Infrastructure.Repositories;
 using MediaVerse.Infrastructure.UserAccessor;
@@ -26,6 +27,9 @@ builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserAccessor, HttpUserAccessor>();
+
+builder.AddLogging();
+
 
 builder.Services.AddCors(o =>
 {
@@ -71,5 +75,5 @@ app.MapControllers();
 app.UsePathBase("/api");
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.ExecuteDbMigrations();
 app.Run();
