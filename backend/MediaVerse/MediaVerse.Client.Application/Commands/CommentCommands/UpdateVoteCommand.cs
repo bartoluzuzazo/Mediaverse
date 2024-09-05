@@ -10,24 +10,27 @@ using MediaVerse.Domain.Interfaces;
 
 namespace MediaVerse.Client.Application.Commands.CommentCommands;
 
-public record UpdateVoteCommand: IRequest<BaseResponse<GetCommentVoteResponse>>
+public record UpdateVoteCommand : IRequest<BaseResponse<GetCommentVoteResponse>>
 {
     public Guid CommentId { get; set; }
     public bool IsPositive { get; set; }
-    
 }
 
-public class UpdateVoteCommandHandler : UserAccessHandler,IRequestHandler<UpdateVoteCommand,BaseResponse<GetCommentVoteResponse>>
+public class UpdateVoteCommandHandler : IRequestHandler<UpdateVoteCommand, BaseResponse<GetCommentVoteResponse>>
 {
     private readonly IRepository<Vote> _voteRepository;
-    public UpdateVoteCommandHandler(IUserAccessor userAccessor, IRepository<User> userRepository, IRepository<Vote> voteRepository) : base(userAccessor, userRepository)
+    private readonly IUserService _userService;
+
+    public UpdateVoteCommandHandler(IRepository<Vote> voteRepository, IUserService userService)
     {
         _voteRepository = voteRepository;
+        _userService = userService;
     }
 
-    public async Task<BaseResponse<GetCommentVoteResponse>> Handle(UpdateVoteCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<GetCommentVoteResponse>> Handle(UpdateVoteCommand request,
+        CancellationToken cancellationToken)
     {
-        var userResp = await GetCurrentUserAsync(cancellationToken);
+        var userResp = await _userService.GetCurrentUserAsync(cancellationToken);
         if (userResp.Exception is not null)
         {
             return new BaseResponse<GetCommentVoteResponse>(userResp.Exception);
@@ -48,6 +51,5 @@ public class UpdateVoteCommandHandler : UserAccessHandler,IRequestHandler<Update
             IsPositive = request.IsPositive
         };
         return new BaseResponse<GetCommentVoteResponse>(responseVote);
-
     }
 }

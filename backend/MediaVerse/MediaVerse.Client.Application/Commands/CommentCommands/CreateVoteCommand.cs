@@ -20,25 +20,25 @@ public record CreateVoteCommand : IRequest<BaseResponse<GetCommentVoteResponse>>
 
 public class CreateVoteCommandHandler : UserAccessHandler,IRequestHandler<CreateVoteCommand, BaseResponse<GetCommentVoteResponse>>
 {
-    private readonly IUserAccessor _userAccessor;
-    private readonly IRepository<User> _userRepository;
+
     private readonly IRepository<Comment> _commentRepository;
     private readonly IRepository<Vote> _voteRepository;
+    private readonly IUserService _userService;
 
     public CreateVoteCommandHandler(IUserAccessor userAccessor, IRepository<User> userRepository,
-        IRepository<Comment> commentRepository, IRepository<Vote> voteRepository) : base(userAccessor, userRepository)
+        IRepository<Comment> commentRepository, IRepository<Vote> voteRepository, IUserService userService) 
     {
-        _userAccessor = userAccessor;
-        _userRepository = userRepository;
+
         _commentRepository = commentRepository;
         _voteRepository = voteRepository;
+        _userService = userService;
     }
 
     public async Task<BaseResponse<GetCommentVoteResponse>> Handle(CreateVoteCommand request,
         CancellationToken cancellationToken)
     {
         
-        var userResp = await GetCurrentUserAsync(cancellationToken);
+        var userResp = await _userService.GetCurrentUserAsync(cancellationToken);
         if (userResp.Exception is not null)
         {
             return new BaseResponse<GetCommentVoteResponse>(userResp.Exception);

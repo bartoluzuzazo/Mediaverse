@@ -60,6 +60,7 @@ builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserAccessor, HttpUserAccessor>();
+builder.Services.AddScoped<IUserService, HttpUserService>();
 
 builder.AddLogging();
 

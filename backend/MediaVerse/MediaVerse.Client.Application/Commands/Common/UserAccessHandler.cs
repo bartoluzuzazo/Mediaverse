@@ -10,30 +10,5 @@ namespace MediaVerse.Client.Application.Commands.Common;
 public abstract class UserAccessHandler
 {
     
-    private readonly IUserAccessor _userAccessor;
-    private readonly IRepository<User> _userRepository;
 
-    public UserAccessHandler(IUserAccessor userAccessor, IRepository<User> userRepository)
-    {
-        _userAccessor = userAccessor;
-        _userRepository = userRepository;
-    }
-
-    public async Task<BaseResponse<User>> GetCurrentUserAsync(CancellationToken cancellationToken)
-    {
-        
-        var email = _userAccessor.Email;
-        if (email is null)
-        {
-            return new BaseResponse<User>(new ProblemException());
-        }
-
-        var user = await _userRepository.FirstOrDefaultAsync(new GetUserSpecification(email), cancellationToken);
-        if (user is null)
-        {
-            return new BaseResponse<User>(new NotFoundException());
-        }
-
-        return new BaseResponse<User>(user);
-    }
 }

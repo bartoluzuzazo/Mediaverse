@@ -17,15 +17,17 @@ public record DeleteVoteCommand: IRequest<Exception?>
 public class DeleteVoteCommandHandler : UserAccessHandler, IRequestHandler<DeleteVoteCommand, Exception?>
 {
     private readonly IRepository<Vote> _voteRepository;
-    public DeleteVoteCommandHandler(IUserAccessor userAccessor, IRepository<User> userRepository, IRepository<Vote> voteRepository) : base(userAccessor, userRepository)
+    private readonly IUserService _userService;
+    public DeleteVoteCommandHandler(IRepository<Vote> voteRepository, IUserService userService)
     {
         _voteRepository = voteRepository;
+        _userService = userService;
     }
 
     public async  Task<Exception?> Handle(DeleteVoteCommand request, CancellationToken cancellationToken)
     {
         
-        var userResp = await GetCurrentUserAsync(cancellationToken);
+        var userResp = await _userService.GetCurrentUserAsync(cancellationToken);
         if (userResp.Exception is not null)
         {
             return userResp.Exception;

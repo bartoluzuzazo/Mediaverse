@@ -18,22 +18,24 @@ public record CreateSubCommentCommand : IRequest<BaseResponse<GetCommentResponse
 
 
 
-public class CreateSubCommentCommandHandler :UserAccessHandler, IRequestHandler<CreateSubCommentCommand, BaseResponse<GetCommentResponse>>
+public class CreateSubCommentCommandHandler : IRequestHandler<CreateSubCommentCommand, BaseResponse<GetCommentResponse>>
 {
 
     private readonly IRepository<Comment> _commentRepository;
     private readonly IRepository<Entry> _entryRepository;
+    private readonly IUserService _userService;
 
 
-    public CreateSubCommentCommandHandler(IUserAccessor userAccessor, IRepository<User> userRepository, IRepository<Comment> commentRepository, IRepository<Entry> entryRepository) : base(userAccessor, userRepository)
+    public CreateSubCommentCommandHandler( IRepository<Comment> commentRepository, IRepository<Entry> entryRepository, IUserService userService) 
     {
         _commentRepository = commentRepository;
         _entryRepository = entryRepository;
+        _userService = userService;
     }
 
     public async Task<BaseResponse<GetCommentResponse>> Handle(CreateSubCommentCommand request, CancellationToken cancellationToken)
     {
-        var userResp = await GetCurrentUserAsync(cancellationToken);
+        var userResp = await _userService.GetCurrentUserAsync(cancellationToken);
         if (userResp.Exception is not null)
         {
             return new BaseResponse<GetCommentResponse>(userResp.Exception);
