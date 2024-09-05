@@ -23,21 +23,19 @@ public record GetTopLevelCommentsAuthorizedQuery : IRequest<BaseResponse<Page<Ge
     public OrderDirection Direction { get; set; }
 }
 
-public class GetTopLevelCommentsAuthorizedQueryHandler : UserAccessHandler,IRequestHandler<GetTopLevelCommentsAuthorizedQuery,
+public class GetTopLevelCommentsAuthorizedQueryHandler :IRequestHandler<GetTopLevelCommentsAuthorizedQuery,
     BaseResponse<Page<GetCommentResponse>>>
 {
-    private readonly IUserAccessor _userAccessor;
-    private readonly IRepository<User> _userRepository;
+    private readonly IUserService _userService;
     private readonly IRepository<Comment> _commentRepository;
     private readonly IRepository<Entry> _entryRepository;
 
 
-    public GetTopLevelCommentsAuthorizedQueryHandler(IUserAccessor userAccessor, IRepository<User> userRepository, IRepository<Comment> commentRepository, IRepository<Entry> entryRepository) : base(userAccessor, userRepository)
+    public GetTopLevelCommentsAuthorizedQueryHandler( IRepository<Comment> commentRepository, IRepository<Entry> entryRepository, IUserService userService)
     {
-        _userAccessor = userAccessor;
-        _userRepository = userRepository;
         _commentRepository = commentRepository;
         _entryRepository = entryRepository;
+        _userService = userService;
     }
 
     public async Task<BaseResponse<Page<GetCommentResponse>>> Handle(GetTopLevelCommentsAuthorizedQuery request,
@@ -45,7 +43,7 @@ public class GetTopLevelCommentsAuthorizedQueryHandler : UserAccessHandler,IRequ
     {
 
         
-        var userResp = await GetCurrentUserAsync(cancellationToken);
+        var userResp = await _userService.GetCurrentUserAsync(cancellationToken);
         if (userResp.Exception is not null)
         {
             return new BaseResponse<Page<GetCommentResponse>>(userResp.Exception);
