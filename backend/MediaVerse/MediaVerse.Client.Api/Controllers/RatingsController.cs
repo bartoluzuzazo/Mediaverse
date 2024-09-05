@@ -9,54 +9,27 @@ namespace MediaVerse.Client.Api.Controllers;
 [ApiController]
 [Authorize]
 [Route("")]
-public class RatingsController : BaseController
+public class RatingsController(IMediator mediator) : BaseController
 {
-    private readonly IMediator _mediator;
-
-    public RatingsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
-
-    [HttpGet("entries/{entryGuid}/ratings/users-rating")]
+    [HttpGet("entries/{entryGuid:guid}/ratings/users-rating")]
     public async Task<IActionResult> GetUsersRating(Guid entryGuid)
     {
         var query = new GetUsersRatingQuery(entryGuid);
-
-        var result = await _mediator.Send(query);
-
-        if (result.Exception is not null)
-        {
-            return ResolveException(result.Exception);
-        }
-
-        return Ok(result.Data);
+        var result = await mediator.Send(query);
+        return ResolveCode(result.Exception, Ok(result.Data));
     }
 
-    [HttpPost("entries/{entryGuid}/ratings")]
-    public async Task<IActionResult> CreateRating(CreateRatingCommand createRatingCommand)
+    [HttpPost("entries/{entryGuid:guid}/ratings")]
+    public async Task<IActionResult> CreateRating(Guid entryGuid, CreateRatingCommand createRatingCommand)
     {
-        var result = await _mediator.Send(createRatingCommand);
-
-        if (result.Exception is not null)
-        {
-            return ResolveException(result.Exception);
-        }
-
-        return Created();
+        var result = await mediator.Send(createRatingCommand);
+        return ResolveCode(result.Exception, CreatedAtAction(nameof(GetUsersRating), result.Data));
     }
 
-    [HttpPut("ratings/{id}")]
-    public async Task<IActionResult> UpdateRating(Guid id, UpdateRatingCommand updateRatingCommand)
+    [HttpPut("ratings/{entryGuid:guid}")]
+    public async Task<IActionResult> UpdateRating(Guid entryGuid, UpdateRatingCommand updateRatingCommand)
     {
-        var result = await _mediator.Send(updateRatingCommand);
-
-        if (result.Exception is not null)
-        {
-            return ResolveException(result.Exception);
-        }
-
-        return Ok(result.Data);
+        var result = await mediator.Send(updateRatingCommand);
+        return ResolveCode(result.Exception, Ok(result.Data));
     }
 }

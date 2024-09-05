@@ -11,6 +11,7 @@ using MediaVerse.Infrastructure.UserAccessor;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 const string defaultpolicy = "default";
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,6 @@ builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserAccessor, HttpUserAccessor>();
-
 builder.AddLogging();
 
 

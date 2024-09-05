@@ -17,21 +17,15 @@ public record UpdateAuthorCommand : IRequest<BaseResponse<Guid>>
     public string? ProfilePicture { get; set; }
 }
 
-public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, BaseResponse<Guid>>
+public class UpdateAuthorCommandHandler(
+    IRepository<Author> authorRepository,
+    IRepository<ProfilePicture> profilePictureRepository)
+    : IRequestHandler<UpdateAuthorCommand, BaseResponse<Guid>>
 {
-    private readonly IRepository<Author> _authorRepository;
-    private readonly IRepository<ProfilePicture> _profilePictureRepository;
-
-    public UpdateAuthorCommandHandler(IRepository<Author> authorRepository, IRepository<ProfilePicture> profilePictureRepository)
-    {
-        _authorRepository = authorRepository;
-        _profilePictureRepository = profilePictureRepository;
-    }
-
     public async Task<BaseResponse<Guid>> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
     {
         var specification = new GetAuthorWithPhotoSpecification(request.Id);
-        var author = await _authorRepository.FirstOrDefaultAsync(specification, cancellationToken);
+        var author = await authorRepository.FirstOrDefaultAsync(specification, cancellationToken);
         if (author is null)
         {
             return new BaseResponse<Guid>(new NotFoundException());
@@ -49,11 +43,11 @@ public class UpdateAuthorCommandHandler : IRequestHandler<UpdateAuthorCommand, B
                 Id = Guid.NewGuid(),
                 Picture = photoData
             };
-           var newPicture =  await _profilePictureRepository.AddAsync(profilePicture, cancellationToken);
+           var newPicture =  await profilePictureRepository.AddAsync(profilePicture, cancellationToken);
            author.ProfilePicture = newPicture;
         }
 
-        var saveChangesAsync = await _authorRepository.SaveChangesAsync(cancellationToken);
+        var saveChangesAsync = await authorRepository.SaveChangesAsync(cancellationToken);
         return new BaseResponse<Guid>(author.Id);
     }
 }
