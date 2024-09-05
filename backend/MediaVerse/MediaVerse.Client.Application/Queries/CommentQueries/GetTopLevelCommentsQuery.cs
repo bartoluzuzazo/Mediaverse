@@ -11,8 +11,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MediaVerse.Client.Application.Queries.CommentQueries;
 
-public record GetTopLevelCommentsQuery(Guid EntryId, int Page, int Size, CommentOrder Order, OrderDirection Direction)
-    : IRequest<BaseResponse<Page<GetCommentResponse>>>;
+public record GetTopLevelCommentsQuery : IRequest<BaseResponse<Page<GetCommentResponse>>>
+{
+    public Guid? EntryId { get; set; }
+    public Guid? ParentId { get; set; }
+    public int Page { get; set; }
+    public int Size { get; set; }
+    public CommentOrder Order { get; set; }
+    public OrderDirection Direction { get; set; }
+}
 
 public class
     GetTopLevelCommentsQueryHandler : IRequestHandler<GetTopLevelCommentsQuery, BaseResponse<Page<GetCommentResponse>>>
@@ -26,16 +33,34 @@ public class
         _commentRepository = commentRepository;
     }
 
-    public  async Task<BaseResponse<Page<GetCommentResponse>>> Handle(GetTopLevelCommentsQuery request,
+    public async Task<BaseResponse<Page<GetCommentResponse>>> Handle(GetTopLevelCommentsQuery request,
         CancellationToken cancellationToken)
     {
-        var entry = await _entryRepository.GetByIdAsync(request.EntryId, cancellationToken);
-        if (entry is null)
+        if (request.ParentId is null && request.EntryId is null)
         {
-            return new BaseResponse<Page<GetCommentResponse>>(new NotFoundException());
+            return new BaseResponse<Page<GetCommentResponse>>(new ProblemException());
         }
 
-        var spec = new GetCommentsSpecification(request.EntryId, null, null, request.Page, request.Size, request.Order,
+        if (request.EntryId is not null)
+        {
+            var entry = await _entryRepository.GetByIdAsync(request.EntryId, cancellationToken);
+            if (entry is null)
+            {
+                return new BaseResponse<Page<GetCommentResponse>>(new NotFoundException());
+            }
+        }
+
+        if (request.ParentId is not null)
+        {
+            var parent = await _commentRepository.GetByIdAsync(request.ParentId, cancellationToken);
+            if (parent is null)
+            {
+                return new BaseResponse<Page<GetCommentResponse>>(new NotFoundException());
+            }
+        }
+
+        var spec = new GetCommentsSpecification(request.EntryId, request.ParentId, null, request.Page, request.Size,
+            request.Order,
             request.Direction);
         var data = await _commentRepository.ListAsync(spec, cancellationToken);
         var commentCount = await _commentRepository.CountAsync(spec, cancellationToken);

@@ -1,8 +1,7 @@
 using MediatR;
+using MediaVerse.Client.Application.Commands.Common;
 using MediaVerse.Client.Application.DTOs.Comments;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.RatingDTOs;
 using MediaVerse.Client.Application.Services.UserAccessor;
-using MediaVerse.Client.Application.Specifications.UserSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
@@ -17,39 +16,28 @@ public record CreateTopLevelCommentCommand : IRequest<BaseResponse<GetCommentRes
 }
 
 public class
-    CreateTopLevelCommentCommandHandler : IRequestHandler<CreateTopLevelCommentCommand,
+    CreateTopLevelCommentCommandHandler : UserAccessHandler,IRequestHandler<CreateTopLevelCommentCommand,
     BaseResponse<GetCommentResponse>>
 {
-    private readonly IUserAccessor _userAccessor;
-    private readonly IRepository<User> _userRepository;
     private readonly IRepository<Comment> _commentRepository;
     private readonly IRepository<Entry> _entryRepository;
 
-    public CreateTopLevelCommentCommandHandler(IRepository<Comment> commentRepository, IRepository<User> userRepository,
-        IUserAccessor userAccessor, IRepository<Entry> entryRepository)
+
+    public CreateTopLevelCommentCommandHandler(IUserAccessor userAccessor, IRepository<User> userRepository, IRepository<Comment> commentRepository, IRepository<Entry> entryRepository) : base(userAccessor, userRepository)
     {
         _commentRepository = commentRepository;
-        _userRepository = userRepository;
-        _userAccessor = userAccessor;
         _entryRepository = entryRepository;
     }
-
 
     public async Task<BaseResponse<GetCommentResponse>> Handle(CreateTopLevelCommentCommand request,
         CancellationToken cancellationToken)
     {
-        var userEmail = _userAccessor.Email;
-        if (userEmail is null)
+        var userResp = await GetCurrentUserAsync(cancellationToken);
+        if (userResp.Exception is not null)
         {
-            return new BaseResponse<GetCommentResponse>(new ProblemException());
+            return new BaseResponse<GetCommentResponse>(userResp.Exception);
         }
-
-        var userSpec = new GetUserSpecification(userEmail);
-        var user = await _userRepository.FirstOrDefaultAsync(userSpec, cancellationToken);
-        if (user is null)
-        {
-            return new BaseResponse<GetCommentResponse>(new NotFoundException());
-        }
+        var user = userResp.Data!;
 
         var entry = await _entryRepository.GetByIdAsync(request.EntryId, cancellationToken);
         if (entry is null)

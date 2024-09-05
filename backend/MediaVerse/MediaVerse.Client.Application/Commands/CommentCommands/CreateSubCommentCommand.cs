@@ -1,4 +1,5 @@
 using MediatR;
+using MediaVerse.Client.Application.Commands.Common;
 using MediaVerse.Client.Application.DTOs.Comments;
 using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Client.Application.Specifications.UserSpecifications;
@@ -17,35 +18,28 @@ public record CreateSubCommentCommand : IRequest<BaseResponse<GetCommentResponse
 
 
 
-public class CreateSubCommentCommandHandler : IRequestHandler<CreateSubCommentCommand, BaseResponse<GetCommentResponse>>
+public class CreateSubCommentCommandHandler :UserAccessHandler, IRequestHandler<CreateSubCommentCommand, BaseResponse<GetCommentResponse>>
 {
-    private readonly IUserAccessor _userAccessor;
-    private readonly IRepository<User> _userRepository;
+
     private readonly IRepository<Comment> _commentRepository;
     private readonly IRepository<Entry> _entryRepository;
-    
-    
-    
-    public CreateSubCommentCommandHandler(IUserAccessor userAccessor, IRepository<User> userRepository, IRepository<Comment> commentRepository, IRepository<Entry> entryRepository)
+
+
+    public CreateSubCommentCommandHandler(IUserAccessor userAccessor, IRepository<User> userRepository, IRepository<Comment> commentRepository, IRepository<Entry> entryRepository) : base(userAccessor, userRepository)
     {
-        _userAccessor = userAccessor;
-        _userRepository = userRepository;
         _commentRepository = commentRepository;
         _entryRepository = entryRepository;
     }
+
     public async Task<BaseResponse<GetCommentResponse>> Handle(CreateSubCommentCommand request, CancellationToken cancellationToken)
     {
-        var email = _userAccessor.Email;
-        if (email is null)
+        var userResp = await GetCurrentUserAsync(cancellationToken);
+        if (userResp.Exception is not null)
         {
-            return new BaseResponse<GetCommentResponse>(new NotFoundException());
+            return new BaseResponse<GetCommentResponse>(userResp.Exception);
         }
 
-        var user = await _userRepository.FirstOrDefaultAsync(new GetUserSpecification(email), cancellationToken);
-        if (user is null)
-        {
-            return new BaseResponse<GetCommentResponse>(new NotFoundException());
-        }
+        var user = userResp.Data!;
 
         var parentComment = await _commentRepository.GetByIdAsync(request.ParentCommentId, cancellationToken);
         if (parentComment is null)
