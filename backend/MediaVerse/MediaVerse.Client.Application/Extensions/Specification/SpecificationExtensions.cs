@@ -34,8 +34,26 @@ public static class SpecificationExtensions
         return specificationBuilder;
     }
     
-    public static ISpecificationBuilder<Entry> Paginate(
-        this ISpecificationBuilder<Entry> specificationBuilder,
+    
+    public static ISpecificationBuilder<Comment> OrderComments(
+        this ISpecificationBuilder<Comment> specificationBuilder,
+        CommentOrder order, OrderDirection direction)
+    {
+        switch (order)
+        {
+            case CommentOrder.Votes:
+                specificationBuilder.OrderByDirection(c =>c.Votes.Select(c=>c.IsPositive ? 1 : -1).Sum(), direction);
+                break;
+            case CommentOrder.VoteCount:
+                specificationBuilder.OrderByDirection(c => c.Votes.Count(), direction);
+                break;
+        }
+
+        return specificationBuilder;
+    }
+    
+    public static ISpecificationBuilder<T> Paginate<T>(
+        this ISpecificationBuilder<T> specificationBuilder,
         int page, int size)
     {
         specificationBuilder.Skip((page - 1) * size).Take(size);
