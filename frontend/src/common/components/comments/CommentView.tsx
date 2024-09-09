@@ -4,7 +4,6 @@ type Props = {
   comment: Comment
 }
 export const CommentView = ({ comment }: Props) => {
-  console.log(comment.username)
   const imgSrc = 'data:image/*;base64,' + comment.userProfile
   return (
     <div className="mb-4 flex gap-6 rounded-xl p-3 shadow-md">
