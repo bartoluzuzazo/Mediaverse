@@ -63,10 +63,11 @@ public class CreateSubCommentCommandHandler : IRequestHandler<CreateSubCommentCo
             Id = newComment.Id,
             EntryId = newComment.EntryId,
             Username = user.Username,
-            UserProfile =user.ProfilePicture == null ? null :  Convert.ToBase64String( user.ProfilePicture.Picture),
+            UserProfile = user.ProfilePicture == null ? null :  Convert.ToBase64String( user.ProfilePicture.Picture),
             Content = newComment.Content,
             SubcommentCount = 0,
-            VoteSum = 0
+            Downvotes = 0,
+            Upvotes = 0
         };
         return new BaseResponse<GetCommentResponse>(commentResponse);
 

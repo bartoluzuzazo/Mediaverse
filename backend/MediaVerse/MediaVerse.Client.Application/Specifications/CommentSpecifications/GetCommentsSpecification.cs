@@ -29,7 +29,9 @@ public class GetCommentsSpecification : Specification<Comment, GetCommentRespons
                 UserProfile =comment.User.ProfilePicture == null ? null : Convert.ToBase64String(comment.User.ProfilePicture.Picture),
                 Content = comment.Content,
                 SubcommentCount = comment.InverseParentComment.Count(),
-                VoteSum = comment.Votes.Select(c => c.IsPositive ? 1 : -1).Sum(),
+                Upvotes = comment.Votes.Count(c => c.IsPositive),
+                Downvotes = comment.Votes.Count(c => !c.IsPositive),
+                
                 UsersVote = userEmail == null
                     ? null
                     : comment.Votes

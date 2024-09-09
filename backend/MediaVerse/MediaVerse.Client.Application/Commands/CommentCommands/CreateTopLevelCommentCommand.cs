@@ -63,7 +63,8 @@ public class
             UserProfile = user.ProfilePicture == null ? null : Convert.ToBase64String(user.ProfilePicture.Picture),
             Content = comment.Content,
             SubcommentCount = 0,
-            VoteSum = 0
+            Upvotes = 0,
+            Downvotes = 0
         };
 
         return new BaseResponse<GetCommentResponse>(commentResponse);

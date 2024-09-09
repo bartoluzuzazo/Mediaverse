@@ -42,10 +42,10 @@ public static class SpecificationExtensions
         switch (order)
         {
             case CommentOrder.Votes:
-                specificationBuilder.OrderByDirection(c =>c.Votes.Select(c=>c.IsPositive ? 1 : -1).Sum(), direction);
+                specificationBuilder.OrderByDirection(c =>c.Votes.Select(c=>c.IsPositive ? 1 : -1).Sum(), direction).ThenByDirection(c=>c.Id, OrderDirection.Descending);
                 break;
             case CommentOrder.VoteCount:
-                specificationBuilder.OrderByDirection(c => c.Votes.Count(), direction);
+                specificationBuilder.OrderByDirection(c => c.Votes.Count(), direction).ThenByDirection(c=>c.Id, OrderDirection.Descending);
                 break;
         }
 

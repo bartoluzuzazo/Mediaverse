@@ -12,3 +12,10 @@ export enum OrderDirection {
   Descending,
   Ascending,
 }
+
+export interface Page<T> {
+  contents: T[]
+  pageCount: number
+  currentPage: number
+  hasNext: boolean
+}
