@@ -89,26 +89,26 @@ export const CommentVotes = ({
       {comment.upvotes}
       {comment.usersVote ? (
         <BsHandThumbsUpFill
-          className="mr-3 text-2xl"
+          className={`mr-3 text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
           onClick={() => {
             sendIfAuthorized(undefined)
           }}
         />
       ) : (
         <BsHandThumbsUp
-          className="mr-3 text-2xl"
+          className={`mr-3 text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
           onClick={() => sendIfAuthorized(true)}
         />
       )}
       {comment.downvotes}
       {!comment.usersVote && comment.usersVote != undefined ? (
         <BsHandThumbsDownFill
-          className="text-2xl"
+          className={`text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
           onClick={() => sendIfAuthorized(undefined)}
         />
       ) : (
         <BsHandThumbsDown
-          className="text-2xl"
+          className={`text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
           onClick={() => sendIfAuthorized(false)}
         />
       )}

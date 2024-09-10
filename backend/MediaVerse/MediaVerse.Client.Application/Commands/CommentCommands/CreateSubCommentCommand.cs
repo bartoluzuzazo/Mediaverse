@@ -52,6 +52,7 @@ public class CreateSubCommentCommandHandler : IRequestHandler<CreateSubCommentCo
         var newComment = new Comment()
         {
             Id = Guid.NewGuid(),
+            ParentCommentId = parentComment.Id,
             EntryId = parentComment.EntryId,
             UserId = user.Id,
             Content = request.Content,

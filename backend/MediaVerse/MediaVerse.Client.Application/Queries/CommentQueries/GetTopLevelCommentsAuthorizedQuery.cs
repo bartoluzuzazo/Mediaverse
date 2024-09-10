@@ -69,7 +69,7 @@ public class GetTopLevelCommentsAuthorizedQueryHandler :IRequestHandler<GetTopLe
             }
         }
 
-        var spec = new GetCommentsSpecification(request.EntryId, null, email, request.Page, request.Size, request.Order,
+        var spec = new GetCommentsSpecification(request.EntryId, request.ParentId, email, request.Page, request.Size, request.Order,
             request.Direction);
         var data = await _commentRepository.ListAsync(spec, cancellationToken);
         var commentCount = await _commentRepository.CountAsync(spec, cancellationToken);

@@ -29,7 +29,7 @@ const CommentSection = ({ entryId }: Props) => {
           .then((res) => res.data)
       } else {
         return await commentService
-          .getRootCommentsAuthorized(entryId, {
+          .getRootCommentsUnauthorized(entryId, {
             page: pageParam,
             ...commentParams,
           })
@@ -62,6 +62,7 @@ const CommentSection = ({ entryId }: Props) => {
                 key={c.id}
                 parentPage={page.currentPage}
                 parentQueryKey={queryKey}
+                commentParams={commentParams}
               />
             )
           })
