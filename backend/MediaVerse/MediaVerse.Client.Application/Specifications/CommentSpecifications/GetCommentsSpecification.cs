@@ -26,18 +26,22 @@ public class GetCommentsSpecification : Specification<Comment, GetCommentRespons
                 Id = comment.Id,
                 EntryId = comment.EntryId,
                 Username = comment.User.Username,
-                UserProfile =comment.User.ProfilePicture == null ? null : Convert.ToBase64String(comment.User.ProfilePicture.Picture),
+                UserProfile = comment.User.ProfilePicture == null
+                    ? null
+                    : Convert.ToBase64String(comment.User.ProfilePicture.Picture),
                 Content = comment.Content,
                 SubcommentCount = comment.InverseParentComment.Count(),
                 Upvotes = comment.Votes.Count(c => c.IsPositive),
                 Downvotes = comment.Votes.Count(c => !c.IsPositive),
-                
+
                 UsersVote = userEmail == null
                     ? null
-                    : comment.Votes
-                        .Where(v => v.User.Email == userEmail)
-                        .Select(v => v.IsPositive)
-                        .FirstOrDefault()
+                    : comment.Votes.Any(v => v.User.Email == userEmail)
+                        ? comment.Votes
+                            .Where(v => v.User.Email == userEmail)
+                            .Select(v => v.IsPositive)
+                            .FirstOrDefault()
+                        : null
             })
             .OrderComments(order, direction)
             .Paginate(page, size);

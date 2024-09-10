@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 import { commentService } from '../../../services/commentService.ts'
 
@@ -10,10 +10,11 @@ interface CommentFormData {
 
 type Props = {
   entryId: string
-  invalidateParentComments: () => void
+  parentQueryKey: unknown[]
 }
-export const CommentForm = ({ entryId, invalidateParentComments }: Props) => {
+export const CommentForm = ({ entryId, parentQueryKey }: Props) => {
   const { isAuthenticated } = useAuthContext()!
+  const queryClient = useQueryClient()
   const {
     register,
     handleSubmit,
@@ -27,7 +28,9 @@ export const CommentForm = ({ entryId, invalidateParentComments }: Props) => {
       return await commentService.postRootComment(comment)
     },
     onSuccess: () => {
-      invalidateParentComments()
+      queryClient.invalidateQueries({
+        queryKey: parentQueryKey,
+      })
     },
   })
   const onSubmit: SubmitHandler<CommentFormData> = async (data) => {

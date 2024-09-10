@@ -20,3 +20,8 @@ export interface GetCommentsParams extends PaginateRequest {
   order: CommentOrder
   direction: OrderDirection
 }
+
+export interface Vote {
+  isPositive: boolean
+  commentId: string
+}

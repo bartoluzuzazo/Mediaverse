@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Page } from '../models/common'
-import { GetCommentsParams } from '../models/comments'
+import { GetCommentsParams, Vote } from '../models/comments'
 import { Comment } from '../models/comments'
 import { CommentFormData } from '../common/components/comments/CommentForm.tsx'
 
@@ -25,5 +25,18 @@ export class commentService {
 
   public static async postRootComment(comment: CommentFormData) {
     return await axios.post(`entries/${comment.entryId}/comments`, comment)
+  }
+
+  public static async postVote(vote: Vote) {
+    return await axios.post(`comments/${vote.commentId}/votes`, vote)
+  }
+  public static async putVote(vote: Vote) {
+    return await axios.put(
+      `comments/${vote.commentId}/votes/current-user`,
+      vote
+    )
+  }
+  public static async deleteVote(commentId: string) {
+    return await axios.delete(`comments/${commentId}/votes/current-user`)
   }
 }
