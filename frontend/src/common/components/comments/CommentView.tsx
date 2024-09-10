@@ -1,6 +1,8 @@
 import { Comment, GetCommentsParams } from '../../../models/comments'
 import { CommentVotes } from './CommentVotes.tsx'
 import { Subcomments } from './Subcomments.tsx'
+import { useState } from 'react'
+import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 
 type Props = {
   comment: Comment
@@ -15,6 +17,8 @@ export const CommentView = ({
   commentParams,
 }: Props) => {
   const imgSrc = 'data:image/*;base64,' + comment.userProfile
+  const [isReplying, setIsReplying] = useState(false)
+  const { isAuthenticated } = useAuthContext()!
   return (
     <>
       <div className="mb-4 rounded-xl p-3 shadow-md">
@@ -30,6 +34,14 @@ export const CommentView = ({
           <div className="flex-1">{comment.content}</div>
         </div>
         <div className="flex justify-end">
+          {isAuthenticated && (
+            <button
+              className={`${isReplying ? 'bg-violet-700' : 'bg-violet-500'} mr-auto rounded-md text-white`}
+              onClick={() => setIsReplying((r) => !r)}
+            >
+              Reply
+            </button>
+          )}
           <CommentVotes
             comment={comment}
             parentPage={parentPage}
@@ -37,9 +49,14 @@ export const CommentView = ({
           />
         </div>
       </div>
-      {comment.subcommentCount > 0 && (
-        <Subcomments parentComment={comment} commentParams={commentParams} />
-      )}
+
+      <Subcomments
+        parentComment={comment}
+        commentParams={commentParams}
+        parentQueryKey={parentQueryKey}
+        isReplying={isReplying}
+        setIsReplying={setIsReplying}
+      />
     </>
   )
 }

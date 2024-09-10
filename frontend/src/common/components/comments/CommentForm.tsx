@@ -2,35 +2,59 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 import { commentService } from '../../../services/commentService.ts'
+import { SetStateAction } from 'react'
 
 interface CommentFormData {
   content: string
   entryId: string
+  commentId?: string
 }
 
 type Props = {
   entryId: string
-  parentQueryKey: unknown[]
+  parentQueryKeys: unknown[][]
+  parentCommentId?: string
+  setIsReplying?: React.Dispatch<SetStateAction<boolean>>
 }
-export const CommentForm = ({ entryId, parentQueryKey }: Props) => {
+export const CommentForm = ({
+  entryId,
+  parentQueryKeys,
+  parentCommentId,
+  setIsReplying,
+}: Props) => {
   const { isAuthenticated } = useAuthContext()!
   const queryClient = useQueryClient()
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
+    reset,
   } = useForm<CommentFormData>({
-    defaultValues: { entryId: entryId, content: '' },
+    defaultValues: {
+      entryId: entryId,
+      content: '',
+      commentId: parentCommentId,
+    },
   })
 
   const { mutateAsync: sendCommentMutation } = useMutation({
     mutationFn: async (comment: CommentFormData) => {
-      return await commentService.postRootComment(comment)
+      if (comment.commentId == undefined) {
+        return await commentService.postRootComment(comment)
+      } else {
+        return await commentService.postSubcomment(comment)
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: parentQueryKey,
-      })
+      for (const key of parentQueryKeys) {
+        queryClient.invalidateQueries({
+          queryKey: key,
+        })
+      }
+      reset()
+      if (setIsReplying !== undefined) {
+        setIsReplying(false)
+      }
     },
   })
   const onSubmit: SubmitHandler<CommentFormData> = async (data) => {

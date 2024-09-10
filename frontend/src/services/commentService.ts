@@ -48,6 +48,13 @@ export class commentService {
     return await axios.post(`entries/${comment.entryId}/comments`, comment)
   }
 
+  public static async postSubcomment(comment: CommentFormData) {
+    return await axios.post(
+      `comments/${comment.commentId}/sub-comments`,
+      comment
+    )
+  }
+
   public static async postVote(vote: Vote) {
     return await axios.post(`comments/${vote.commentId}/votes`, vote)
   }

@@ -52,7 +52,7 @@ const CommentSection = ({ entryId }: Props) => {
 
   return (
     <div>
-      <CommentForm entryId={entryId} parentQueryKey={queryKey} />
+      <CommentForm entryId={entryId} parentQueryKeys={[queryKey]} />
       {data &&
         data.pages.map((page) =>
           page.contents.map((c) => {
