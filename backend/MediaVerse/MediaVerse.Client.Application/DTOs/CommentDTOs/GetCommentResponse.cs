@@ -1,6 +1,6 @@
 using MediaVerse.Domain.Entities;
 
-namespace MediaVerse.Client.Application.DTOs.Comments;
+namespace MediaVerse.Client.Application.DTOs.CommentDtos;
 
 public class GetCommentResponse
 {

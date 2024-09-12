@@ -14,7 +14,7 @@ const CommentSection = ({ entryId }: Props) => {
   const [commentParams] = useState<Omit<GetCommentsParams, 'page'>>({
     order: CommentOrder.votes,
     direction: OrderDirection.Descending,
-    size: 2,
+    size: 20,
   })
   const queryKey = ['GET_ENTRY_COMMENTS', entryId, { commentParams }]
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({

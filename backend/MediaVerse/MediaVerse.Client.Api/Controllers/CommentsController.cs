@@ -1,7 +1,7 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.CommentCommands;
+using MediaVerse.Client.Application.DTOs.CommentDtos;
 using MediaVerse.Client.Application.Queries.CommentQueries;
-using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,23 +20,27 @@ public class CommentsController : BaseController
     }
 
 
-    [HttpPost("comments/{commentId}/votes")]
-    public async Task<IActionResult> PostVote(Guid commentId, CreateVoteCommand command)
+    [HttpPost("comments/{commentId:guid}/votes")]
+    public async Task<IActionResult> PostVote(Guid commentId, PostVoteDto voteDto)
     {
-        command.CommentId = commentId;
+        var command = new CreateVoteCommand(commentId, voteDto);
         var result = await _mediator.Send(command);
         return ResolveCode(result.Exception, Created("", result.Data));
     }
 
-    [HttpPut("comments/{commentId}/votes/current-user")]
-    public async Task<IActionResult> PutVote(Guid commentId, UpdateVoteCommand command)
+    [HttpPut("comments/{commentId:guid}/votes/current-user")]
+    public async Task<IActionResult> PutVote(Guid commentId, PutVoteDto voteDto)
     {
-        command.CommentId = commentId;
+        var command = new UpdateVoteCommand()
+        {
+            CommentId = commentId,
+            VoteDto = voteDto
+        };
         var result = await _mediator.Send(command);
         return ResolveCode(result.Exception, Ok(result.Data));
     }
 
-    [HttpDelete("comments/{commentId}/votes/current-user")]
+    [HttpDelete("comments/{commentId:guid}/votes/current-user")]
     public async Task<IActionResult> DeleteVote(Guid commentId)
     {
         var command = new DeleteVoteCommand()
@@ -48,30 +52,38 @@ public class CommentsController : BaseController
     }
 
 
-    [HttpPost("entries/{entryId}/comments")]
+    [HttpPost("entries/{entryId:guid}/comments")]
     [Authorize]
-    public async Task<IActionResult> PostTopLevelComment(Guid entryId, CreateTopLevelCommentCommand command)
+    public async Task<IActionResult> PostTopLevelComment(Guid entryId, PostCommentDto commentDto)
     {
-        command.EntryId = entryId;
+        var command = new CreateTopLevelCommentCommand()
+        {
+            EntryId = entryId,
+            CommentDto = commentDto
+        };
         var result = await _mediator.Send(command);
         return ResolveCode(result.Exception, CreatedAtAction(nameof(GetComments), new { entryId }, result.Data));
     }
 
-    [HttpPost("comments/{commentId}/sub-comments")]
+    [HttpPost("comments/{commentId:guid}/sub-comments")]
     [Authorize]
-    public async Task<IActionResult> PostSubComment(Guid commentId, CreateSubCommentCommand command)
+    public async Task<IActionResult> PostSubComment(Guid commentId, PostCommentDto commentDto)
     {
-        command.ParentCommentId = commentId;
+        var command = new CreateSubCommentCommand()
+        {
+            CommentDto = commentDto,
+            ParentCommentId = commentId,
+        };
         var result = await _mediator.Send(command);
         return ResolveCode(result.Exception, CreatedAtAction(nameof(GetSubcomments), new { commentId }, result.Data));
     }
 
-    [HttpGet("entries/{entryId}/authorized-comments")]
+    [HttpGet("entries/{entryId:guid}/authorized-comments")]
     [Authorize]
     public async Task<IActionResult> GetCommentsWithUsersVote(Guid entryId, int page, int size, CommentOrder order,
         OrderDirection direction)
     {
-        var query = new GetTopLevelCommentsAuthorizedQuery()
+        var query = new GetCommentsAuthorizedQuery()
         {
             EntryId = entryId,
             Page = page,
@@ -83,11 +95,11 @@ public class CommentsController : BaseController
         return ResolveCode(result.Exception, Ok(result.Data));
     }
 
-    [HttpGet("entries/{entryId}/comments")]
+    [HttpGet("entries/{entryId:guid}/comments")]
     public async Task<IActionResult> GetComments(Guid entryId, int page, int size, CommentOrder order,
         OrderDirection direction)
     {
-        var query = new GetTopLevelCommentsQuery()
+        var query = new GetCommentsQuery()
         {
             EntryId = entryId,
             Page = page,
@@ -99,11 +111,11 @@ public class CommentsController : BaseController
         return ResolveCode(result.Exception, Ok(result.Data));
     }
 
-    [HttpGet("comments/{commentId}/sub-comments")]
+    [HttpGet("comments/{commentId:guid}/sub-comments")]
     public async Task<IActionResult> GetSubcomments(Guid commentId, int page, int size, CommentOrder order,
         OrderDirection direction)
     {
-        var query = new GetTopLevelCommentsQuery()
+        var query = new GetCommentsQuery()
         {
             ParentId = commentId,
             Page = page,
@@ -116,12 +128,12 @@ public class CommentsController : BaseController
     }
 
 
-    [HttpGet("comments/{commentId}/authorized-sub-comments")]
+    [HttpGet("comments/{commentId:guid}/authorized-sub-comments")]
     [Authorize]
     public async Task<IActionResult> GetSubcommentsAuthorized(Guid commentId, int page, int size, CommentOrder order,
         OrderDirection direction)
     {
-        var query = new GetTopLevelCommentsAuthorizedQuery()
+        var query = new GetCommentsAuthorizedQuery()
         {
             ParentId = commentId,
             Page = page,

@@ -1,6 +1,5 @@
 using MediatR;
-using MediaVerse.Client.Application.Commands.Common;
-using MediaVerse.Client.Application.DTOs.Comments;
+using MediaVerse.Client.Application.DTOs.CommentDtos;
 using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Client.Application.Specifications.CommentSpecifications;
 using MediaVerse.Domain.AggregatesModel;
@@ -12,8 +11,8 @@ namespace MediaVerse.Client.Application.Commands.CommentCommands;
 
 public record UpdateVoteCommand : IRequest<BaseResponse<GetCommentVoteResponse>>
 {
+    public PutVoteDto VoteDto { get; set; } = null!;
     public Guid CommentId { get; set; }
-    public bool IsPositive { get; set; }
 }
 
 public class UpdateVoteCommandHandler : IRequestHandler<UpdateVoteCommand, BaseResponse<GetCommentVoteResponse>>
@@ -43,12 +42,12 @@ public class UpdateVoteCommandHandler : IRequestHandler<UpdateVoteCommand, BaseR
             return new BaseResponse<GetCommentVoteResponse>(new NotFoundException());
         }
 
-        vote.IsPositive = request.IsPositive;
+        vote.IsPositive = request.VoteDto.IsPositive;
         await _voteRepository.SaveChangesAsync(cancellationToken);
         var responseVote = new GetCommentVoteResponse()
         {
             CommentId = request.CommentId,
-            IsPositive = request.IsPositive
+            IsPositive = request.VoteDto.IsPositive
         };
         return new BaseResponse<GetCommentVoteResponse>(responseVote);
     }

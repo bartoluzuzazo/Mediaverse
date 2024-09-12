@@ -21,22 +21,24 @@ export const CommentView = ({
   const { isAuthenticated } = useAuthContext()!
   return (
     <>
-      <div className="mb-4 rounded-xl p-3 shadow-md">
+      <div className="mb-4 mt-3 rounded-xl p-3 shadow-md">
         <div className="flex gap-6">
           <div>
             <img
               src={imgSrc}
               alt="users profile"
-              className="picture aspect-square w-24 rounded-full border-2 object-cover shadow-md"
+              className="picture aspect-square w-16 rounded-full border-2 object-cover shadow-md md:w-24"
             />
-            <div className="text-center">{comment.username}</div>
+            <div className="mb-3 text-center font-semibold">
+              {comment.username}
+            </div>
           </div>
           <div className="flex-1">{comment.content}</div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex items-baseline justify-end">
           {isAuthenticated && (
             <button
-              className={`${isReplying ? 'bg-violet-700' : 'bg-violet-500'} mr-auto rounded-md text-white`}
+              className={`${isReplying ? 'bg-slate-900' : 'bg-slate-700'} mr-auto rounded-md px-3 py-1.5 text-white md:px-4 md:py-2`}
               onClick={() => setIsReplying((r) => !r)}
             >
               Reply

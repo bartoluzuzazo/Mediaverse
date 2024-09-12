@@ -1,5 +1,5 @@
 using Ardalis.Specification;
-using MediaVerse.Client.Application.DTOs.Comments;
+using MediaVerse.Client.Application.DTOs.CommentDtos;
 using MediaVerse.Client.Application.Extensions.Specification;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.ValueObjects.Enums;

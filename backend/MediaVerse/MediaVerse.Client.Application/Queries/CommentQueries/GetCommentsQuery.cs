@@ -1,5 +1,5 @@
 using MediatR;
-using MediaVerse.Client.Application.DTOs.Comments;
+using MediaVerse.Client.Application.DTOs.CommentDtos;
 using MediaVerse.Client.Application.DTOs.Common;
 using MediaVerse.Client.Application.Specifications.CommentSpecifications;
 using MediaVerse.Domain.AggregatesModel;
@@ -7,11 +7,10 @@ using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
 using MediaVerse.Domain.ValueObjects.Enums;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MediaVerse.Client.Application.Queries.CommentQueries;
 
-public record GetTopLevelCommentsQuery : IRequest<BaseResponse<Page<GetCommentResponse>>>
+public record GetCommentsQuery : IRequest<BaseResponse<Page<GetCommentResponse>>>
 {
     public Guid? EntryId { get; set; }
     public Guid? ParentId { get; set; }
@@ -22,18 +21,10 @@ public record GetTopLevelCommentsQuery : IRequest<BaseResponse<Page<GetCommentRe
 }
 
 public class
-    GetTopLevelCommentsQueryHandler : IRequestHandler<GetTopLevelCommentsQuery, BaseResponse<Page<GetCommentResponse>>>
+    GetCommentsQueryHandler(IRepository<Entry> entryRepository, IRepository<Comment> commentRepository)
+    : IRequestHandler<GetCommentsQuery, BaseResponse<Page<GetCommentResponse>>>
 {
-    private readonly IRepository<Comment> _commentRepository;
-    private readonly IRepository<Entry> _entryRepository;
-
-    public GetTopLevelCommentsQueryHandler(IRepository<Entry> entryRepository, IRepository<Comment> commentRepository)
-    {
-        _entryRepository = entryRepository;
-        _commentRepository = commentRepository;
-    }
-
-    public async Task<BaseResponse<Page<GetCommentResponse>>> Handle(GetTopLevelCommentsQuery request,
+    public async Task<BaseResponse<Page<GetCommentResponse>>> Handle(GetCommentsQuery request,
         CancellationToken cancellationToken)
     {
         if (request.ParentId is null && request.EntryId is null)
@@ -43,7 +34,7 @@ public class
 
         if (request.EntryId is not null)
         {
-            var entry = await _entryRepository.GetByIdAsync(request.EntryId, cancellationToken);
+            var entry = await entryRepository.GetByIdAsync(request.EntryId, cancellationToken);
             if (entry is null)
             {
                 return new BaseResponse<Page<GetCommentResponse>>(new NotFoundException());
@@ -52,7 +43,7 @@ public class
 
         if (request.ParentId is not null)
         {
-            var parent = await _commentRepository.GetByIdAsync(request.ParentId, cancellationToken);
+            var parent = await commentRepository.GetByIdAsync(request.ParentId, cancellationToken);
             if (parent is null)
             {
                 return new BaseResponse<Page<GetCommentResponse>>(new NotFoundException());
@@ -62,8 +53,8 @@ public class
         var spec = new GetCommentsSpecification(request.EntryId, request.ParentId, null, request.Page, request.Size,
             request.Order,
             request.Direction);
-        var data = await _commentRepository.ListAsync(spec, cancellationToken);
-        var commentCount = await _commentRepository.CountAsync(spec, cancellationToken);
+        var data = await commentRepository.ListAsync(spec, cancellationToken);
+        var commentCount = await commentRepository.CountAsync(spec, cancellationToken);
         var page = new Page<GetCommentResponse>()
         {
             Contents = data,

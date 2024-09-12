@@ -1,11 +1,5 @@
 import { Comment } from '../../../models/comments'
 import {
-  BsHandThumbsDown,
-  BsHandThumbsDownFill,
-  BsHandThumbsUp,
-  BsHandThumbsUpFill,
-} from 'react-icons/bs'
-import {
   InfiniteData,
   useMutation,
   useQueryClient,
@@ -13,6 +7,7 @@ import {
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 import { Page } from '../../../models/common'
 import { commentService } from '../../../services/commentService.ts'
+import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from 'react-icons/bi'
 
 type Props = {
   comment: Comment
@@ -26,6 +21,7 @@ export const CommentVotes = ({
 }: Props) => {
   const parentIndex = parentPage - 1
   const queryClient = useQueryClient()
+
   const { mutate: sendVoteMutation } = useMutation({
     mutationFn: async (newVote?: boolean) => {
       if (newVote == undefined) {
@@ -78,6 +74,7 @@ export const CommentVotes = ({
       queryClient.setQueryData(parentQueryKey, context!.previousData)
     },
   })
+
   const { isAuthenticated } = useAuthContext()!
   const sendIfAuthorized = (newVote?: boolean) => {
     if (isAuthenticated) {
@@ -85,29 +82,29 @@ export const CommentVotes = ({
     }
   }
   return (
-    <div className="flex text-xl">
-      {comment.upvotes}
+    <div className="flex items-end gap-0.5 text-xl text-slate-700">
+      <span>{comment.upvotes}</span>
       {comment.usersVote ? (
-        <BsHandThumbsUpFill
+        <BiSolidLike
           className={`mr-3 text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
           onClick={() => {
             sendIfAuthorized(undefined)
           }}
         />
       ) : (
-        <BsHandThumbsUp
+        <BiLike
           className={`mr-3 text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
           onClick={() => sendIfAuthorized(true)}
         />
       )}
-      {comment.downvotes}
+      <span>{comment.downvotes}</span>
       {!comment.usersVote && comment.usersVote != undefined ? (
-        <BsHandThumbsDownFill
+        <BiSolidDislike
           className={`text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
           onClick={() => sendIfAuthorized(undefined)}
         />
       ) : (
-        <BsHandThumbsDown
+        <BiDislike
           className={`text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
           onClick={() => sendIfAuthorized(false)}
         />

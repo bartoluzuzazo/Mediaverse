@@ -25,3 +25,8 @@ export interface Vote {
   isPositive: boolean
   commentId: string
 }
+export interface CommentFormData {
+  content: string
+  entryId: string
+  commentId?: string
+}

@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { Page } from '../models/common'
-import { GetCommentsParams, Vote } from '../models/comments'
+import { CommentFormData, GetCommentsParams, Vote } from '../models/comments'
 import { Comment } from '../models/comments'
-import { CommentFormData } from '../common/components/comments/CommentForm.tsx'
 
 export class commentService {
   public static async getRootCommentsAuthorized(

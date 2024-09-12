@@ -1,6 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.Common;
-using MediaVerse.Client.Application.DTOs.Comments;
+using MediaVerse.Client.Application.DTOs.CommentDtos;
 using MediaVerse.Client.Application.DTOs.Common;
 using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Client.Application.Specifications.CommentSpecifications;
@@ -12,11 +12,7 @@ using MediaVerse.Domain.Interfaces;
 
 namespace MediaVerse.Client.Application.Commands.CommentCommands;
 
-public record CreateVoteCommand : IRequest<BaseResponse<GetCommentVoteResponse>>
-{
-    public Guid CommentId { get; set; }
-    public bool IsPositive { get; set; }
-}
+public record CreateVoteCommand(Guid CommentId, PostVoteDto VoteDto) : IRequest<BaseResponse<GetCommentVoteResponse>>;
 
 public class CreateVoteCommandHandler : UserAccessHandler,IRequestHandler<CreateVoteCommand, BaseResponse<GetCommentVoteResponse>>
 {
@@ -56,7 +52,7 @@ public class CreateVoteCommandHandler : UserAccessHandler,IRequestHandler<Create
         {
             Comment = comment,
             User = user,
-            IsPositive = request.IsPositive
+            IsPositive = request.VoteDto.IsPositive
         };
         var spec = new GetVoteByCommentAndAuthorIdsSpecification(comment.Id, user.Id);
         var conflictingVote = await _voteRepository.FirstOrDefaultAsync(spec, cancellationToken);

@@ -1,5 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.RatingDTOs;
+using MediaVerse.Client.Application.DTOs.RatingDTOs;
 using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Client.Application.Specifications.RatingSpecifications;
 using MediaVerse.Client.Application.Specifications.UserSpecifications;
@@ -11,17 +12,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MediaVerse.Client.Application.Commands.RatingCommands;
 
-public record UpdateRatingCommand : IRequest<BaseResponse<GetRatingResponse>>
-{
-    public Guid Id { get; set; }
-
-    public int Grade { get; set; }
-
-
-    public Guid EntryId { get; set; }
-
-}
-
+public record UpdateRatingCommand(Guid Id, PutRatingDto RatingDto) : IRequest<BaseResponse<GetRatingResponse>>;
+    
 public class UpdateRatingCommandHandler : IRequestHandler<UpdateRatingCommand, BaseResponse<GetRatingResponse>>
 {
     private readonly IRepository<Rating> _ratingRepository;
@@ -68,16 +60,16 @@ public class UpdateRatingCommandHandler : IRequestHandler<UpdateRatingCommand, B
             return new BaseResponse<GetRatingResponse>(new ForbiddenException());
         }
 
-        if (rating.EntryId != request.EntryId)
+        if (rating.EntryId != request.RatingDto.EntryId)
         {
-            var byRelatedIdsSpec = new GetRatingByIdsSpecification(user.Id, request.EntryId);
+            var byRelatedIdsSpec = new GetRatingByIdsSpecification(user.Id, request.RatingDto.EntryId);
             var conflictingRating = await _ratingRepository.FirstOrDefaultAsync(byRelatedIdsSpec);
             if (conflictingRating is not null)
             {
                 return new BaseResponse<GetRatingResponse>(new ConflictException());
             }
 
-            var entry = await _entryRepository.GetByIdAsync(request.EntryId, cancellationToken);
+            var entry = await _entryRepository.GetByIdAsync(request.RatingDto.EntryId, cancellationToken);
             if (entry is null)
             {
                 return new BaseResponse<GetRatingResponse>(new NotFoundException());
@@ -87,7 +79,7 @@ public class UpdateRatingCommandHandler : IRequestHandler<UpdateRatingCommand, B
         }
 
         rating.User = user;
-        rating.Grade = request.Grade;
+        rating.Grade = request.RatingDto.Grade;
         rating.Modifiedat = DateTime.Now;
         await _ratingRepository.SaveChangesAsync(cancellationToken);
 

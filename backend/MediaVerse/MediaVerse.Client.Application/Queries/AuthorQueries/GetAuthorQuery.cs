@@ -11,10 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Queries.AuthorQueries;
 
-public record GetAuthorQuery : IRequest<BaseResponse<GetAuthorResponse>>
-{
-    public Guid Id { get; set; }
-}
+public record GetAuthorQuery(Guid Id) : IRequest<BaseResponse<GetAuthorResponse>>;
 
 public class GetAuthorQueryHandler(IRepository<Author> authorRepository)
     : IRequestHandler<GetAuthorQuery, BaseResponse<GetAuthorResponse>>

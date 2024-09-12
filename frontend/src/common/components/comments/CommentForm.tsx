@@ -3,12 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 import { commentService } from '../../../services/commentService.ts'
 import { SetStateAction } from 'react'
-
-interface CommentFormData {
-  content: string
-  entryId: string
-  commentId?: string
-}
+import { CommentFormData } from '../../../models/comments'
 
 type Props = {
   entryId: string
@@ -64,14 +59,14 @@ export const CommentForm = ({
     return null
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
       <textarea
         {...register('content', { required: 'Cannot send an empty comment' })}
         rows={10}
         className="block w-full rounded-md border-2 border-black p-1"
       />
       <button
-        className={`text-white ${isSubmitting ? 'bg-violet-400' : 'bg-violet-700'}`}
+        className={`mt-2 text-white ${isSubmitting ? 'bg-violet-400' : 'bg-violet-700'}`}
         disabled={isSubmitting}
       >
         {isSubmitting ? 'Submitting...' : 'Submit'}
@@ -81,4 +76,3 @@ export const CommentForm = ({
 }
 
 export default CommentForm
-export type { CommentFormData }

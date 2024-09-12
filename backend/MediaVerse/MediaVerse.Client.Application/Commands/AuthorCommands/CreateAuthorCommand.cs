@@ -15,17 +15,11 @@ public record CreateAuthorCommand : IRequest<BaseResponse<Guid>>
 }
 
 
-public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, BaseResponse<Guid>>
+public class CreateAuthorCommandHandler(
+    IRepository<Author> authorRepository,
+    IRepository<ProfilePicture> profilePictureRepository)
+    : IRequestHandler<CreateAuthorCommand, BaseResponse<Guid>>
 {
-    private readonly IRepository<Author> _authorRepository;
-    private readonly IRepository<ProfilePicture> _profilePictureRepository;
-
-    public CreateAuthorCommandHandler(IRepository<Author> authorRepository, IRepository<ProfilePicture> profilePictureRepository)
-    {
-        _authorRepository = authorRepository;
-        _profilePictureRepository = profilePictureRepository;
-    }
-
     public async Task<BaseResponse<Guid>> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
     {
         byte[] photoData = Convert.FromBase64String(request.ProfilePicture);
@@ -35,7 +29,7 @@ public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, B
             Id = Guid.NewGuid(),
             Picture = photoData
         };
-        await _profilePictureRepository.AddAsync(profilePicture, cancellationToken);
+        await profilePictureRepository.AddAsync(profilePicture, cancellationToken);
 
         var author = new Author()
         {
@@ -46,7 +40,7 @@ public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, B
             ProfilePicture = profilePicture
         };
 
-        await _authorRepository.AddAsync(author, cancellationToken);
+        await authorRepository.AddAsync(author, cancellationToken);
         return new BaseResponse<Guid>(author.Id);
     }
 }
