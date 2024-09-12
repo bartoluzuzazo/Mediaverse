@@ -37,7 +37,6 @@ export const Subcomments = ({
             page: pageParam,
           })
           .then((res) => {
-            console.log(res.data)
             return res.data
           })
       } else {
@@ -54,7 +53,6 @@ export const Subcomments = ({
     getNextPageParam: (lastPage) =>
       lastPage.hasNext ? lastPage.currentPage + 1 : null,
   })
-  console.log(isReplying)
   if (isCollapsed) {
     return (
       <div
@@ -65,6 +63,14 @@ export const Subcomments = ({
       </div>
     )
   }
+
+  const onFormSent = () => {
+    setIsReplying(false)
+    if (!isNotFirstRequest) {
+      setIsNotFirstRequest(true)
+      fetchNextPage()
+    }
+  }
   return (
     <>
       {isReplying && (
@@ -72,7 +78,7 @@ export const Subcomments = ({
           entryId={parentComment.entryId}
           parentQueryKeys={[parentQueryKey, queryKey]}
           parentCommentId={parentComment.id}
-          setIsReplying={setIsReplying}
+          onFormSent={onFormSent}
         />
       )}
       {parentComment.subcommentCount > 0 && (

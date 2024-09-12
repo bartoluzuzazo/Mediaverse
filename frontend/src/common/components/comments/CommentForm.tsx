@@ -2,20 +2,19 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 import { commentService } from '../../../services/commentService.ts'
-import { SetStateAction } from 'react'
 import { CommentFormData } from '../../../models/comments'
 
 type Props = {
   entryId: string
   parentQueryKeys: unknown[][]
   parentCommentId?: string
-  setIsReplying?: React.Dispatch<SetStateAction<boolean>>
+  onFormSent?: () => void
 }
 export const CommentForm = ({
   entryId,
   parentQueryKeys,
   parentCommentId,
-  setIsReplying,
+  onFormSent,
 }: Props) => {
   const { isAuthenticated } = useAuthContext()!
   const queryClient = useQueryClient()
@@ -47,8 +46,8 @@ export const CommentForm = ({
         })
       }
       reset()
-      if (setIsReplying !== undefined) {
-        setIsReplying(false)
+      if (onFormSent !== undefined) {
+        onFormSent()
       }
     },
   })
