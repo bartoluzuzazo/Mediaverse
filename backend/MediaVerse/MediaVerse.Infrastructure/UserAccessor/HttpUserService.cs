@@ -7,28 +7,19 @@ using MediaVerse.Domain.Interfaces;
 
 namespace MediaVerse.Infrastructure.UserAccessor;
 
-public class HttpUserService : IUserService
+public class HttpUserService(IUserAccessor userAccessor, IRepository<User> userRepository)
+    : IUserService
 {
-    
-    private readonly IUserAccessor _userAccessor;
-    private readonly IRepository<User> _userRepository;
-
-    public HttpUserService(IUserAccessor userAccessor, IRepository<User> userRepository)
-    {
-        _userAccessor = userAccessor;
-        _userRepository = userRepository;
-    }
-
     public async Task<BaseResponse<User>> GetCurrentUserAsync(CancellationToken cancellationToken)
     {
         
-        var email = _userAccessor.Email;
+        var email = userAccessor.Email;
         if (email is null)
         {
             return new BaseResponse<User>(new ProblemException());
         }
 
-        var user = await _userRepository.FirstOrDefaultAsync(new GetUserSpecification(email), cancellationToken);
+        var user = await userRepository.FirstOrDefaultAsync(new GetUserSpecification(email), cancellationToken);
         if (user is null)
         {
             return new BaseResponse<User>(new NotFoundException());
@@ -36,5 +27,6 @@ public class HttpUserService : IUserService
 
         return new BaseResponse<User>(user);
     }
-    
+
+
 }
