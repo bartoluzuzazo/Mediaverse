@@ -9,7 +9,7 @@ namespace MediaVerse.Infrastructure.Database;
 public partial class Context : DbContext
 {
     private readonly IConfiguration _configuration;
-    
+
     public Context(DbContextOptions<Context> options, IConfiguration configuration)
         : base(options)
     {
@@ -83,7 +83,6 @@ public partial class Context : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
-        
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -410,6 +409,12 @@ public partial class Context : DbContext
                 .HasForeignKey(d => d.CoverPhotoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("entry_cover_photo");
+
+            entity.Property(e => e.SearchVector).HasColumnName("search_vector");
+            
+            entity.HasGeneratedTsVectorColumn(
+                    p => p.SearchVector, "english", p => new { p.Name, p.Description }).HasIndex(p => p.SearchVector)
+                .HasMethod("GIN");
         });
 
         modelBuilder.Entity<Episode>(entity =>

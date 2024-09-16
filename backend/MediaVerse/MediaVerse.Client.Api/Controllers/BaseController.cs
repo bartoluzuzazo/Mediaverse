@@ -5,32 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediaVerse.Client.Api.Controllers;
 
-
 public abstract class BaseController : ControllerBase
 {
     protected IActionResult ResolveException(Exception exception)
     {
-        if (exception is NotFoundException)
+        return exception switch
         {
-            return NotFound();
-        }
-
-        if (exception is ProblemException)
-        {
-            return Problem();
-        }
-
-        if (exception is ForbiddenException)
-        {
-            return Forbid();
-        }
-
-        if (exception is ConflictException)
-        {
-            return Conflict();
-        }
-        
-        return Problem();
+            NotFoundException => NotFound(),
+            ProblemException => Problem(),
+            ForbiddenException => Forbid(),
+            ConflictException => Conflict(),
+            _ => Problem()
+        };
     }
-    
 }

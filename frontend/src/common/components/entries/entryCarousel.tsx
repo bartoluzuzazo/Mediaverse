@@ -79,6 +79,7 @@ const EntryCarousel: FunctionComponent<EntryCarouselProps> = ({
       >
         {entries.map(({ id, photo }) => (
           <Link
+            key={id}
             className="m-1 my-3 block h-[235px] w-[170px] overflow-hidden transition-shadow"
             to="/entries/books/$id"
             params={{ id }}

@@ -7,12 +7,15 @@ import FormButton from '../form/button'
 import FormInput from '../form/input'
 import AuthPanel from './authPanel'
 import NavBarBurger from './navBarBurger'
+import { useSearchPanelContext } from '../../../context/searchPanel'
 
 interface NavBarProps {}
 
 const NavBar: FunctionComponent<NavBarProps> = () => {
   const [isBurgerOpen, setBurgerOpen] = useState(false)
   const [isAuthPanelOpen, setAuthPanelOpen] = useState(false)
+
+  const searchPanelContext = useSearchPanelContext()
 
   const authContext = useAuthContext()
 
@@ -23,7 +26,7 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
   }, [authContext?.token])
 
   return (
-    <div className="flex h-[90px] w-full items-center justify-between px-[40px] shadow-xl">
+    <div className="z-10 flex h-[90px] w-full items-center justify-between px-[40px] shadow-xl">
       <div className="relative flex w-[200px] items-center gap-6">
         <NavBarBurger isOpen={isBurgerOpen} setIsOpen={setBurgerOpen} />
         <RxHamburgerMenu
@@ -39,7 +42,13 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
       </div>
       <div className="w-[600px]">
         <FormInput
-          inputProps={{ type: 'text', placeholder: 'search...' }}
+          inputProps={{
+            type: 'text',
+            placeholder: 'search...',
+            value: searchPanelContext?.searchValue || '',
+            onChange: (e) =>
+              searchPanelContext?.setSearchValue?.(e.target.value),
+          }}
           rightElement={<FaSearch />}
         />
       </div>
