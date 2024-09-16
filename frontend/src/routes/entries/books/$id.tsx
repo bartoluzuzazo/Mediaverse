@@ -8,6 +8,7 @@ import { Book } from '../../../models/entry/book'
 import { BookService } from '../../../services/bookService.ts'
 import EntryAuthorPreview from '../../../common/components/entries/entryAuthorPreview.tsx'
 import SectionHeader from '../../../common/components/entries/sectionHeader.tsx'
+import CommentSection from '../../../common/components/comments/CommentSection.tsx'
 
 interface BookEntryComponentProps {}
 
@@ -39,11 +40,16 @@ const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
       {book.entry.authors.map((group) => (
         <>
           <SectionHeader title={group.role} />
-          {group.authors.map(a => <div className="p-2"><EntryAuthorPreview author={a}/></div>)}
+          {group.authors.map((a) => (
+            <div className="p-2">
+              <EntryAuthorPreview author={a} />
+            </div>
+          ))}
         </>
       ))}
       <SectionHeader title={'Synopsis'} />
       <div className="p-4">{book.synopsis}</div>
+      <CommentSection entryId={id} />
     </>
   )
 }

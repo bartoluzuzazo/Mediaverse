@@ -35,7 +35,6 @@ public class BookController(IMediator mediator) : ControllerBase
     [HttpGet("page")]
     public async Task<IActionResult> GetBooks(int page, int size, EntryOrder order, OrderDirection direction)
     {
-        Console.WriteLine(order);
         var request = new GetBookPageQuery(page, size, order, direction);
         var response = await mediator.Send(request);
         return Ok(response.Data);

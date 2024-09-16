@@ -1,36 +1,24 @@
-using System.Diagnostics;
-using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaVerse.Client.Api.Controllers;
 
-
 public abstract class BaseController : ControllerBase
 {
-    protected IActionResult ResolveException(Exception exception)
+    protected IActionResult ResolveCode(Exception? exception, IActionResult result)
     {
-        if (exception is NotFoundException)
-        {
-            return NotFound();
-        }
-
-        if (exception is ProblemException)
-        {
-            return Problem();
-        }
-
-        if (exception is ForbiddenException)
-        {
-            return Forbid();
-        }
-
-        if (exception is ConflictException)
-        {
-            return Conflict();
-        }
-        
-        return Problem();
+        return exception is not null ? ResolveException(exception) : result;
     }
     
+    protected IActionResult ResolveException(Exception exception)
+    {
+        return exception switch
+        {
+            NotFoundException => NotFound(),
+            ProblemException => Problem(),
+            ForbiddenException => Forbid(),
+            ConflictException => Conflict(),
+            _ => Problem()
+        };
+    }
 }
