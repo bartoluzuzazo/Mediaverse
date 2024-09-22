@@ -2,16 +2,18 @@ import { createFileRoute } from '@tanstack/react-router'
 import { FunctionComponent } from 'react'
 import { User } from '../../models/user'
 import { userService } from '../../services/userService.ts'
+import { useAuthContext } from '../../context/auth/useAuthContext.ts'
+import { FriendshipButton } from '../../common/components/friends/FriendshipButton'
 
 interface Props {}
 
 const UserComponent: FunctionComponent<Props> = () => {
   const user = Route.useLoaderData<User>()
+  const { userData } = useAuthContext()!
   const imgSrc = 'data:image/*;base64,' + user.profilePicture
   return (
     <div>
       <div className="-mx-[calc(50vw-50%)] h-20 bg-violet-800 md:h-32"></div>
-
       <div className="flex flex-col p-4 md:flex-row">
         <div>
           <img
@@ -20,6 +22,9 @@ const UserComponent: FunctionComponent<Props> = () => {
             alt="profile picture"
           />
           <div className="text-xl font-bold">{user.username}</div>
+          {userData && userData.id !== user.id ? (
+            <FriendshipButton friendId={user.id} />
+          ) : null}
         </div>
 
         <div className="flex-1 md:ml-20"></div>

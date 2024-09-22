@@ -9,7 +9,7 @@ import DebounceValidatedInput from '../../../common/components/form/debounceVali
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 
 const EditUserComponent: FunctionComponent = () => {
-  const { data, setToken } = useAuthContext()!
+  const { userData, setToken } = useAuthContext()!
   const navigate = useNavigate()
   const user = Route.useLoaderData()
   const formValues = useForm<UserFormData>({
@@ -32,10 +32,7 @@ const EditUserComponent: FunctionComponent = () => {
     await navigate({ to: `/users/${user.id}` })
   }
   const validate = useCallback(async (value: string) => {
-    if (!data.isAuthenticated) {
-      return 'Auth error' //this should not be visible, only here for the discriminated union to work
-    }
-    if (value === data.email) {
+    if (value === userData?.email) {
       return null
     }
     try {
@@ -46,7 +43,7 @@ const EditUserComponent: FunctionComponent = () => {
     }
   }, [])
 
-  if (!data.isAuthenticated || data.id != user.id) {
+  if (userData?.id !== user.id) {
     navigate({ to: '/' })
   }
   return (

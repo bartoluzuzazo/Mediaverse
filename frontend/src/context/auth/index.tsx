@@ -13,17 +13,14 @@ export interface AuthContextProps {
   setToken: React.Dispatch<React.SetStateAction<string | undefined>>
   removeToken: () => void
   isAuthenticated: boolean
-  data: AuthData
+  userData?: AuthData
 }
 
-export type AuthData =
-  | { isAuthenticated: false }
-  | {
-      isAuthenticated: true
-      username: string
-      id: string
-      email: string
-    }
+export interface AuthData {
+  username: string
+  id: string
+  email: string
+}
 
 interface JwtPayload {
   unique_name: string
@@ -42,21 +39,19 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
     'token',
     undefined
   )
-  const [data, setData] = useState<AuthData>({ isAuthenticated: false })
+  const [data, setData] = useState<AuthData | undefined>(undefined)
   useEffect(() => {
     axios.defaults.headers.common['Authorization'] = token && `Bearer ${token}`
 
     if (token) {
       const jwtData = jwtDecode<JwtPayload>(token)
-      console.log(jwtData)
       setData({
-        isAuthenticated: true,
         email: jwtData.email,
         id: jwtData.nameid,
         username: jwtData.unique_name,
       })
     } else {
-      setData({ isAuthenticated: false })
+      setData(undefined)
     }
   }, [token])
 
@@ -67,7 +62,7 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
         setToken,
         removeToken,
         isAuthenticated: !!token,
-        data,
+        userData: data,
       }}
     >
       {children}
