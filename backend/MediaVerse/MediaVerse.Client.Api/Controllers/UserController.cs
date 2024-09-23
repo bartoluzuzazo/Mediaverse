@@ -1,7 +1,10 @@
 ﻿using MediatR;
 using MediaVerse.Client.Application.Commands.UserCommands;
+using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Client.Application.Queries.UserQueries;
+using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
+using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +22,10 @@ public class UserController(IMediator mediator) : BaseController
         {
             return response.Exception is ConflictException ? Conflict() : Problem(response.Exception.Message);
         }
+
         return CreatedAtAction(nameof(LoginUser), response.Data);
     }
-    
+
     [HttpPost("login")]
     public async Task<IActionResult> LoginUser(LoginUserQuery request)
     {
@@ -57,5 +61,30 @@ public class UserController(IMediator mediator) : BaseController
         var response = await mediator.Send(command);
         return ResolveCode(response.Exception, Ok(response.Data));
     }
-    
+
+    [Authorize]
+    [HttpGet("current-user/friend-invites")]
+    public async Task<IActionResult> GetInvites()
+    {
+        var query = new GetFriendInvitesQuery();
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+    }
+
+    [HttpGet("{userId:guid}/rated-entries")]
+    public async Task<IActionResult> GetRatedEntries(Guid userId, int page, int size, EntryOrder order,
+        OrderDirection direction)
+    {
+        var query = new GetRatedEntriesQuery(userId, page, size, order, direction);
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+    }
+
+    [HttpGet("{userId:guid}/friends")]
+    public async Task<IActionResult> GetFriends(Guid userId)
+    {
+        var query = new GetFriendsQuery(userId);
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+    }
 }

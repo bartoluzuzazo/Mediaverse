@@ -5,8 +5,9 @@ import { friendshipService } from '../../../../services/friendshipService.ts'
 import { useAuthContext } from '../../../../context/auth/useAuthContext.ts'
 import { InviteFriendButton } from './InviteFriendButton.tsx'
 import { RemoveFriendButton } from './RemoveFriendButton.tsx'
-import { ApprovalPendingButton } from './ApprovalPendingButton.tsx'
 import { ApproveFriendButton } from './ApproveFriendshipButton.tsx'
+import { FaCircleXmark } from 'react-icons/fa6'
+import { MdCancelScheduleSend, MdPersonRemove } from 'react-icons/md'
 
 type Props = {
   friendId: string
@@ -27,19 +28,35 @@ export const FriendshipButton: FunctionComponent<Props> = ({ friendId }) => {
     return <InviteFriendButton friendId={friendId} />
   }
   if (friendship.approved) {
-    return <RemoveFriendButton friendId={friendId} text={'Remove friend'} />
+    return (
+      <RemoveFriendButton
+        friendId={friendId}
+        text={'Remove friend'}
+        icon={<MdPersonRemove />}
+      />
+    )
   }
   const currentUserIsOferrer = friendship.userId === userData.id
 
   if (currentUserIsOferrer) {
-    return <ApprovalPendingButton />
+    return (
+      <RemoveFriendButton
+        friendId={friendId}
+        text={'Rescind request'}
+        icon={<MdCancelScheduleSend />}
+      />
+    )
   }
   const currentUserIsRecipient = friendship.user2Id === userData.id
   if (currentUserIsRecipient) {
     return (
       <div>
         <ApproveFriendButton friendId={friendId} />
-        <RemoveFriendButton friendId={friendId} text="Remove friend" />
+        <RemoveFriendButton
+          friendId={friendId}
+          text="Reject request"
+          icon={<FaCircleXmark />}
+        />
       </div>
     )
   }
