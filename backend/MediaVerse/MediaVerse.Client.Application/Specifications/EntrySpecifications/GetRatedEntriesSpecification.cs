@@ -6,9 +6,10 @@ using MediaVerse.Domain.ValueObjects.Enums;
 
 namespace MediaVerse.Client.Application.Specifications.EntrySpecifications;
 
-public class GetRatedEntriesSpecification :Specification<Entry,GetRatedEntryResponse>
+public class GetRatedEntriesSpecification : Specification<Entry, GetRatedEntryResponse>
 {
-    public GetRatedEntriesSpecification(Guid userId,int page, int size, EntryOrder entryOrder, OrderDirection direction )
+    public GetRatedEntriesSpecification(Guid userId, int page, int size, RatedEntryOrder order,
+        OrderDirection direction)
     {
         Query.Where(entry => entry.Ratings.Any(r => r.UserId == userId));
         Query.Select(entry => new()
@@ -18,6 +19,13 @@ public class GetRatedEntriesSpecification :Specification<Entry,GetRatedEntryResp
             Photo = Convert.ToBase64String(entry.CoverPhoto.Photo),
             UsersRating = entry.Ratings.FirstOrDefault(r => r.UserId == userId)!.Grade
         });
-        Query.OrderEntry(entryOrder,direction).Paginate(page, size);
+        switch (order)
+        {
+            case RatedEntryOrder.RatedByUserAt:
+                Query.OrderByDirection(e => e.Ratings.FirstOrDefault(r => r.UserId == userId)!.Modifiedat, direction);
+                break;
+        }
+
+        Query.Paginate(page, size);
     }
 }

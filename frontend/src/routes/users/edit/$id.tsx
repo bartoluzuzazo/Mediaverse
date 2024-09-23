@@ -9,7 +9,7 @@ import DebounceValidatedInput from '../../../common/components/form/debounceVali
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 
 const EditUserComponent: FunctionComponent = () => {
-  const { userData, setToken } = useAuthContext()!
+  const { authUserData, setToken } = useAuthContext()!
   const navigate = useNavigate()
   const user = Route.useLoaderData()
   const formValues = useForm<UserFormData>({
@@ -32,7 +32,7 @@ const EditUserComponent: FunctionComponent = () => {
     await navigate({ to: `/users/${user.id}` })
   }
   const validate = useCallback(async (value: string) => {
-    if (value === userData?.email) {
+    if (value === authUserData?.email) {
       return null
     }
     try {
@@ -43,7 +43,7 @@ const EditUserComponent: FunctionComponent = () => {
     }
   }, [])
 
-  if (userData?.id !== user.id) {
+  if (authUserData?.id !== user.id) {
     navigate({ to: '/' })
   }
   return (

@@ -10,7 +10,7 @@ using MediaVerse.Domain.ValueObjects.Enums;
 
 namespace MediaVerse.Client.Application.Queries.EntryQueries;
 
-public record GetRatedEntriesQuery(Guid UserId, int Page, int Size, EntryOrder EntryOrder, OrderDirection Direction)
+public record GetRatedEntriesQuery(Guid UserId, int Page, int Size, RatedEntryOrder EntryOrder, OrderDirection Direction)
     : IRequest<BaseResponse<Page<GetRatedEntryResponse>>>;
 
 public class GetRatedEntriesQueryHandler(IRepository<User> userRepository, IRepository<Entry> entryRepository)

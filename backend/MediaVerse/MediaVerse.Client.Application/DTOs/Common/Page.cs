@@ -10,7 +10,7 @@ public class Page<T>
     public Page(List<T> contents, int currentPage, int itemCount, int size)
     {
         Contents = contents;
-        currentPage = currentPage;
+        CurrentPage = currentPage;
         PageCount = CalculatePageCount(itemCount, size);
         
     }

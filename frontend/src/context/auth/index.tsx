@@ -13,7 +13,7 @@ export interface AuthContextProps {
   setToken: React.Dispatch<React.SetStateAction<string | undefined>>
   removeToken: () => void
   isAuthenticated: boolean
-  userData?: AuthData
+  authUserData?: AuthData
 }
 
 export interface AuthData {
@@ -62,7 +62,7 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
         setToken,
         removeToken,
         isAuthenticated: !!token,
-        userData: data,
+        authUserData: data,
       }}
     >
       {children}

@@ -20,8 +20,8 @@ export const FriendshipButton: FunctionComponent<Props> = ({ friendId }) => {
       return await serviceUtils.getIfFound(getFn)
     },
   })
-  const { userData } = useAuthContext()!
-  if (isLoading || !userData || friendId === userData.id) {
+  const { authUserData } = useAuthContext()!
+  if (isLoading || !authUserData || friendId === authUserData.id) {
     return null
   }
   if (!friendship) {
@@ -36,7 +36,7 @@ export const FriendshipButton: FunctionComponent<Props> = ({ friendId }) => {
       />
     )
   }
-  const currentUserIsOferrer = friendship.userId === userData.id
+  const currentUserIsOferrer = friendship.userId === authUserData.id
 
   if (currentUserIsOferrer) {
     return (
@@ -47,7 +47,7 @@ export const FriendshipButton: FunctionComponent<Props> = ({ friendId }) => {
       />
     )
   }
-  const currentUserIsRecipient = friendship.user2Id === userData.id
+  const currentUserIsRecipient = friendship.user2Id === authUserData.id
   if (currentUserIsRecipient) {
     return (
       <div>

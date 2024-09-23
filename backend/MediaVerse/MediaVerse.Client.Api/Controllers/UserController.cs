@@ -72,7 +72,7 @@ public class UserController(IMediator mediator) : BaseController
     }
 
     [HttpGet("{userId:guid}/rated-entries")]
-    public async Task<IActionResult> GetRatedEntries(Guid userId, int page, int size, EntryOrder order,
+    public async Task<IActionResult> GetRatedEntries(Guid userId, int page, int size, RatedEntryOrder order,
         OrderDirection direction)
     {
         var query = new GetRatedEntriesQuery(userId, page, size, order, direction);

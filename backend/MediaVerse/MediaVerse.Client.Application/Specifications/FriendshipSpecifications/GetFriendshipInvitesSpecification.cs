@@ -8,6 +8,6 @@ public class GetFriendshipInvitesSpecification : Specification<Friendship>
     public GetFriendshipInvitesSpecification(Guid userId)
     {
         Query.Where(friendship => friendship.User2Id == userId && !friendship.Approved)
-            .Include(friendship => friendship.User);
+            .Include(friendship => friendship.User).ThenInclude(u=>u.ProfilePicture);
     }
 }

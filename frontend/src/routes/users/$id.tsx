@@ -4,12 +4,15 @@ import { User } from '../../models/user'
 import { userService } from '../../services/userService.ts'
 import { useAuthContext } from '../../context/auth/useAuthContext.ts'
 import { FriendshipButton } from '../../common/components/friends/FriendshipButton'
+import { FriendCarousel } from '../../common/components/users/FriendCarousel'
+import { FriendRequestCarousel } from '../../common/components/users/FriendRequestCarousel'
+import { RatedEntryCarousel } from '../../common/components/users/RatedEntryCarousel.tsx'
 
 interface Props {}
 
 const UserComponent: FunctionComponent<Props> = () => {
   const user = Route.useLoaderData<User>()
-  const { userData } = useAuthContext()!
+  const { authUserData } = useAuthContext()!
   const imgSrc = 'data:image/*;base64,' + user.profilePicture
   return (
     <div>
@@ -21,14 +24,22 @@ const UserComponent: FunctionComponent<Props> = () => {
             className="-mt-16 aspect-square w-52 rounded-full border-4 border-white bg-slate-300 object-cover md:-mt-24 md:w-60"
             alt="profile picture"
           />
-          <div className="text-xl font-bold">{user.username}</div>
-          {userData && userData.id !== user.id ? (
+          <div className="text-3xl font-bold">{user.username}</div>
+          {authUserData && authUserData.id !== user.id ? (
             <FriendshipButton friendId={user.id} />
           ) : null}
         </div>
 
         <div className="flex-1 md:ml-20"></div>
       </div>
+      <FriendCarousel userId={user.id} />
+
+      {authUserData && authUserData.id == user.id && (
+        <>
+          <FriendRequestCarousel />
+        </>
+      )}
+      <RatedEntryCarousel userId={user.id} />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { OrderDirection, PaginateRequest } from '../../common/index.ts'
+import { OrderDirection, PaginateRequest } from '../../common'
 import { Entry, EntryOrder } from '../Entry.ts'
 
 export interface Book {
@@ -8,8 +8,7 @@ export interface Book {
   bookGenres: string[]
 }
 
-export interface GetBooksRequest extends PaginateRequest {
+export interface GetEntryPageRequest extends PaginateRequest {
   order: EntryOrder
   direction: OrderDirection
 }
-

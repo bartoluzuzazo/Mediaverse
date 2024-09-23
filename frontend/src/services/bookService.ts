@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { BookFormData } from '../common/components/entries/books/bookForm.tsx'
-import { Book, GetBooksRequest } from '../models/entry/book'
+import { Book, GetEntryPageRequest } from '../models/entry/book'
 import { Entry } from '../models/entry/Entry'
 
 export class BookService {
@@ -12,7 +12,7 @@ export class BookService {
     })
   }
 
-  public static async getBooks(params: GetBooksRequest) {
+  public static async getBooks(params: GetEntryPageRequest) {
     return await axios.get<{ books: Entry[] }>('book/page', { params })
   }
 
@@ -23,7 +23,7 @@ export class BookService {
   public static async patchBook(author: BookFormData, id: string) {
     return await axios.patch(`/book/${id}`, author, {
       params: {
-        'id': id,
+        id: id,
       },
     })
   }

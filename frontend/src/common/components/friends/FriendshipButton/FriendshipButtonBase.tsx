@@ -22,6 +22,7 @@ export const FriendshipButtonBase: FunctionComponent<Props> = ({
     mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['GET_FRIENDSHIP', friendId] })
+      queryClient.invalidateQueries({ queryKey: ['GET_FRIENDS', friendId] })
     },
   })
   const onClick = async () => {
