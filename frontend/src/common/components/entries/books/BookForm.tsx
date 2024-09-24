@@ -1,13 +1,15 @@
 import FormButton from '../../form/button'
 import { useNavigate } from '@tanstack/react-router'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Book } from '../../../../models/entry/book/Book.ts'
-import { FunctionComponent } from 'react'
+import { Book, WorkOn } from '../../../../models/entry/book/Book.ts'
+import { FunctionComponent, useState } from 'react'
 import FormField from '../../form/FormField/FormField.tsx'
 import { BookService } from '../../../../services/bookService.ts'
 import FormTextArea from '../FormTextArea/FormTextArea.tsx'
 import FormDateInput from '../../form/FormDateInput/FormDateInput.tsx'
 import CoverPicker from '../../form/CoverPicker/CoverPicker.tsx'
+import { MultipleInputForm } from './MultipleInputForm.tsx'
+import {  AuthorEntryInputForm } from './AuthorEntryInputForm.tsx'
 
 export interface BookFormData {
   id?: string
@@ -17,46 +19,57 @@ export interface BookFormData {
   coverPhoto: string,
   isbn: string,
   synopsis: string,
-  genreIds: string[]
+  genres: string[]
+  workOnRequests: WorkOn[]
 }
 
 type Props = {
   book?: Book
 }
 
-const bookForm: FunctionComponent<Props> = ({ book }) => {
+const BookForm: FunctionComponent<Props> = ({ book }) => {
 
   const {
     register,
     handleSubmit,
     watch,
     control,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<BookFormData>({
     defaultValues: book
       ? {
-        id: book.id,
+        id: book.entry.id,
         name: book.entry.name,
         description: book.entry.description,
+        synopsis: book.synopsis,
         release: book.entry.release,
-        coverPhoto: book.entry.photo,
         isbn: book.isbn,
-        genreIds: book.bookGenres,
+        genres: book.bookGenres,
+        workOnRequests: book.entry.authors.map(g => g.authors.map(a => {
+          const workOn : WorkOn = {id: a.id, role: g.role}
+          return workOn
+        })).flat()
       }
       : undefined,
   })
 
   const navigate = useNavigate()
 
+  const [genres, setGenres] = useState<string[]>(getValues('genres'))
+  const [authors, setAuthors] = useState<WorkOn[]>(getValues('workOnRequests'))
+
   const onSubmit: SubmitHandler<BookFormData> = async (data) => {
-    data.genreIds = []
+    data.genres = genres
+    data.workOnRequests = authors;
+
     if (book == null) {
       const response = await BookService.postBook(data)
       const id = response.data.id
       await navigate({ to: `/entries/books/${id}` })
     } else {
-      await BookService.patchBook(data, book.id)
-      await navigate({ to: `/entries/books/${book.id}` })
+      await BookService.patchBook(data, book.entry.id)
+      await navigate({ to: `/entries/books/${book.entry.id}` })
     }
   }
 
@@ -85,8 +98,12 @@ const bookForm: FunctionComponent<Props> = ({ book }) => {
           </div>
         </div>
       </form>
+      <div className="flex flex-row justify-evenly">
+        <MultipleInputForm label={'Genres'} collection={genres} setCollection={setGenres}/>
+        <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
+      </div>
     </>
   )
 }
 
-export default bookForm
+export default BookForm
