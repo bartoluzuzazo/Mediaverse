@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Navigate, useNavigate } from '@tanstack/react-router'
 import { userService } from '../../../services/userService.ts'
 import { FunctionComponent, useCallback } from 'react'
 import { UserFormData } from '../../../models/user'
@@ -7,6 +7,7 @@ import ProfilePicker from '../../../common/components/form/profilePicker'
 import FormButton from '../../../common/components/form/button'
 import DebounceValidatedInput from '../../../common/components/form/debounceValidatedInput'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
+import { UpdatePasswordForm } from '../../../common/components/users/UpdatePasswordForm'
 
 const EditUserComponent: FunctionComponent = () => {
   const { authUserData, setToken } = useAuthContext()!
@@ -15,7 +16,7 @@ const EditUserComponent: FunctionComponent = () => {
   const formValues = useForm<UserFormData>({
     defaultValues: {
       id: user.id,
-      email: user.email,
+      email: authUserData?.email,
     },
   })
   const {
@@ -41,10 +42,10 @@ const EditUserComponent: FunctionComponent = () => {
     } catch (_error) {
       return null
     }
-  }, [])
+  }, [authUserData?.email])
 
   if (authUserData?.id !== user.id) {
-    navigate({ to: '/' })
+    return <Navigate to={'/'}/>
   }
   return (
     <div>
@@ -60,6 +61,7 @@ const EditUserComponent: FunctionComponent = () => {
             watch={watch}
             previousImageSrc={user.profilePicture}
           />
+          <UpdatePasswordForm/>
         </div>
 
         <div className="flex-1 md:ml-20">

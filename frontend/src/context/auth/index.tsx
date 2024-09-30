@@ -1,6 +1,6 @@
 import { ReactNode } from '@tanstack/react-router'
 import axios from 'axios'
-import { createContext, FunctionComponent, useEffect, useState } from 'react'
+import { createContext, FunctionComponent, useEffect, useMemo } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 import { jwtDecode } from 'jwt-decode'
 
@@ -29,29 +29,30 @@ interface JwtPayload {
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
-  undefined
+  undefined,
 )
 
 const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
-  children,
-}) => {
+                                                                            children,
+                                                                          }) => {
   const [token, setToken, removeToken] = useLocalStorage<string | undefined>(
     'token',
-    undefined
+    undefined,
   )
-  const [data, setData] = useState<AuthData | undefined>(undefined)
+
   useEffect(() => {
     axios.defaults.headers.common['Authorization'] = token && `Bearer ${token}`
+  }, [token])
 
-    if (token) {
-      const jwtData = jwtDecode<JwtPayload>(token)
-      setData({
-        email: jwtData.email,
-        id: jwtData.nameid,
-        username: jwtData.unique_name,
-      })
-    } else {
-      setData(undefined)
+  const authUserData: AuthData | undefined = useMemo(() => {
+    if (!token) {
+      return undefined
+    }
+    const jwtData = jwtDecode<JwtPayload>(token)
+    return {
+      email: jwtData.email,
+      id: jwtData.nameid,
+      username: jwtData.unique_name,
     }
   }, [token])
 
@@ -62,7 +63,7 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
         setToken,
         removeToken,
         isAuthenticated: !!token,
-        authUserData: data,
+        authUserData: authUserData,
       }}
     >
       {children}

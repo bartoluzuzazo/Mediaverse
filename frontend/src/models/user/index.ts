@@ -9,3 +9,9 @@ export interface UserFormData {
   email: string
   profilePicture?: string
 }
+
+export interface UpdatePasswordFormData {
+  oldPassword: string
+  newPassword: string
+  repeatPassword: string
+}

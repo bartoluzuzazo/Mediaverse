@@ -29,6 +29,7 @@ public abstract class BaseController : ControllerBase
             ProblemException => Problem(exception.Message),
             ForbiddenException => Forbid(exception.Message),
             ConflictException => Conflict(exception.Message),
+            NotAuthorizedException => Unauthorized(exception.Message),
             _ => Problem(exception.Message)
         };
     }

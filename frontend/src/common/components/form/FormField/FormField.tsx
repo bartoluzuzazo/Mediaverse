@@ -1,28 +1,38 @@
 import { IoIosWarning } from 'react-icons/io'
-import { FieldError, FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import { FieldError, FieldValues, Path, RegisterOptions, UseFormRegister } from 'react-hook-form'
+import { HTMLInputTypeAttribute } from 'react'
 
-interface Props <T extends FieldValues>{
+interface Props<T extends FieldValues> {
   label: string
-  registerValue: Path<T>
-  register:  UseFormRegister<T>
-  errorValue: FieldError | undefined
+  name: Path<T>
+  register: UseFormRegister<T>
+  errorValue?: FieldError
+  type?: HTMLInputTypeAttribute
+  rules?: RegisterOptions<T>
 }
 
-const FormField = <T extends FieldValues> ({label, registerValue, register, errorValue} : Props<T>) => {
+const FormField = <T extends FieldValues>({
+                                            label,
+                                            name,
+                                            register,
+                                            errorValue,
+                                            type = 'text',
+                                            rules = { required: `${label} is Required` },
+                                          }: Props<T>) => {
   return (
-    <div className="mb-2 block">
+    <div className='mb-2 block'>
       <label>
         {label}
         <input
           {
-          ...register(registerValue, { required: `${label} is required` })
+            ...register(name, rules)
           }
-          className="block w-full rounded-md border-2 border-slate-500 p-1"
-          type="text"
+          className='block w-full rounded-md border-2 border-slate-500 p-1'
+          type={type}
         />
       </label>
       {errorValue && (
-        <div className="text-red-700 flex flex-row">
+        <div className='text-red-700 flex flex-row'>
           <IoIosWarning />
           <div>{errorValue.message}</div>
         </div>
@@ -30,5 +40,4 @@ const FormField = <T extends FieldValues> ({label, registerValue, register, erro
     </div>
   )
 }
-
-export default FormField;
+export default FormField

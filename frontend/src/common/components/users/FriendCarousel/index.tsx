@@ -34,7 +34,7 @@ export const FriendCarousel: FunctionComponent<Props> = ({ userId }) => {
               className="m-1 my-5 block w-[150px]"
             >
               <CustomImage
-                className="aspect-square h-full w-full rounded-full"
+                className="aspect-square h-full w-full rounded-full object-cover"
                 src={`data:image/webp;base64,${f.profilePicture}`}
               />
               <div className="text-center text-lg font-semibold text-violet-700">

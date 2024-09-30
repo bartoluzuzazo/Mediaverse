@@ -1,9 +1,6 @@
 import axios from 'axios'
-import {
-  GetRatedEntryPageRequest,
-  RatedEntry,
-} from '../models/entry/ratedEntry'
-import { User, UserFormData } from '../models/user'
+import { GetRatedEntryPageRequest, RatedEntry } from '../models/entry/ratedEntry'
+import { UpdatePasswordFormData, User, UserFormData } from '../models/user'
 import { Page } from '../models/common'
 
 export class userService {
@@ -34,5 +31,8 @@ export class userService {
 
   public static async getFriends(userId: string) {
     return await axios.get<User[]>(`user/${userId}/friends`)
+  }
+  public static async putPassword(updatePasswordData: UpdatePasswordFormData ){
+    return await axios.put('user/current-user/password', updatePasswordData)
   }
 }
