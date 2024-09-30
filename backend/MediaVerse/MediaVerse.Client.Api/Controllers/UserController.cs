@@ -87,4 +87,11 @@ public class UserController(IMediator mediator) : BaseController
         var response = await mediator.Send(query);
         return OkOrError(response);
     }
+
+    [HttpPut("current-user/password")]
+    public async Task<IActionResult> UpdatePassword(UpdatePasswordCommand command)
+    {
+        var response = await mediator.Send(command);
+        return OkOrError(response);
+    }
 }

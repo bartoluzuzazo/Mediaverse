@@ -3,14 +3,14 @@ using System.Security.Claims;
 using System.Text;
 using MediaVerse.Client.Application.Services.Authentication;
 using MediaVerse.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Infrastructure.Authentication;
 
-public class TokenService(IConfiguration configuration) : ITokenService
+public class AuthService(IConfiguration configuration) : IAuthService
 {
-    
     public string CreateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -37,5 +37,12 @@ public class TokenService(IConfiguration configuration) : ITokenService
         };
         var token = tokenHandler.CreateToken(tokenDescription);
         return tokenHandler.WriteToken(token);
+    }
+
+    public bool VerifyPassword(string providedPassword, User user)
+    {
+        var passwordHasher = new PasswordHasher<User>();
+        return passwordHasher.VerifyHashedPassword(user, user.PasswordHash, providedPassword) ==
+               PasswordVerificationResult.Success;
     }
 }

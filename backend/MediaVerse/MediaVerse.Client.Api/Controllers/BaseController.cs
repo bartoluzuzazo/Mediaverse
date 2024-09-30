@@ -25,11 +25,11 @@ public abstract class BaseController : ControllerBase
     {
         return exception switch
         {
-            NotFoundException => NotFound(),
-            ProblemException => Problem(),
-            ForbiddenException => Forbid(),
-            ConflictException => Conflict(),
-            _ => Problem()
+            NotFoundException => NotFound(exception.Message),
+            ProblemException => Problem(exception.Message),
+            ForbiddenException => Forbid(exception.Message),
+            ConflictException => Conflict(exception.Message),
+            _ => Problem(exception.Message)
         };
     }
 }

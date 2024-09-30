@@ -14,7 +14,7 @@ public class UpdateUserCommand : IRequest<BaseResponse<UserLoginResponse>>
     public string? ProfilePicture { get; set; }
 }
 
-public class UpdateUserCommandHandler(IUserService userService, IRepository<User> userRepository, IRepository<ProfilePicture> profilePictureRepository, ITokenService tokenService) : IRequestHandler<UpdateUserCommand, BaseResponse<UserLoginResponse>>
+public class UpdateUserCommandHandler(IUserService userService, IRepository<User> userRepository, IRepository<ProfilePicture> profilePictureRepository, IAuthService authService) : IRequestHandler<UpdateUserCommand, BaseResponse<UserLoginResponse>>
 {
     public async Task<BaseResponse<UserLoginResponse>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
@@ -41,7 +41,7 @@ public class UpdateUserCommandHandler(IUserService userService, IRepository<User
         }
 
         var saveChanges = await userRepository.SaveChangesAsync(cancellationToken);
-        var token = tokenService.CreateToken(user);
+        var token = authService.CreateToken(user);
         var response = new UserLoginResponse()
         {
             Token = token

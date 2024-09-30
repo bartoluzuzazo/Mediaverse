@@ -21,7 +21,7 @@ public record LoginUserQuery : IRequest<BaseResponse<UserLoginResponse>>
     public string Password { get; set; }
 }
 
-public class LoginUserQueryHandler(IRepository<User> userRepository, ITokenService tokenService)
+public class LoginUserQueryHandler(IRepository<User> userRepository, IAuthService authService)
     : IRequestHandler<LoginUserQuery, BaseResponse<UserLoginResponse>>
 {
     public async Task<BaseResponse<UserLoginResponse>> Handle(LoginUserQuery request,
@@ -32,13 +32,11 @@ public class LoginUserQueryHandler(IRepository<User> userRepository, ITokenServi
 
         if (user is null) return new BaseResponse<UserLoginResponse>(new NotFoundException());
 
-        var passwordHasher = new PasswordHasher<User>();
-        var isVerified = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password) ==
-                         PasswordVerificationResult.Success;
+        var isVerified = authService.VerifyPassword(request.Password, user);
 
         if (!isVerified) return new BaseResponse<UserLoginResponse>(new NotFoundException());
 
-        var token = tokenService.CreateToken(user);
+        var token = authService.CreateToken(user);
 
         var response = new UserLoginResponse()
         {
