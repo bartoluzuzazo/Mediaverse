@@ -7,6 +7,8 @@ using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace MediaVerse.Client.Application.Queries.EntryQueries;
 
@@ -19,12 +21,12 @@ public class GetEntriesQueryHandler(IRepository<Entry> entryRepository, IMapper 
         CancellationToken cancellationToken)
     {
         var entryDbSet = entryRepository.GetDbSet();
-
         var entries = await entryDbSet.FromSqlInterpolated($"""
                                                             SELECT
                                                                 * 
                                                             FROM
                                                             full_text_search_entries({request.SearchTerm})
+                                                            LIMIT 5
                                                             """)
             .AsNoTracking().Include(e => e.CoverPhoto).Include(e => e.Ratings)
             .ToListAsync(cancellationToken);

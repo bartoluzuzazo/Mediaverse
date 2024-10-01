@@ -13,6 +13,6 @@ BEGIN
         WHERE query @@ entry.search_vector
            OR similarity >= 0.2
         ORDER BY rank_name, rank_description, similarity DESC NULLS LAST;
-END;
+END
 
 $$ LANGUAGE plpgsql;

@@ -10,7 +10,7 @@ public sealed class GetEntryFullTextSearchedNoTrackingSpecification : Specificat
     {
         Query
             .Where(e => e.SearchVector.Matches(EF.Functions.ToTsQuery("english", searchTerm))
-                        || EF.Functions.TrigramsSimilarity(searchTerm, e.Name) >= 0.4)
+                        || EF.Functions.TrigramsSimilarity(searchTerm, e.Name) >= 0.2)
             .OrderByDescending(e => EF.Functions.ToTsVector(e.Name).Rank(EF.Functions.ToTsQuery("english", searchTerm)))
             .ThenByDescending(e =>
                 EF.Functions.ToTsVector(e.Description).Rank(EF.Functions.ToTsQuery("english", searchTerm)))
