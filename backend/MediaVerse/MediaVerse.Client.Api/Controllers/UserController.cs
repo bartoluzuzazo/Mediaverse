@@ -18,24 +18,14 @@ public class UserController(IMediator mediator) : BaseController
     public async Task<IActionResult> RegisterUser(RegisterUserCommand request)
     {
         var response = await mediator.Send(request);
-        if (response.Exception is not null)
-        {
-            return response.Exception is ConflictException ? Conflict() : Problem(response.Exception.Message);
-        }
-
-        return CreatedAtAction(nameof(LoginUser), response.Data);
+        return ResolveCode(response.Exception, CreatedAtAction(nameof(LoginUser), response.Data));
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> LoginUser(LoginUserQuery request)
     {
         var response = await mediator.Send(request);
-        if (response.Exception is not null)
-        {
-            return response.Exception is NotFoundException ? NotFound() : Problem(response.Exception.Message);
-        }
-
-        return Ok(response.Data);
+        return ResolveCode(response.Exception,  Ok(response.Data));
     }
 
     [HttpGet("{userId:guid}")]

@@ -8,6 +8,7 @@ using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace MediaVerse.Client.Application.Commands.RatingCommands;
 
@@ -30,7 +31,9 @@ public class CreateRatingCommandHandler(
         }
 
         var userSpecification = new GetUserSpecification(email);
-        var user = await userRepository.FirstOrDefaultAsync(userSpecification);
+
+        var user = await userRepository.FirstOrDefaultAsync(userSpecification, cancellationToken);
+
         if (user is null)
         {
             return new BaseResponse<GetRatingResponse>(new NotFoundException());
