@@ -1,10 +1,12 @@
 using System.Text;
 using MediaVerse.Client.Application.Extensions.MediatR;
 using MediaVerse.Client.Application.Queries.Test;
+using MediaVerse.Client.Application.Services.Authentication;
 using MediaVerse.Client.Application.Services.Transformer;
 using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Domain.Interfaces;
 using MediaVerse.Host.Extensions;
+using MediaVerse.Infrastructure.Authentication;
 using MediaVerse.Infrastructure.Database;
 using MediaVerse.Infrastructure.Repositories;
 using MediaVerse.Infrastructure.UserAccessor;
@@ -62,6 +64,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserAccessor, HttpUserAccessor>();
 builder.Services.AddScoped<IUserService, HttpUserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.AddLogging();
 

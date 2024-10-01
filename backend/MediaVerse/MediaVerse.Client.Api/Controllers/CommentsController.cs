@@ -10,21 +10,13 @@ namespace MediaVerse.Client.Api.Controllers;
 
 [ApiController]
 [Route("")]
-public class CommentsController : BaseController
+public class CommentsController(IMediator mediator) : BaseController
 {
-    private readonly IMediator _mediator;
-
-    public CommentsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
-
     [HttpPost("comments/{commentId:guid}/votes")]
     public async Task<IActionResult> PostVote(Guid commentId, PostVoteDto voteDto)
     {
         var command = new CreateVoteCommand(commentId, voteDto);
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         return ResolveCode(result.Exception, Created("", result.Data));
     }
 
@@ -36,7 +28,7 @@ public class CommentsController : BaseController
             CommentId = commentId,
             VoteDto = voteDto
         };
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         return ResolveCode(result.Exception, Ok(result.Data));
     }
 
@@ -47,7 +39,7 @@ public class CommentsController : BaseController
         {
             CommentId = commentId
         };
-        var exception = await _mediator.Send(command);
+        var exception = await mediator.Send(command);
         return ResolveCode(exception, Ok());
     }
 
@@ -61,7 +53,7 @@ public class CommentsController : BaseController
             EntryId = entryId,
             CommentDto = commentDto
         };
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         return ResolveCode(result.Exception, CreatedAtAction(nameof(GetComments), new { entryId }, result.Data));
     }
 
@@ -74,7 +66,7 @@ public class CommentsController : BaseController
             CommentDto = commentDto,
             ParentCommentId = commentId,
         };
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         return ResolveCode(result.Exception, CreatedAtAction(nameof(GetSubcomments), new { commentId }, result.Data));
     }
 
@@ -91,7 +83,7 @@ public class CommentsController : BaseController
             Order = order,
             Direction = direction
         };
-        var result = await _mediator.Send(query);
+        var result = await mediator.Send(query);
         return ResolveCode(result.Exception, Ok(result.Data));
     }
 
@@ -107,7 +99,7 @@ public class CommentsController : BaseController
             Order = order,
             Direction = direction
         };
-        var result = await _mediator.Send(query);
+        var result = await mediator.Send(query);
         return ResolveCode(result.Exception, Ok(result.Data));
     }
 
@@ -123,7 +115,7 @@ public class CommentsController : BaseController
             Order = order,
             Direction = direction
         };
-        var result = await _mediator.Send(query);
+        var result = await mediator.Send(query);
         return ResolveCode(result.Exception, Ok(result.Data));
     }
 
@@ -141,7 +133,7 @@ public class CommentsController : BaseController
             Order = order,
             Direction = direction
         };
-        var result = await _mediator.Send(query);
+        var result = await mediator.Send(query);
         return ResolveCode(result.Exception, Ok(result.Data));
     }
 }

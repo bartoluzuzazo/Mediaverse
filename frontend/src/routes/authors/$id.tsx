@@ -34,7 +34,11 @@ export const Route = createFileRoute('/authors/$id')({
         {author.workOns.map((group) => (
           <>
             <SectionHeader title={group.role} />
-            {group.entries.map(e => <div className="p-2"><AuthorEntryPreview entry={e}/></div>)}
+            {group.entries.map((e) => (
+              <div className="p-2">
+                <AuthorEntryPreview entry={e} />
+              </div>
+            ))}
           </>
         ))}
       </>

@@ -19,12 +19,7 @@ public class RatingsController(IMediator mediator) : BaseController
 
         var result = await mediator.Send(query);
 
-        if (result.Exception is not null)
-        {
-            return ResolveException(result.Exception);
-        }
-
-        return Ok(result.Data);
+        return OkOrError(result);
     }
 
     [HttpPost("entries/{entryGuid:guid}/ratings")]
@@ -33,12 +28,7 @@ public class RatingsController(IMediator mediator) : BaseController
         var command = new CreateRatingCommand(entryGuid, postRatingDto);
         var result = await mediator.Send(command);
 
-        if (result.Exception is not null)
-        {
-            return ResolveException(result.Exception);
-        }
-
-        return Created();
+        return ResolveCode(result.Exception, CreatedAtAction(nameof(GetUsersRating), new {entryGuid = result.Data?.EntryId }));
     }
 
     [HttpPut("ratings/{id:guid}")]
@@ -47,11 +37,6 @@ public class RatingsController(IMediator mediator) : BaseController
         var updateRatingCommand = new UpdateRatingCommand(id, ratingDto);
         var result = await mediator.Send(updateRatingCommand);
 
-        if (result.Exception is not null)
-        {
-            return ResolveException(result.Exception);
-        }
-
-        return Ok(result.Data);
+        return OkOrError(result);
     }
 }
