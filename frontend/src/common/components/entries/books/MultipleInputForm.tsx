@@ -17,7 +17,7 @@ export const MultipleInputForm : FunctionComponent<Props> = ({label, collection,
 
   const form = useForm<FormFieldData>()
   const handleAdd = (data: FormFieldData) => {
-    setCollection([...collection, data.field])
+    setCollection((prev) => [...prev, data.field])
     form.resetField('field')
   }
 

@@ -14,7 +14,7 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({ label, collecti
 
   const form = useForm<WorkOn>()
   const handleAdd = (data: WorkOn) => {
-    setCollection([...collection, data])
+    setCollection((prev) => [...prev, data])
     form.resetField('id')
     form.resetField('role')
   }

@@ -14,7 +14,7 @@ const FormTextArea = <T extends FieldValues> ({label, registerPath, register, er
       <label>
         {label}
         <textarea
-          {...register(registerPath, { required: 'Bio is required' })}
+          {...register(registerPath, { required: `${label} is required` })}
           className="block w-full rounded-md border-2 border-slate-500 p-1"
           rows={20}
         />

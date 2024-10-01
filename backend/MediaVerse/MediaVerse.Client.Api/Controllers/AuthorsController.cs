@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 public class AuthorsController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    // [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> CreateAuthor(CreateAuthorCommand createAuthorCommand)
     {
         var response = await mediator.Send(createAuthorCommand);
@@ -33,13 +33,5 @@ public class AuthorsController(IMediator mediator) : BaseController
         command.Id = id;
         var response = await mediator.Send(command);
         return ResolveCode(response.Exception, Ok());
-    }
-    
-    [HttpPost("entries")]
-    // [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> AddBookAuthors(AddAuthorEntriesCommand request)
-    {
-        var response = await mediator.Send(request);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetAuthor), response.Data));
     }
 }

@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
 using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
@@ -27,8 +28,9 @@ public class AddBookCommandHandler(
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> photoRepository,
     IRepository<BookGenre> bookGenreRepository,
-    IRepository<WorkOn> workOnRepository, 
-    IRepository<AuthorRole> roleRepository)
+    IRepository<WorkOn> workOnRepository,
+    IRepository<AuthorRole> roleRepository,
+    IMapper mapper)
     : IRequestHandler<AddBookCommand, BaseResponse<AddEntryResponse>>
 {
     public async Task<BaseResponse<AddEntryResponse>> Handle(AddBookCommand request,
@@ -74,7 +76,7 @@ public class AddBookCommandHandler(
         await photoRepository.AddAsync(photo, cancellationToken);
         await entryRepository.AddAsync(entry, cancellationToken);
         await bookRepository.AddAsync(book, cancellationToken);
-        
+
         if (!request.WorkOnRequests.IsNullOrEmpty())
         {
             var roleNames = request.WorkOnRequests!.Select(r => r.Role).ToList();
@@ -87,13 +89,15 @@ public class AddBookCommandHandler(
             await roleRepository.AddRangeAsync(newRoles, cancellationToken);
             roles.AddRange(newRoles);
 
-            var newWorkOns = request.WorkOnRequests!.Select(r => new WorkOn()
-            {
-                Id = Guid.NewGuid(),
-                EntryId = book.Id,
-                AuthorId = r.Id,
-                AuthorRoleId = roles.First(role => role.Name == r.Role).Id
-            }).ToList();
+            var newWorkOns = request.WorkOnRequests!
+                .Select(r => mapper.Map<WorkOn>(r, opt =>
+                {
+                    opt.Items["roles"] = roles;
+                    opt.Items["book"] = book;
+                }))
+                .ToList();
+            Console.WriteLine("----------- ID ------------------");
+            Console.WriteLine(newWorkOns.First().AuthorId);
             await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
         }
 
@@ -102,7 +106,7 @@ public class AddBookCommandHandler(
             Id = entry.Id,
             CoverPhotoId = photo.Id
         };
-        
+
         return new BaseResponse<AddEntryResponse>(response);
     }
 }

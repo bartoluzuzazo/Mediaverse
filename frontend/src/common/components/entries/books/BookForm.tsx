@@ -46,10 +46,10 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
         release: book.entry.release,
         isbn: book.isbn,
         genres: book.bookGenres,
-        workOnRequests: book.entry.authors.map(g => g.authors.map(a => {
+        workOnRequests: book.entry.authors.flatMap(g => g.authors.map(a => {
           const workOn : WorkOn = {id: a.id, role: g.role}
           return workOn
-        })).flat()
+        }))
       }
       : undefined,
   })
@@ -64,7 +64,6 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
     data.workOnRequests = authors;
 
     if (book == null) {
-      console.log(data)
       const response = await BookService.postBook(data)
       const id = response.data.id
       await navigate({ to: `/entries/books/${id}` })

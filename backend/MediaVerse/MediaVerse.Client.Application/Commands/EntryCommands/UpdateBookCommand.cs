@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
@@ -20,7 +21,8 @@ public class UpdateBookCommandHandler(
     IRepository<CoverPhoto> coverPhotoRepository,
     IRepository<BookGenre> bookGenreRepository,
     IRepository<AuthorRole> roleRepository,
-    IRepository<WorkOn> workOnRepository) : IRequestHandler<UpdateBookCommand, BaseResponse<Guid>>
+    IRepository<WorkOn> workOnRepository,
+    IMapper mapper) : IRequestHandler<UpdateBookCommand, BaseResponse<Guid>>
 {
     public async Task<BaseResponse<Guid>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
@@ -60,13 +62,9 @@ public class UpdateBookCommandHandler(
             await roleRepository.AddRangeAsync(newRoles, cancellationToken);
             roles.AddRange(newRoles);
 
-            var newWorkOns = request.Dto.WorkOnRequests!.Select(r => new WorkOn()
-            {
-                Id = Guid.NewGuid(),
-                EntryId = request.Id,
-                AuthorId = r.Id,
-                AuthorRoleId = roles.First(role => role.Name == r.Role).Id
-            }).ToList();
+            var newWorkOns = request.Dto.WorkOnRequests!
+                .Select(r => mapper.Map<WorkOn>(r, opt => opt.Items["roles"] = roles))
+                .ToList();
 
             var woSpec = new GetWorkOnsByEntryIdSpecification(request.Id);
             var currentWorkOns = await workOnRepository.ListAsync(woSpec, cancellationToken);
