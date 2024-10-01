@@ -26,7 +26,7 @@ public class FriendshipsController(IMediator mediator) : BaseController
         var command = new ApproveFriendshipCommand(userId);
         var response = await mediator.Send(command);
         return ResolveCode(response.Exception,
-            Created("", response.Data));
+            CreatedAtAction(nameof(GetFriendship), new {userId = response.Data?.UserId},response.Data));
     }
 
     [HttpGet("{userId:guid}")]

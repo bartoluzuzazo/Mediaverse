@@ -26,7 +26,7 @@ export const UpdatePasswordForm: FunctionComponent = () => {
   })
 
 
-  const onSubmit: SubmitHandler<UpdatePasswordFormData> = async (data) => {
+  const onSubmit: SubmitHandler<UpdatePasswordFormData> = (data) => {
     updatePasswordMutation.mutate(data)
   }
   if (!authUserData) {
