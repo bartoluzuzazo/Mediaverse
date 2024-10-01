@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 public class AuthorsController(IMediator mediator) : BaseController
 {
     [HttpPost]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> CreateAuthor(CreateAuthorCommand createAuthorCommand)
     {
         var response = await mediator.Send(createAuthorCommand);

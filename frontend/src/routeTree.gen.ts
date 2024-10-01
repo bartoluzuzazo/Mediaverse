@@ -17,6 +17,7 @@ import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index
 import { Route as EntriesBooksIdImport } from './routes/entries/books/$id'
 import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
 import { Route as EntriesBooksCreateIndexImport } from './routes/entries/books/create/index'
+import { Route as EntriesBooksEditIdImport } from './routes/entries/books/edit/$id'
 
 // Create/Update Routes
 
@@ -47,6 +48,11 @@ const AuthorsEditIdRoute = AuthorsEditIdImport.update({
 
 const EntriesBooksCreateIndexRoute = EntriesBooksCreateIndexImport.update({
   path: '/entries/books/create/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EntriesBooksEditIdRoute = EntriesBooksEditIdImport.update({
+  path: '/entries/books/edit/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -89,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorsCreateIndexImport
       parentRoute: typeof rootRoute
     }
+    '/entries/books/edit/$id': {
+      id: '/entries/books/edit/$id'
+      path: '/entries/books/edit/$id'
+      fullPath: '/entries/books/edit/$id'
+      preLoaderRoute: typeof EntriesBooksEditIdImport
+      parentRoute: typeof rootRoute
+    }
     '/entries/books/create/': {
       id: '/entries/books/create/'
       path: '/entries/books/create'
@@ -107,6 +120,7 @@ export const routeTree = rootRoute.addChildren({
   AuthorsEditIdRoute,
   EntriesBooksIdRoute,
   AuthorsCreateIndexRoute,
+  EntriesBooksEditIdRoute,
   EntriesBooksCreateIndexRoute,
 })
 
@@ -123,6 +137,7 @@ export const routeTree = rootRoute.addChildren({
         "/authors/edit/$id",
         "/entries/books/$id",
         "/authors/create/",
+        "/entries/books/edit/$id",
         "/entries/books/create/"
       ]
     },
@@ -140,6 +155,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/authors/create/": {
       "filePath": "authors/create/index.tsx"
+    },
+    "/entries/books/edit/$id": {
+      "filePath": "entries/books/edit/$id.tsx"
     },
     "/entries/books/create/": {
       "filePath": "entries/books/create/index.tsx"

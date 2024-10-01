@@ -6,7 +6,6 @@ using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Queries.AuthorQueries;

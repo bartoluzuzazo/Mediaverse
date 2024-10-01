@@ -18,8 +18,4 @@
       <ProjectReference Include="..\MediaVerse.Infrastructure\MediaVerse.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Files\2024\09\" />
-    </ItemGroup>
-
 </Project>

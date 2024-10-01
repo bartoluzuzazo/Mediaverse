@@ -11,6 +11,7 @@ using MediaVerse.Infrastructure.UserAccessor;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using Microsoft.OpenApi.Models;
 
 const string defaultpolicy = "default";

@@ -8,17 +8,15 @@ interface Props <T extends FieldValues>{
   errorValue: FieldError | undefined
 }
 
-const FormField = <T extends FieldValues> ({label, registerPath, register, errorValue} : Props<T>) => {
+const FormTextArea = <T extends FieldValues> ({label, registerPath, register, errorValue} : Props<T>) => {
   return (
     <div className="mb-2 block">
       <label>
         {label}
-        <input
-          {
-          ...register(registerPath, { required: `${label} is required` })
-          }
+        <textarea
+          {...register(registerPath, { required: `${label} is required` })}
           className="block w-full rounded-md border-2 border-slate-500 p-1"
-          type="text"
+          rows={20}
         />
       </label>
       {errorValue && (
@@ -31,4 +29,4 @@ const FormField = <T extends FieldValues> ({label, registerPath, register, error
   )
 }
 
-export default FormField;
+export default FormTextArea;
