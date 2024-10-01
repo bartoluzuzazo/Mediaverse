@@ -11,6 +11,7 @@ public class MigrationService(string connectionString)
         var upgradeEngine = DeployChanges.To.PostgresqlDatabase(connectionString)
             .WithScriptsEmbeddedInAssembly(typeof(MigrationService).GetTypeInfo().Assembly)
             .LogTo(new UpgradeLogger())
+            .WithVariablesDisabled()
             .Build();
 
         if (upgradeEngine is null)

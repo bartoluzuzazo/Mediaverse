@@ -96,8 +96,6 @@ public class AddBookCommandHandler(
                     opt.Items["book"] = book;
                 }))
                 .ToList();
-            Console.WriteLine("----------- ID ------------------");
-            Console.WriteLine(newWorkOns.First().AuthorId);
             await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
         }
 
