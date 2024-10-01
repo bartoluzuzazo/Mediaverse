@@ -1,4 +1,6 @@
-﻿namespace MediaVerse.Domain.Entities;
+﻿using NpgsqlTypes;
+
+namespace MediaVerse.Domain.Entities;
 
 public partial class Entry
 {
@@ -37,4 +39,6 @@ public partial class Entry
     public virtual Song? Song { get; set; }
 
     public virtual ICollection<WorkOn> WorkOns { get; set; } = new List<WorkOn>();
+    
+    public NpgsqlTsVector SearchVector { get; set; }
 }
