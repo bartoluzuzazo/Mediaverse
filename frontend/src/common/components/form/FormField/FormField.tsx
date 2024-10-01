@@ -4,7 +4,7 @@ import { HTMLInputTypeAttribute } from 'react'
 
 interface Props<T extends FieldValues> {
   label: string
-  name: Path<T>
+  registerPath: Path<T>
   register: UseFormRegister<T>
   errorValue?: FieldError
   type?: HTMLInputTypeAttribute
@@ -13,7 +13,7 @@ interface Props<T extends FieldValues> {
 
 const FormField = <T extends FieldValues>({
                                             label,
-                                            name,
+                                            registerPath,
                                             register,
                                             errorValue,
                                             type = 'text',
@@ -25,7 +25,7 @@ const FormField = <T extends FieldValues>({
         {label}
         <input
           {
-            ...register(name, rules)
+            ...register(registerPath, rules)
           }
           className='block w-full rounded-md border-2 border-slate-500 p-1'
           type={type}

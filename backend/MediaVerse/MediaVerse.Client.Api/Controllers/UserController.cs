@@ -2,8 +2,6 @@
 using MediaVerse.Client.Application.Commands.UserCommands;
 using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Client.Application.Queries.UserQueries;
-using MediaVerse.Domain.Entities;
-using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

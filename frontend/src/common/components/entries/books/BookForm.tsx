@@ -9,7 +9,7 @@ import FormTextArea from '../FormTextArea/FormTextArea.tsx'
 import FormDateInput from '../../form/FormDateInput/FormDateInput.tsx'
 import CoverPicker from '../../form/CoverPicker/CoverPicker.tsx'
 import { MultipleInputForm } from './MultipleInputForm.tsx'
-import {  AuthorEntryInputForm } from './AuthorEntryInputForm.tsx'
+import { AuthorEntryInputForm } from './AuthorEntryInputForm.tsx'
 
 export interface BookFormData {
   id?: string
