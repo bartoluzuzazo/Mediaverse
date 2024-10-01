@@ -7,6 +7,7 @@ using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
@@ -18,7 +19,7 @@ public record AddBookCommand : IRequest<BaseResponse<AddEntryResponse>>
     public string CoverPhoto { get; set; }
     public string Isbn { get; set; }
     public string Synopsis { get; set; }
-    public List<string> Genres { get; set; }
+    public List<string>? Genres { get; set; }
     public List<EntryWorkOnRequest>? WorkOnRequests { get; set; }
 }
 
@@ -54,17 +55,20 @@ public class AddBookCommandHandler(
             Synopsis = request.Synopsis,
             BookGenres = new List<BookGenre>()
         };
-        
-        var genreSpec = new GetBookGenresByNameSpecification(request.Genres);
-        var dbGenres = await bookGenreRepository.ListAsync(genreSpec, cancellationToken);
-        var dbGenreNames = dbGenres.Select(g => g.Name).ToList();
-        var newGenres = request.Genres.Where(genre => !dbGenreNames.Contains(genre))
-            .Select(genre => new BookGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
 
-        await bookGenreRepository.AddRangeAsync(newGenres, cancellationToken);
-        dbGenres.AddRange(newGenres);
-        
-        book.BookGenres = dbGenres;
+        if (!request.Genres.IsNullOrEmpty())
+        {
+            var genreSpec = new GetBookGenresByNameSpecification(request.Genres);
+            var dbGenres = await bookGenreRepository.ListAsync(genreSpec, cancellationToken);
+            var dbGenreNames = dbGenres.Select(g => g.Name).ToList();
+            var newGenres = request.Genres.Where(genre => !dbGenreNames.Contains(genre))
+                .Select(genre => new BookGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
+
+            await bookGenreRepository.AddRangeAsync(newGenres, cancellationToken);
+            dbGenres.AddRange(newGenres);
+
+            book.BookGenres = dbGenres;
+        }
 
         var response = new AddEntryResponse()
         {

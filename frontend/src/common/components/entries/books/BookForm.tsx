@@ -64,6 +64,7 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
     data.workOnRequests = authors;
 
     if (book == null) {
+      console.log(data)
       const response = await BookService.postBook(data)
       const id = response.data.id
       await navigate({ to: `/entries/books/${id}` })

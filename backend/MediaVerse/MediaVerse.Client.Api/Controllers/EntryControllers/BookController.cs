@@ -1,5 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
+using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -13,27 +14,28 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class BookController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    // [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> AddBook(AddBookCommand request)
     {
         var response = await mediator.Send(request);
         if (request.WorkOnRequests.IsNullOrEmpty() || response.Data is null)
-            return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data));
+            return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data, response.Data));
+        
         var addAuthorsRequest = new AddEntryAuthorsCommand(response.Data.Id, request.WorkOnRequests);
         await mediator.Send(addAuthorsRequest);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data));
+        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data, response.Data));
     }
     
     [HttpPatch("{id:guid}")]
-    // [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> PatchBook(Guid id, UpdateBookCommand request)
+    [Authorize(Policy = "Admin")]
+    public async Task<IActionResult> PatchBook(Guid id, PatchBookRequest request)
     {
-        request.Id = id;
-        var response = await mediator.Send(request);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data));
+        var command = new UpdateBookCommand(id, request);
+        var response = await mediator.Send(command);
+        return ResolveCode(response.Exception, Ok(nameof(GetBook)));
     }
     
-    [HttpGet]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetBook(Guid id)
     {
         var request = new GetBookQuery(id);
@@ -50,10 +52,10 @@ public class BookController(IMediator mediator) : BaseController
     }
     
     [HttpPost("authors")]
-    // [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> AddBookAuthors(AddEntryAuthorsCommand request)
     {
         var response = await mediator.Send(request);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data));
+        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data, response.Data));
     }
 }

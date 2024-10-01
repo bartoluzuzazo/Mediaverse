@@ -35,7 +35,7 @@ public class AddEntryAuthorsCommandHandler(IRepository<WorkOn> workOnRepository,
 
         await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
 
-        var response = new EntryWorkOnResponse() {  };
+        var response = new EntryWorkOnResponse() { Id = request.EntryId};
         return new BaseResponse<EntryWorkOnResponse>(response);
     }
 }

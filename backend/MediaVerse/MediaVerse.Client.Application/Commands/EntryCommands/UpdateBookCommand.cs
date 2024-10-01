@@ -1,5 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
+using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
 using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
@@ -7,22 +8,10 @@ using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
-public record UpdateBookCommand : IRequest<BaseResponse<Guid>>
-{
-    public Guid Id { get; set; }
-    public string? Name { get; set; }
-    public string? Description { get; set; }
-    public DateTime? Release { get; set; }
-    public string? CoverPhoto { get; set; }
-    public string? Isbn { get; set; }
-    public string? Synopsis { get; set; }
-    public List<string>? Genres { get; set; }
-    public List<EntryWorkOnRequest>? WorkOnRequests { get; set; }
-}
+public record UpdateBookCommand(Guid Id, PatchBookRequest Dto) : IRequest<BaseResponse<Guid>>;
 
 public class UpdateBookCommandHandler(
     IRepository<Entry> entryRepository,
@@ -40,17 +29,17 @@ public class UpdateBookCommandHandler(
             return new BaseResponse<Guid>(new NotFoundException());
         }
 
-        book.Description = request.Description ?? book.Description;
-        book.Name = request.Name ?? book.Name;
-        book.Book!.Isbn = request.Isbn ?? book.Book.Isbn;
-        book.Book!.Synopsis = request.Synopsis ?? book.Book.Synopsis;
-        if (request.Release is not null) book.Release = DateOnly.FromDateTime(request.Release.Value);
-        if (request.Genres is not null)
+        book.Description = request.Dto.Description ?? book.Description;
+        book.Name = request.Dto.Name ?? book.Name;
+        book.Book!.Isbn = request.Dto.Isbn ?? book.Book.Isbn;
+        book.Book!.Synopsis = request.Dto.Synopsis ?? book.Book.Synopsis;
+        if (request.Dto.Release is not null) book.Release = DateOnly.FromDateTime(request.Dto.Release.Value);
+        if (request.Dto.Genres is not null)
         {
-            var genreSpec = new GetBookGenresByNameSpecification(request.Genres);
+            var genreSpec = new GetBookGenresByNameSpecification(request.Dto.Genres);
             var dbGenres = await bookGenreRepository.ListAsync(genreSpec, cancellationToken);
             var dbGenreNames = dbGenres.Select(g => g.Name).ToList();
-            var newGenres = request.Genres.Where(genre => !dbGenreNames.Contains(genre))
+            var newGenres = request.Dto.Genres.Where(genre => !dbGenreNames.Contains(genre))
                 .Select(genre => new BookGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
             await bookGenreRepository.AddRangeAsync(newGenres, cancellationToken);
             dbGenres.AddRange(newGenres);
@@ -59,9 +48,9 @@ public class UpdateBookCommandHandler(
 
         //TODO: workOns
 
-        if (request.CoverPhoto is not null)
+        if (request.Dto.CoverPhoto is not null)
         {
-            var photoData = Convert.FromBase64String(request.CoverPhoto);
+            var photoData = Convert.FromBase64String(request.Dto.CoverPhoto);
 
             var coverPhoto = new CoverPhoto()
             {

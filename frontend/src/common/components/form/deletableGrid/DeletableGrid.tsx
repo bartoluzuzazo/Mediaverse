@@ -17,7 +17,7 @@ export const DeletableGrid = <T extends any> ({label, collection, setCollection,
     <>
       <label className="p-1">{label}</label>
       <div className="grid grid-cols-1 divide-y divide-black outline outline-2 outline-slate-500 rounded-md">
-        {collection.length > 0 ?
+        {collection?.length > 0 ?
           collection.map(wo =>
             (<div className="flex flex-row justify-between">
               <div className="p-1">{displayFn ? displayFn(wo) : wo}</div>

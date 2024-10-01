@@ -5,11 +5,7 @@ import { Entry } from '../models/entry/Entry'
 
 export class BookService {
   public static async getBook(id: string) {
-    return await axios.get<Book>('book', {
-      params: {
-        id,
-      },
-    })
+    return await axios.get<Book>(`/book/${id}`)
   }
 
   public static async getBooks(params: GetBooksRequest) {
@@ -21,10 +17,6 @@ export class BookService {
   }
 
   public static async patchBook(book: BookFormData, id: string) {
-    return await axios.patch(`/book/${id}`, book, {
-      params: {
-        'id': id,
-      },
-    })
+    return await axios.patch(`/book/${id}`, book)
   }
 }
