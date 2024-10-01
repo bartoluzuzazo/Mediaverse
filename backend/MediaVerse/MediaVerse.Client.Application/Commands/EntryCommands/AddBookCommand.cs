@@ -1,8 +1,7 @@
-using System.Text;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
+using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
@@ -27,7 +26,9 @@ public class AddBookCommandHandler(
     IRepository<Book> bookRepository,
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> photoRepository,
-    IRepository<BookGenre> bookGenreRepository)
+    IRepository<BookGenre> bookGenreRepository,
+    IRepository<WorkOn> workOnRepository, 
+    IRepository<AuthorRole> roleRepository)
     : IRequestHandler<AddBookCommand, BaseResponse<AddEntryResponse>>
 {
     public async Task<BaseResponse<AddEntryResponse>> Handle(AddBookCommand request,
@@ -58,10 +59,10 @@ public class AddBookCommandHandler(
 
         if (!request.Genres.IsNullOrEmpty())
         {
-            var genreSpec = new GetBookGenresByNameSpecification(request.Genres);
+            var genreSpec = new GetBookGenresByNameSpecification(request.Genres!);
             var dbGenres = await bookGenreRepository.ListAsync(genreSpec, cancellationToken);
             var dbGenreNames = dbGenres.Select(g => g.Name).ToList();
-            var newGenres = request.Genres.Where(genre => !dbGenreNames.Contains(genre))
+            var newGenres = request.Genres!.Where(genre => !dbGenreNames.Contains(genre))
                 .Select(genre => new BookGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
 
             await bookGenreRepository.AddRangeAsync(newGenres, cancellationToken);
@@ -70,16 +71,38 @@ public class AddBookCommandHandler(
             book.BookGenres = dbGenres;
         }
 
+        await photoRepository.AddAsync(photo, cancellationToken);
+        await entryRepository.AddAsync(entry, cancellationToken);
+        await bookRepository.AddAsync(book, cancellationToken);
+        
+        if (!request.WorkOnRequests.IsNullOrEmpty())
+        {
+            var roleNames = request.WorkOnRequests!.Select(r => r.Role).ToList();
+            var spec = new GetAuthorRoleIdsByNameSpecification(roleNames);
+            var roles = await roleRepository.ListAsync(spec, cancellationToken);
+            var dbRoleNames = roles.Select(r => r.Name).ToList();
+            var newRoles = roleNames.Where(roleName => !dbRoleNames.Contains(roleName))
+                .Select(roleName => new AuthorRole() { Id = Guid.NewGuid(), Name = roleName }).ToList();
+
+            await roleRepository.AddRangeAsync(newRoles, cancellationToken);
+            roles.AddRange(newRoles);
+
+            var newWorkOns = request.WorkOnRequests!.Select(r => new WorkOn()
+            {
+                Id = Guid.NewGuid(),
+                EntryId = book.Id,
+                AuthorId = r.Id,
+                AuthorRoleId = roles.First(role => role.Name == r.Role).Id
+            }).ToList();
+            await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
+        }
+
         var response = new AddEntryResponse()
         {
             Id = entry.Id,
             CoverPhotoId = photo.Id
         };
-
-        await photoRepository.AddAsync(photo, cancellationToken);
-        await entryRepository.AddAsync(entry, cancellationToken);
-        await bookRepository.AddAsync(book, cancellationToken);
-
+        
         return new BaseResponse<AddEntryResponse>(response);
     }
 }

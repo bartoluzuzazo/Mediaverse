@@ -4,10 +4,12 @@ using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
 using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
+using MediaVerse.Client.Application.Specifications.WorkOnSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
@@ -46,7 +48,44 @@ public class UpdateBookCommandHandler(
             book.Book.BookGenres = dbGenres;
         }
 
-        //TODO: workOns
+        if (!request.Dto.WorkOnRequests.IsNullOrEmpty())
+        {
+            var roleNames = request.Dto.WorkOnRequests!.Select(r => r.Role).ToList();
+            var roleSpec = new GetAuthorRoleIdsByNameSpecification(roleNames);
+            var roles = await roleRepository.ListAsync(roleSpec, cancellationToken);
+            var dbRoleNames = roles.Select(r => r.Name).ToList();
+            var newRoles = roleNames.Where(roleName => !dbRoleNames.Contains(roleName))
+                .Select(roleName => new AuthorRole() { Id = Guid.NewGuid(), Name = roleName }).ToList();
+
+            await roleRepository.AddRangeAsync(newRoles, cancellationToken);
+            roles.AddRange(newRoles);
+
+            var newWorkOns = request.Dto.WorkOnRequests!.Select(r => new WorkOn()
+            {
+                Id = Guid.NewGuid(),
+                EntryId = request.Id,
+                AuthorId = r.Id,
+                AuthorRoleId = roles.First(role => role.Name == r.Role).Id
+            }).ToList();
+
+            var woSpec = new GetWorkOnsByEntryIdSpecification(request.Id);
+            var currentWorkOns = await workOnRepository.ListAsync(woSpec, cancellationToken);
+
+            var deleted = new List<WorkOn>();
+            currentWorkOns.ForEach(wo =>
+            {
+                var duplicate = newWorkOns.FirstOrDefault(nwo =>
+                    nwo.EntryId == wo.EntryId && nwo.AuthorId == wo.AuthorId &&
+                    nwo.AuthorRoleId == wo.AuthorRoleId);
+                if (duplicate is not null)
+                    newWorkOns.Remove(duplicate);
+                else
+                    deleted.Add(wo);
+            });
+
+            await workOnRepository.DeleteRangeAsync(deleted, cancellationToken);
+            await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
+        }
 
         if (request.Dto.CoverPhoto is not null)
         {

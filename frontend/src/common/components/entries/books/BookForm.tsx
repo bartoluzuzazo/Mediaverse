@@ -56,8 +56,8 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
 
   const navigate = useNavigate()
 
-  const [genres, setGenres] = useState<string[]>(getValues('genres'))
-  const [authors, setAuthors] = useState<WorkOn[]>(getValues('workOnRequests'))
+  const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
+  const [authors, setAuthors] = useState<WorkOn[]>(getValues('workOnRequests')?getValues('workOnRequests'):[])
 
   const onSubmit: SubmitHandler<BookFormData> = async (data) => {
     data.genres = genres

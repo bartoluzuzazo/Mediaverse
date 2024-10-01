@@ -18,11 +18,6 @@ public class BookController(IMediator mediator) : BaseController
     public async Task<IActionResult> AddBook(AddBookCommand request)
     {
         var response = await mediator.Send(request);
-        if (request.WorkOnRequests.IsNullOrEmpty() || response.Data is null)
-            return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data, response.Data));
-        
-        var addAuthorsRequest = new AddEntryAuthorsCommand(response.Data.Id, request.WorkOnRequests);
-        await mediator.Send(addAuthorsRequest);
         return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data, response.Data));
     }
     
@@ -49,13 +44,5 @@ public class BookController(IMediator mediator) : BaseController
         var request = new GetBookPageQuery(page, size, order, direction);
         var response = await mediator.Send(request);
         return ResolveCode(response.Exception, Ok(response.Data));
-    }
-    
-    [HttpPost("authors")]
-    [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> AddBookAuthors(AddEntryAuthorsCommand request)
-    {
-        var response = await mediator.Send(request);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data, response.Data));
     }
 }
