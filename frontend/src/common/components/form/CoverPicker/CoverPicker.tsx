@@ -20,7 +20,7 @@ const CoverPicker = <T extends FieldValues>({ control, name, watch, previousImag
       <img
         src={curImage || prevImage || defaultImgUrl}
         className="-mt-16 aspect-square w-[170px] h-[235px] border-4 border-white bg-slate-300 object-cover md:-mt-24 md:w-60"
-        alt="profile picture" />
+        alt="cover photo" />
 
       <div className="absolute inset-0 flex items-center">
         <ImagePicker<T>
