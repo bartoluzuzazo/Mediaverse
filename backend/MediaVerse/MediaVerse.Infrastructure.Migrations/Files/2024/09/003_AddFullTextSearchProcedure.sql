@@ -11,7 +11,7 @@ BEGIN
              NULLIF(ts_rank(to_tsvector(entry.description), query), 0) rank_description,
              SIMILARITY(search_term, entry.name) similarity
         WHERE query @@ entry.search_vector
-           OR similarity >= 0.4
+           OR similarity >= 0.2
         ORDER BY rank_name, rank_description, similarity DESC NULLS LAST;
 END;
 
