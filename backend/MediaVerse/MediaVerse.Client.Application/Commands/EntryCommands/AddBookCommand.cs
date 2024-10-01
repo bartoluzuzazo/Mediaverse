@@ -1,11 +1,13 @@
-using System.Text;
+using AutoMapper;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
+using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
+using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
@@ -17,14 +19,18 @@ public record AddBookCommand : IRequest<BaseResponse<AddEntryResponse>>
     public string CoverPhoto { get; set; }
     public string Isbn { get; set; }
     public string Synopsis { get; set; }
-    public List<Guid> GenreIds { get; set; }
+    public List<string>? Genres { get; set; }
+    public List<EntryWorkOnRequest>? WorkOnRequests { get; set; }
 }
 
 public class AddBookCommandHandler(
     IRepository<Book> bookRepository,
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> photoRepository,
-    IRepository<BookGenre> bookGenreRepository)
+    IRepository<BookGenre> bookGenreRepository,
+    IRepository<WorkOn> workOnRepository,
+    IRepository<AuthorRole> roleRepository,
+    IMapper mapper)
     : IRequestHandler<AddBookCommand, BaseResponse<AddEntryResponse>>
 {
     public async Task<BaseResponse<AddEntryResponse>> Handle(AddBookCommand request,
@@ -53,20 +59,51 @@ public class AddBookCommandHandler(
             BookGenres = new List<BookGenre>()
         };
 
-        var genreSpec = new GetBookGenresByIdSpecification(request.GenreIds);
-        var genres = await bookGenreRepository.ListAsync(genreSpec, cancellationToken);
+        if (!request.Genres.IsNullOrEmpty())
+        {
+            var genreSpec = new GetBookGenresByNameSpecification(request.Genres!);
+            var dbGenres = await bookGenreRepository.ListAsync(genreSpec, cancellationToken);
+            var dbGenreNames = dbGenres.Select(g => g.Name).ToList();
+            var newGenres = request.Genres!.Where(genre => !dbGenreNames.Contains(genre))
+                .Select(genre => new BookGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
 
-        book.BookGenres = genres;
+            await bookGenreRepository.AddRangeAsync(newGenres, cancellationToken);
+            dbGenres.AddRange(newGenres);
+
+            book.BookGenres = dbGenres;
+        }
+
+        await photoRepository.AddAsync(photo, cancellationToken);
+        await entryRepository.AddAsync(entry, cancellationToken);
+        await bookRepository.AddAsync(book, cancellationToken);
+
+        if (!request.WorkOnRequests.IsNullOrEmpty())
+        {
+            var roleNames = request.WorkOnRequests!.Select(r => r.Role).ToList();
+            var spec = new GetAuthorRoleIdsByNameSpecification(roleNames);
+            var roles = await roleRepository.ListAsync(spec, cancellationToken);
+            var dbRoleNames = roles.Select(r => r.Name).ToList();
+            var newRoles = roleNames.Where(roleName => !dbRoleNames.Contains(roleName))
+                .Select(roleName => new AuthorRole() { Id = Guid.NewGuid(), Name = roleName }).ToList();
+
+            await roleRepository.AddRangeAsync(newRoles, cancellationToken);
+            roles.AddRange(newRoles);
+
+            var newWorkOns = request.WorkOnRequests!
+                .Select(r => mapper.Map<WorkOn>(r, opt =>
+                {
+                    opt.Items["roles"] = roles;
+                    opt.Items["book"] = book;
+                }))
+                .ToList();
+            await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
+        }
 
         var response = new AddEntryResponse()
         {
             Id = entry.Id,
             CoverPhotoId = photo.Id
         };
-
-        await photoRepository.AddAsync(photo, cancellationToken);
-        await entryRepository.AddAsync(entry, cancellationToken);
-        await bookRepository.AddAsync(book, cancellationToken);
 
         return new BaseResponse<AddEntryResponse>(response);
     }

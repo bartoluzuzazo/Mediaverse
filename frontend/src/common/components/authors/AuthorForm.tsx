@@ -2,9 +2,10 @@ import { Author } from '../../../models/author/Author.ts'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { AuthorService } from '../../../services/AuthorService.ts'
 import ProfilePicker from '../form/profilePicker'
-import { IoIosWarning } from 'react-icons/io'
 import FormButton from '../form/button'
 import { useNavigate } from '@tanstack/react-router'
+import FormTextArea from '../entries/FormTextArea/FormTextArea.tsx'
+import FormField from '../form/FormField/FormField.tsx'
 
 type Props = {
   author?: Author
@@ -27,11 +28,11 @@ const AuthorForm = ({ author }: Props) => {
   } = useForm<AuthorFormData>({
     defaultValues: author
       ? {
-          id: author.id,
-          name: author.name,
-          surname: author.surname,
-          bio: author.bio,
-        }
+        id: author.id,
+        name: author.name,
+        surname: author.surname,
+        bio: author.bio,
+      }
       : undefined,
   })
 
@@ -56,68 +57,18 @@ const AuthorForm = ({ author }: Props) => {
         className="flex flex-col p-4 md:flex-row"
       >
         <div>
-          <ProfilePicker<AuthorFormData>
-            control={control}
-            name={'profilePicture'}
-            watch={watch}
-            previousImageSrc={author?.profilePicture}
-          />
-          <div className="mb-2 block">
-            <label>
-              Name
-              <input
-                {...register('name', { required: 'Name is required' })}
-                className="block w-full rounded-md border-2 border-slate-500 p-1"
-                type="text"
-              />
-            </label>
-            {errors.name && (
-              <div className="text-red-700 flex flex-row">
-                <IoIosWarning />
-                <div>{errors.name.message}</div>
-              </div>
-            )}
-          </div>
-
-          <div className="mb-2 block">
-            <label>
-              Surname
-              <input
-                {...register('surname', { required: 'Surname is required' })}
-                className="block w-full rounded-md border-2 border-slate-500 p-1"
-                type="text"
-              />
-            </label>
-            {errors.surname && (
-              <div className="text-red-700 flex flex-row">
-                <IoIosWarning />
-                <div>{errors.surname.message}</div>
-              </div>
-            )}
-          </div>
+          <ProfilePicker<AuthorFormData> control={control} name={'profilePicture'} watch={watch} previousImageSrc={author?.profilePicture} />
+          <FormField label={'Name'} register={register} errorValue={errors.name} registerPath={'name'} />
+          <FormField label={'Surname'} register={register} errorValue={errors.surname} registerPath={'surname'} />
         </div>
 
         <div className="flex-1 md:ml-20">
-          <div className="mb-2 block">
-            <label>
-              Bio
-              <textarea
-                {...register('bio', { required: 'Bio is required' })}
-                className="block w-full rounded-md border-2 border-slate-500 p-1"
-                rows={20}
-              />
-            </label>
-            {errors.bio && (
-              <div className="text-red-700 flex flex-row">
-                <IoIosWarning />
-                <div>{errors.bio.message}</div>
-              </div>
-            )}
+          <FormTextArea label={'Bio'} register={register} errorValue={errors.bio} registerPath={'bio'} />
+          <div className="flex flex-row-reverse">
+            <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
+              {isSubmitting ? 'Submitting...' : 'Submit'}
+            </FormButton>
           </div>
-
-          <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
-            {isSubmitting ? 'Submitting...' : 'Submit'}
-          </FormButton>
         </div>
       </form>
     </>

@@ -6,4 +6,10 @@ export interface Book {
   isbn: string,
   synopsis: string,
   bookGenres: string[]
+  workOns: WorkOn[]
+}
+
+export interface WorkOn {
+  id: string,
+  role: string
 }
