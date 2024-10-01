@@ -1,5 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.AuthorCommands;
+using MediaVerse.Client.Application.DTOs.AuthorDTOs;
 using MediaVerse.Client.Application.Queries.AuthorQueries;
 using Microsoft.AspNetCore.Authorization;
 
@@ -28,9 +29,9 @@ public class AuthorsController(IMediator mediator) : BaseController
     }
 
     [HttpPatch("{id:guid}")]
-    public async Task<IActionResult> PatchAuthor(Guid id, UpdateAuthorCommand command)
+    public async Task<IActionResult> PatchAuthor(Guid id, PatchAuthorDto authorDto)
     {
-        command.Id = id;
+        var command = new UpdateAuthorCommand(id, authorDto);
         var response = await mediator.Send(command);
         return ResolveCode(response.Exception, Ok());
     }

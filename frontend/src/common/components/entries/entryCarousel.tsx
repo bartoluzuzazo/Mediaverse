@@ -82,6 +82,7 @@ const EntryCarousel: FunctionComponent<EntryCarouselProps> = ({
             className="m-1 my-3 block h-[235px] w-[170px] overflow-hidden transition-shadow"
             to="/entries/books/$id"
             params={{ id }}
+            key={id}
           >
             <CustomImage
               className="h-full w-full transition-all hover:scale-[1.1]"

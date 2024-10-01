@@ -1,5 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.RatingDTOs;
+using MediaVerse.Client.Application.DTOs.RatingDTOs;
 using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Client.Application.Specifications.RatingSpecifications;
 using MediaVerse.Client.Application.Specifications.UserSpecifications;
@@ -11,12 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MediaVerse.Client.Application.Commands.RatingCommands;
 
-public record CreateRatingCommand : IRequest<BaseResponse<GetRatingResponse>>
-{
-    public int Grade { get; set; }
-    public Guid EntryId { get; set; }
-
-}
+public record CreateRatingCommand(Guid EntryId, PostRatingDto RatingDto) : IRequest<BaseResponse<GetRatingResponse>>;
 
 public class CreateRatingCommandHandler(
     IRepository<Rating> ratingRepository,
@@ -35,7 +31,9 @@ public class CreateRatingCommandHandler(
         }
 
         var userSpecification = new GetUserSpecification(email);
+
         var user = await userRepository.FirstOrDefaultAsync(userSpecification, cancellationToken);
+
         if (user is null)
         {
             return new BaseResponse<GetRatingResponse>(new NotFoundException());
@@ -61,7 +59,7 @@ public class CreateRatingCommandHandler(
             Entry = entry,
             User = user,
             Modifiedat = DateTime.Now,
-            Grade = request.Grade,
+            Grade = request.RatingDto.Grade,
         };
         await ratingRepository.AddAsync(rating, cancellationToken);
 

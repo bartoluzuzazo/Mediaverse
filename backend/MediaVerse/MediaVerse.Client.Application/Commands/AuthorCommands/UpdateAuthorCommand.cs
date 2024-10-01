@@ -1,4 +1,5 @@
 using MediatR;
+using MediaVerse.Client.Application.DTOs.AuthorDTOs;
 using MediaVerse.Client.Application.Specifications.AuthorSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
@@ -8,14 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace MediaVerse.Client.Application.Commands.AuthorCommands;
 
-public record UpdateAuthorCommand : IRequest<BaseResponse<Guid>>
-{
-    public Guid Id { get; set; }
-    public string? Name { get; set; }
-    public string? Surname { get; set; }
-    public string? Bio { get; set; }
-    public string? ProfilePicture { get; set; }
-}
+public record UpdateAuthorCommand(Guid Id, PatchAuthorDto AuthorDto) : IRequest<BaseResponse<Guid>>;
 
 public class UpdateAuthorCommandHandler(
     IRepository<Author> authorRepository,
@@ -31,20 +25,20 @@ public class UpdateAuthorCommandHandler(
             return new BaseResponse<Guid>(new NotFoundException());
         }
 
-        author.Bio = request.Bio ?? author.Bio;
-        author.Name = request.Name ?? author.Name;
-        author.Surname = request.Surname ?? author.Surname;
-        if (request.ProfilePicture is not null)
+        author.Bio = request.AuthorDto.Bio ?? author.Bio;
+        author.Name = request.AuthorDto.Name ?? author.Name;
+        author.Surname = request.AuthorDto.Surname ?? author.Surname;
+        if (request.AuthorDto.ProfilePicture is not null)
         {
-            var photoData = Convert.FromBase64String(request.ProfilePicture);
+            var photoData = Convert.FromBase64String(request.AuthorDto.ProfilePicture);
 
             var profilePicture = new ProfilePicture()
             {
                 Id = Guid.NewGuid(),
                 Picture = photoData
             };
-           var newPicture =  await profilePictureRepository.AddAsync(profilePicture, cancellationToken);
-           author.ProfilePicture = newPicture;
+            var newPicture = await profilePictureRepository.AddAsync(profilePicture, cancellationToken);
+            author.ProfilePicture = newPicture;
         }
 
         var saveChangesAsync = await authorRepository.SaveChangesAsync(cancellationToken);
