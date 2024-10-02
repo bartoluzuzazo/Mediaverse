@@ -3,6 +3,7 @@ import axios from 'axios'
 import { createContext, FunctionComponent, useEffect, useMemo } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 import { jwtDecode } from 'jwt-decode'
+import { Role } from '../../models/user'
 
 export interface AuthContextProviderProps {
   children: ReactNode
@@ -20,12 +21,14 @@ export interface AuthData {
   username: string
   id: string
   email: string
+  roles: string[]
 }
 
 interface JwtPayload {
   unique_name: string
   nameid: string
   email: string
+  role: Role | Role[]
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -49,10 +52,12 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
       return undefined
     }
     const jwtData = jwtDecode<JwtPayload>(token)
+    const roles = Array.isArray(jwtData.role) ? jwtData.role : [jwtData.role]
     return {
       email: jwtData.email,
       id: jwtData.nameid,
       username: jwtData.unique_name,
+      roles
     }
   }, [token])
 
