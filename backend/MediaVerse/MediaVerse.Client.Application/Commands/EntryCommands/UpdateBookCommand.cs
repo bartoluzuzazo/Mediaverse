@@ -27,17 +27,17 @@ public class UpdateBookCommandHandler(
     public async Task<BaseResponse<Guid>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
         var specification = new GetBookByIdSpecification(request.Id);
-        var book = await entryRepository.FirstOrDefaultAsync(specification, cancellationToken);
-        if (book is null)
+        var bookEntry = await entryRepository.FirstOrDefaultAsync(specification, cancellationToken);
+        if (bookEntry is null)
         {
             return new BaseResponse<Guid>(new NotFoundException());
         }
 
-        book.Description = request.Dto.Description ?? book.Description;
-        book.Name = request.Dto.Name ?? book.Name;
-        book.Book!.Isbn = request.Dto.Isbn ?? book.Book.Isbn;
-        book.Book!.Synopsis = request.Dto.Synopsis ?? book.Book.Synopsis;
-        if (request.Dto.Release is not null) book.Release = DateOnly.FromDateTime(request.Dto.Release.Value);
+        bookEntry.Description = request.Dto.Description ?? bookEntry.Description;
+        bookEntry.Name = request.Dto.Name ?? bookEntry.Name;
+        bookEntry.Book!.Isbn = request.Dto.Isbn ?? bookEntry.Book.Isbn;
+        bookEntry.Book!.Synopsis = request.Dto.Synopsis ?? bookEntry.Book.Synopsis;
+        if (request.Dto.Release is not null) bookEntry.Release = DateOnly.FromDateTime(request.Dto.Release.Value);
         if (request.Dto.Genres is not null)
         {
             var genreSpec = new GetBookGenresByNameSpecification(request.Dto.Genres);
@@ -47,7 +47,7 @@ public class UpdateBookCommandHandler(
                 .Select(genre => new BookGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
             await bookGenreRepository.AddRangeAsync(newGenres, cancellationToken);
             dbGenres.AddRange(newGenres);
-            book.Book.BookGenres = dbGenres;
+            bookEntry.Book.BookGenres = dbGenres;
         }
 
         if (!request.Dto.WorkOnRequests.IsNullOrEmpty())
@@ -63,7 +63,11 @@ public class UpdateBookCommandHandler(
             roles.AddRange(newRoles);
 
             var newWorkOns = request.Dto.WorkOnRequests!
-                .Select(r => mapper.Map<WorkOn>(r, opt => opt.Items["roles"] = roles))
+                .Select(r => mapper.Map<WorkOn>(r, opt =>
+                {
+                    opt.Items["roles"] = roles;
+                    opt.Items["book"] = bookEntry.Book;
+                }))
                 .ToList();
 
             var woSpec = new GetWorkOnsByEntryIdSpecification(request.Id);
@@ -95,10 +99,10 @@ public class UpdateBookCommandHandler(
                 Photo = photoData
             };
             var newPicture = await coverPhotoRepository.AddAsync(coverPhoto, cancellationToken);
-            book.CoverPhoto = newPicture;
+            bookEntry.CoverPhoto = newPicture;
         }
 
         await entryRepository.SaveChangesAsync(cancellationToken);
-        return new BaseResponse<Guid>(book.Id);
+        return new BaseResponse<Guid>(bookEntry.Id);
     }
 }
