@@ -1,6 +1,9 @@
 ﻿using MediatR;
+using MediaVerse.Client.Application.Commands.RoleCommands;
 using MediaVerse.Client.Application.Commands.UserCommands;
+using MediaVerse.Client.Application.DTOs.RoleDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
+using MediaVerse.Client.Application.Queries.RoleQueries;
 using MediaVerse.Client.Application.Queries.UserQueries;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -80,6 +83,41 @@ public class UserController(IMediator mediator) : BaseController
     public async Task<IActionResult> UpdatePassword(UpdatePasswordCommand command)
     {
         var response = await mediator.Send(command);
+        return OkOrError(response);
+    }
+
+    [HttpGet("{userId:guid}/role-statuses")]
+    [Authorize]
+    public async Task<IActionResult> GetRoleStatuses(Guid userId)
+    {
+        var query = new GetUsersRoleStatusesQuery(userId);
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+    }
+
+    [HttpPost("{userId:guid}/roles")]
+    [Authorize]
+    public async Task<IActionResult> AddRole(Guid userId,PostRoleDto postRoleDto)
+    {
+        var addRoleCommand = new AddUsersRoleCommand(userId, postRoleDto);
+        var response = await mediator.Send(addRoleCommand);
+        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetRoleStatuses),new{userId= userId},response.Data));
+    }
+
+    [HttpDelete("{userId:guid}/roles/{roleId:guid}")]
+    [Authorize]
+    public async Task<IActionResult> RemoveRole(Guid userId, Guid roleId)
+    {
+        var deleteRoleCommand = new DeleteUsersRoleCommand(userId, roleId);
+        var exception = await mediator.Send(deleteRoleCommand);
+        return OkOrError(exception);
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchUsers(string query, int page, int size)
+    {
+        var searchUsersQuery = new SearchUsersQuery(page, size, query);
+        var response = await mediator.Send(searchUsersQuery);
         return OkOrError(response);
     }
 }

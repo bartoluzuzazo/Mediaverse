@@ -2,6 +2,7 @@ import axios from 'axios'
 import { GetRatedEntryPageRequest, RatedEntry } from '../models/entry/ratedEntry'
 import { UpdatePasswordFormData, User, UserFormData } from '../models/user'
 import { Page } from '../models/common'
+import { RoleStatus } from '../models/user/role'
 
 export class userService {
   public static async getUser(id: string) {
@@ -32,7 +33,22 @@ export class userService {
   public static async getFriends(userId: string) {
     return await axios.get<User[]>(`user/${userId}/friends`)
   }
+
   public static async putPassword(updatePasswordData: UpdatePasswordFormData ){
     return await axios.put('user/current-user/password', updatePasswordData)
   }
+
+  public static async getRoleStatuses(userId: string) {
+    return await axios.get<RoleStatus[]>(`/user/${userId}/role-statuses`)
+  }
+
+  public static async postUsersRole(userId: string, roleId: string) {
+    return await axios.post(`/user/${userId}/roles`, {roleId})
+  }
+
+  public static async deleteUsersRole(userId: string,roleId: string) {
+    return await axios.delete(`/user/${userId}/roles/${roleId}`)
+  }
+
+
 }

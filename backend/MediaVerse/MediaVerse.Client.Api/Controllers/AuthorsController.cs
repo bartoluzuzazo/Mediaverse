@@ -35,4 +35,22 @@ public class AuthorsController(IMediator mediator) : BaseController
         var response = await mediator.Send(command);
         return ResolveCode(response.Exception, Ok());
     }
+    //TODO: add post /id/linked-user
+    [HttpPut("{id:guid}/linked-users")]
+    public async Task<IActionResult> AddLinkToUser(Guid id, AddLinkedUserDto dto)
+    {
+        var command = new LinkUserToAuthorCommand(id,dto );
+        var response = await mediator.Send(command);
+        return OkOrError(response);
+    }
+    //TODO: add delete /id/linked-user
+    
+    [HttpDelete("{id:guid}/linked-users")]
+    public async Task<IActionResult> RemoveLinkToUser(Guid id, AddLinkedUserDto dto)
+    {
+        var command = new UnlinkUserFromAuthorCommand(id);
+        var response = await mediator.Send(command);
+        return OkOrError(response);
+    }
+    
 }
