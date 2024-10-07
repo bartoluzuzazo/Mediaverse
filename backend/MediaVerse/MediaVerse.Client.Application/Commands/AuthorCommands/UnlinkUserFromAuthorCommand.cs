@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using MediatR;
+using MediaVerse.Client.Application.Specifications.AuthorSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
@@ -13,13 +14,14 @@ public class UnlinkUserFromAuthorCommandHandler(IRepository<Author> authorReposi
 {
     public async Task<Exception?> Handle(UnlinkUserFromAuthorCommand request, CancellationToken cancellationToken)
     {
-        var author = await authorRepository.GetByIdAsync(request.AuthorId, cancellationToken);
-        if (author is null)
+        var getAuthorWithUserSpecification = new GetAuthorWithUserSpecification(request.AuthorId);
+        var author = await authorRepository.FirstOrDefaultAsync(getAuthorWithUserSpecification, cancellationToken);
+        if (author is null || author.User is null)
         {
             return new NotFoundException();
         }
 
-        author.User = null;
+        author.User.Authors.Remove(author);
         await authorRepository.SaveChangesAsync(cancellationToken);
         return null;
     }

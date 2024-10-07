@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { AuthorFormData } from '../common/components/authors/AuthorForm.tsx'
+import { User } from '../models/user'
 
 export class AuthorService {
   public static async postAuthor(author: AuthorFormData) {
@@ -12,5 +13,14 @@ export class AuthorService {
 
   public static async getAuthor(id: string) {
     return await axios.get(`/authors/${id}`)
+  }
+  public static async getLinkedUser(authorId: string) {
+    return await axios.get<User>(`/authors/${authorId}/linked-user`)
+  }
+  public static async addLinkedUser(authorId: string, userId: string) {
+    return await axios.put(`/authors/${authorId}/linked-user`, {userId})
+  }
+  public static async deleteLinkedUser(authorId: string) {
+    return await axios.delete(`/authors/${authorId}/linked-user`)
   }
 }

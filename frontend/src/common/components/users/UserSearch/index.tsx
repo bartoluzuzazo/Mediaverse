@@ -32,7 +32,7 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
   console.log(isFetchingNextPage)
 
   return (
-    <div className='mt-10 max-w-[800px] mx-auto'>
+    <div className='max-w-[800px] mx-auto'>
       <FormInput
         inputProps={{
           type: 'text',
@@ -42,7 +42,7 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
         }}
         rightElement={<FaSearch />}
       />
-      <div className='flex flex-wrap gap-4 mt-10'>
+      <div className='flex flex-wrap gap-6 mt-10'>
         {users?.pages.flatMap(p => p.contents).map(u => (
           <UserLinkWrapper key={u.id} user={u} onClick={onClick}>
             <UserTile user={u} />
@@ -51,10 +51,11 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
         {!isDone && query && <button type='button'
                                      disabled={isFetchingNextPage}
                                      onClick={() => fetchNextPage()}
-                                     className={` text-white m-2 ${isFetchingNextPage ? 'bg-violet-400' : 'bg-violet-900'}`}>
-          <span className="font-extrabold text-white rotate-12 block text-xl max-w-[80px] capitalize">next</span>
+                                     className={` w-[125px] aspect-square  rounded-full text-white self-start ${isFetchingNextPage ? 'bg-violet-400' : 'bg-violet-900 hover:bg-violet-800'}`}>
+          <span className="font-extrabold text-white rotate-12 block text-xl capitalize">next</span>
         </button>}
       </div>
+
 
 
     </div>

@@ -57,7 +57,7 @@ export const Subcomments = ({
     return (
       <div
         onClick={toggleCollapsed}
-        className="flex items-center gap-3 text-xl text-slate-700"
+        className="flex items-center gap-3 text-xl text-slate-700 cursor-pointer"
       >
         <FaSquarePlus /> Show comments
       </div>
@@ -86,7 +86,7 @@ export const Subcomments = ({
           <div className="flex">
             <div
               onClick={toggleCollapsed}
-              className="w-4 border-l-[4px] border-slate-400 hover:border-slate-700 md:w-6"
+              className="w-4 border-l-[4px] border-slate-400 hover:border-slate-700 md:w-6 cursor-pointer"
             ></div>
             <div className="flex-1">
               {data &&

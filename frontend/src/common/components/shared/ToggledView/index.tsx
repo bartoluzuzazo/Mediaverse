@@ -12,15 +12,15 @@ export const ToggledView: FunctionComponent<Props> = ({ children, containerClass
   const [isOpen, toggleOpen] = useToggle()
   return (
     <div className={containerClass}>
-      <div className="flex gap-2 items-baseline mb-2">
-        <button type="button" onClick={toggleOpen} className="bg-transparent p-0 m-0 outline-none shadow-none">
+      <button type="button" onClick={toggleOpen} className="flex gap-2 items-baseline mb-2 bg-transparent p-0 outline-none">
+        <div  className="bg-transparent p-0 m-0 outline-none shadow-none">
           <TbTriangleInvertedFilled className={`text-lg transition-all ${!isOpen ? `-rotate-90` : ``}`}/>
-        </button>
+        </div>
         <span className="font-semibold text-xl">{title}</span>
-      </div>
+      </button>
       {isOpen &&
         <div className='relative'>
-          <div className='absolute top-0 left-0 right-0 bg-white rounded-md border-[3px] border-slate-300 p-1 pl-[1.83rem]'>
+          <div className='absolute top-0 left-0 right-0 bg-white rounded-md shadow-lg p-1 pl-[1.83rem] border border-solid border-slate-200'>
             {children}
           </div>
         </div>

@@ -17,7 +17,7 @@ public class AuthorsController(IMediator mediator) : BaseController
     public async Task<IActionResult> CreateAuthor(CreateAuthorCommand createAuthorCommand)
     {
         var response = await mediator.Send(createAuthorCommand);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetAuthor), new { Id = response.Data }));
+        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetAuthor), new { id = response.Data },new { id = response.Data }));
     }
 
     [HttpGet("{id:guid}")]
@@ -35,8 +35,17 @@ public class AuthorsController(IMediator mediator) : BaseController
         var response = await mediator.Send(command);
         return ResolveCode(response.Exception, Ok());
     }
+
+    [HttpGet("{id:guid}/linked-user")]
+    public async Task<IActionResult> GetLinkedUser(Guid id)
+    {
+        var query = new GetLinkedUserQuery(id);
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+        
+    }
     //TODO: add post /id/linked-user
-    [HttpPut("{id:guid}/linked-users")]
+    [HttpPut("{id:guid}/linked-user")]
     public async Task<IActionResult> AddLinkToUser(Guid id, AddLinkedUserDto dto)
     {
         var command = new LinkUserToAuthorCommand(id,dto );
@@ -45,8 +54,8 @@ public class AuthorsController(IMediator mediator) : BaseController
     }
     //TODO: add delete /id/linked-user
     
-    [HttpDelete("{id:guid}/linked-users")]
-    public async Task<IActionResult> RemoveLinkToUser(Guid id, AddLinkedUserDto dto)
+    [HttpDelete("{id:guid}/linked-user")]
+    public async Task<IActionResult> RemoveLinkToUser(Guid id)
     {
         var command = new UnlinkUserFromAuthorCommand(id);
         var response = await mediator.Send(command);

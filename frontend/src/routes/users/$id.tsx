@@ -34,7 +34,7 @@ const UserComponent: FunctionComponent<Props> = () => {
         </div>
 
         <div className='flex-1'>
-          <AuthorizedView allowedRoles='Admin'>
+          <AuthorizedView allowedRoles='Administrator'>
             <RoleStatusList userId={user.id} />
           </AuthorizedView>
         </div>

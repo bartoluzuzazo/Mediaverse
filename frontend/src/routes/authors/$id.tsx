@@ -3,6 +3,8 @@ import { AuthorService } from '../../services/AuthorService.ts'
 import { Author } from '../../models/author/Author.ts'
 import AuthorEntryPreview from '../../common/components/authors/Entry/AuthorEntryPreview.tsx'
 import SectionHeader from '../../common/components/entries/sectionHeader.tsx'
+import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
+import { LinkedUser } from '../../common/components/authors/LinkedAuthor'
 
 export const Route = createFileRoute('/authors/$id')({
   loader: async ({ params }) => {
@@ -27,6 +29,9 @@ export const Route = createFileRoute('/authors/$id')({
               {author.name}{' '}
               <span className="font-italic">{author.surname}</span>
             </div>
+            <AuthorizedView allowedRoles='Administrator'>
+              <LinkedUser authorId={author.id} />
+            </AuthorizedView>
           </div>
 
           <div className="flex-1 md:ml-20">{author.bio}</div>
