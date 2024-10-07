@@ -39,7 +39,7 @@ public class CommentsController(IMediator mediator) : BaseController
         {
             CommentId = commentId
         };
-        var exception = await mediator.Send(command);
+        var exception = await mediator.Send(command); 
         return ResolveCode(exception, Ok());
     }
 
