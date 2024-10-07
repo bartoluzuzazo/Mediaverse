@@ -14,7 +14,7 @@ type Props = {
 
 export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
   const [query, setQuery] = useState<string>('')
-  const [debouncedQuery]=useDebounceValue(query, 1000)
+  const [debouncedQuery]=useDebounceValue(query, 300)
 
   const { data: users, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['SEARCH_USER', { query: debouncedQuery }],
@@ -68,7 +68,7 @@ type WrapperProps = {
 const UserLinkWrapper: FunctionComponent<WrapperProps> = ({ onClick, children, user }) => {
   if (onClick) {
     return (
-      <button onClick={() => onClick(user)}>
+      <button onClick={() => onClick(user)} className="bg-transparent p-0 border-none outline-none">
         {children}
       </button>
     )
