@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import { User } from '../../../../models/user'
 import { Link } from '@tanstack/react-router'
 import CustomImage from '../../customImage'
@@ -14,10 +14,8 @@ type Props = {
 
 export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
   const [query, setQuery] = useState<string>('')
-  const [debouncedQuery, setDebouncedQuery]=useDebounceValue('', 200)
-  useEffect(() => {
-    setDebouncedQuery(query)
-  }, [query, setDebouncedQuery])
+  const [debouncedQuery]=useDebounceValue(query, 1000)
+
   const { data: users, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['SEARCH_USER', { query: debouncedQuery }],
     queryFn: async ({ pageParam }) => {
