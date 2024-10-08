@@ -34,6 +34,8 @@ public partial class User
 
     public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
 
+    public virtual ICollection<AmaQuestion> AmaQuestionsNavigation { get; set; } = new List<AmaQuestion>();
+
     public virtual ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
 
     public virtual ICollection<Role> Roles { get; set; } = new List<Role>();

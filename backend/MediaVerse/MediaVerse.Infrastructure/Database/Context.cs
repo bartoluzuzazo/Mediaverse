@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using MediaVerse.Domain.Entities;
+﻿using MediaVerse.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace MediaVerse.Infrastructure.Database;
 
 public partial class Context : DbContext
 {
-    private readonly IConfiguration _configuration;
+    public Context()
+    {
+    }
 
-    public Context(DbContextOptions<Context> options, IConfiguration configuration)
+    public Context(DbContextOptions<Context> options)
         : base(options)
     {
-        _configuration = configuration;
     }
 
     public virtual DbSet<Album> Albums { get; set; }
@@ -70,6 +68,8 @@ public partial class Context : DbContext
 
     public virtual DbSet<Role> Roles { get; set; }
 
+    public virtual DbSet<Schemaversion> Schemaversions { get; set; }
+
     public virtual DbSet<Series> Series { get; set; }
 
     public virtual DbSet<Song> Songs { get; set; }
@@ -81,12 +81,13 @@ public partial class Context : DbContext
     public virtual DbSet<WorkOn> WorkOns { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql(_configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=localhost;User ID=postgres;Password=admin;Port=5432;Database=pro-test;Pooling=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresExtension("pg_trgm");
+
         modelBuilder.Entity<Album>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("album_pk");
@@ -149,6 +150,25 @@ public partial class Context : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("question_user");
+
+            entity.HasMany(d => d.Users).WithMany(p => p.AmaQuestionsNavigation)
+                .UsingEntity<Dictionary<string, object>>(
+                    "Like",
+                    r => r.HasOne<User>().WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("user_id"),
+                    l => l.HasOne<AmaQuestion>().WithMany()
+                        .HasForeignKey("AmaQuestionId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("ama_question_id"),
+                    j =>
+                    {
+                        j.HasKey("AmaQuestionId", "UserId").HasName("like_id");
+                        j.ToTable("like");
+                        j.IndexerProperty<Guid>("AmaQuestionId").HasColumnName("ama_question_id");
+                        j.IndexerProperty<Guid>("UserId").HasColumnName("user_id");
+                    });
         });
 
         modelBuilder.Entity<AmaSession>(entity =>
@@ -164,9 +184,6 @@ public partial class Context : DbContext
             entity.Property(e => e.End)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("end");
-            entity.Property(e => e.PlannedEnd)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("planned_end");
             entity.Property(e => e.Start)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("start");
@@ -344,6 +361,8 @@ public partial class Context : DbContext
             entity.Property(e => e.Content)
                 .HasMaxLength(1000)
                 .HasColumnName("content");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
             entity.Property(e => e.EntryId).HasColumnName("entry_id");
             entity.Property(e => e.ParentCommentId).HasColumnName("parent_comment_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
@@ -395,6 +414,8 @@ public partial class Context : DbContext
 
             entity.ToTable("entry");
 
+            entity.HasIndex(e => e.SearchVector, "entry_ts_idx").HasMethod("gin");
+
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
@@ -404,17 +425,17 @@ public partial class Context : DbContext
                 .HasMaxLength(150)
                 .HasColumnName("name");
             entity.Property(e => e.Release).HasColumnName("release");
+            entity.Property(e => e.SearchVector)
+                .HasComputedColumnSql("to_tsvector('english'::regconfig, ((COALESCE(description, ''::text) || ' '::text) || (COALESCE(name, ''::character varying))::text))", true)
+                .HasColumnName("search_vector");
+            entity.Property(e => e.Type)
+                .HasMaxLength(50)
+                .HasColumnName("type");
 
             entity.HasOne(d => d.CoverPhoto).WithMany(p => p.Entries)
                 .HasForeignKey(d => d.CoverPhotoId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("entry_cover_photo");
-
-            entity.Property(e => e.SearchVector).HasColumnName("search_vector");
-            
-            entity.HasGeneratedTsVectorColumn(
-                    p => p.SearchVector, "english", p => new { p.Name, p.Description }).HasIndex(p => p.SearchVector)
-                .HasMethod("GIN");
         });
 
         modelBuilder.Entity<Episode>(entity =>
@@ -700,6 +721,9 @@ public partial class Context : DbContext
             entity.Property(e => e.Content)
                 .HasMaxLength(2000)
                 .HasColumnName("content");
+            entity.Property(e => e.Title)
+                .HasMaxLength(200)
+                .HasColumnName("title");
 
             entity.HasOne(d => d.Entry).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.EntryId)
@@ -743,6 +767,21 @@ public partial class Context : DbContext
                         j.IndexerProperty<Guid>("RoleId").HasColumnName("role_id");
                         j.IndexerProperty<Guid>("UserId").HasColumnName("user_id");
                     });
+        });
+
+        modelBuilder.Entity<Schemaversion>(entity =>
+        {
+            entity.HasKey(e => e.Schemaversionsid).HasName("PK_schemaversions_Id");
+
+            entity.ToTable("schemaversions");
+
+            entity.Property(e => e.Schemaversionsid).HasColumnName("schemaversionsid");
+            entity.Property(e => e.Applied)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("applied");
+            entity.Property(e => e.Scriptname)
+                .HasMaxLength(255)
+                .HasColumnName("scriptname");
         });
 
         modelBuilder.Entity<Series>(entity =>
@@ -912,6 +951,9 @@ public partial class Context : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.AuthorId).HasColumnName("author_id");
             entity.Property(e => e.AuthorRoleId).HasColumnName("author_role_id");
+            entity.Property(e => e.Details)
+                .HasMaxLength(1000)
+                .HasColumnName("details");
             entity.Property(e => e.EntryId).HasColumnName("entry_id");
 
             entity.HasOne(d => d.Author).WithMany(p => p.WorkOns)

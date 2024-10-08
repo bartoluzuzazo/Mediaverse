@@ -10,6 +10,8 @@ public partial class WorkOn
 
     public Guid Id { get; set; }
 
+    public string? Details { get; set; }
+
     public virtual Author Author { get; set; } = null!;
 
     public virtual AuthorRole AuthorRole { get; set; } = null!;

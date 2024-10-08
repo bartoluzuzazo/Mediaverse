@@ -15,4 +15,6 @@ public partial class AmaQuestion
     public virtual AmaSession AmaSession { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
