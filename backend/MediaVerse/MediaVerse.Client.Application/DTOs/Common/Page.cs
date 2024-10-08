@@ -6,6 +6,7 @@ public class Page<T>
     public int? PageCount { get; set; }
     public int CurrentPage { get; set; }
     public bool HasNext => CurrentPage < PageCount;
+    public int? NextPage => HasNext ? CurrentPage + 1 : null;
 
     public Page(List<T> contents, int currentPage, int itemCount, int size)
     {

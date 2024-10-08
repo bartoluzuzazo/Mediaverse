@@ -18,4 +18,5 @@ export interface Page<T> {
   pageCount: number
   currentPage: number
   hasNext: boolean
+  nextPage?: number
 }
