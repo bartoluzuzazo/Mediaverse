@@ -40,13 +40,13 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
         }}
         rightElement={<FaSearch />}
       />
-      <div className='flex flex-wrap gap-6 mt-10'>
+      <div className='flex flex-wrap gap-6 mt-10 overflow-y-auto'>
         {users?.pages.flatMap(p => p.contents).map(u => (
           <UserLinkWrapper key={u.id} user={u} onClick={onClick}>
             <UserTile user={u} />
           </UserLinkWrapper>),
         )}
-        {!isDone && query && <button type='button'
+        {!isDone && query && users && <button type='button'
                                      disabled={isFetchingNextPage}
                                      onClick={() => fetchNextPage()}
                                      className={` w-[125px] aspect-square  rounded-full text-white self-start ${isFetchingNextPage ? 'bg-violet-400' : 'bg-violet-900 hover:bg-violet-800'}`}>

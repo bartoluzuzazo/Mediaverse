@@ -50,11 +50,11 @@ export const UpdatePasswordForm: FunctionComponent = () => {
                       exit={{ x: -300, opacity: 0.3 }}>
 
             <div>
-              <FormField<UpdatePasswordFormData> label={'Old password'} name={'oldPassword'} register={register}
+              <FormField<UpdatePasswordFormData> label={'Old password'} registerPath={'oldPassword'} register={register}
                                                  errorValue={errors.oldPassword} type="password"/>
-              <FormField<UpdatePasswordFormData> label={'New password'} name={'newPassword'} register={register}
+              <FormField<UpdatePasswordFormData> label={'New password'} registerPath={'newPassword'} register={register}
                                                  errorValue={errors.newPassword} type="password"/>
-              <FormField<UpdatePasswordFormData> label={'Repeat password'} name={'repeatPassword'}
+              <FormField<UpdatePasswordFormData> label={'Repeat password'} registerPath={'repeatPassword'}
                                                  register={register} type="password"
                                                  errorValue={errors.repeatPassword}
                                                  rules={{ validate: repeatedPassword => repeatedPassword == newPassword || 'Passwords do not match'}} />

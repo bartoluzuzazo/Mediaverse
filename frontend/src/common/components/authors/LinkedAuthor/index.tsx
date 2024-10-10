@@ -7,6 +7,7 @@ import { Modal } from '../../shared/Modal'
 import { UserSearch } from '../../users/UserSearch'
 import { User } from '../../../../models/user'
 import CustomImage from '../../customImage'
+import { Link } from '@tanstack/react-router'
 
 type Props = {
   authorId: string
@@ -49,10 +50,15 @@ const UnlinkUserComponent: FunctionComponent<UnlinkUserProps> =({linkedUser, aut
   })
   return(
     <div className='mt-2 bg-violet-200 flex items-center rounded-md gap-3 p-1 w-full'>
+      <Link
+        to="/users/$id"
+        params={{ id: linkedUser.id }}
+      >
       <CustomImage
         className='aspect-square w-10 self-center rounded-full object-cover shadow-lg'
         src={`data:image/webp;base64,${linkedUser.profilePicture}`}
       />
+      </Link>
       <span className='font-semibold text-lg'>{linkedUser.username}</span>
       <button type="button" onClick={async ()=>{ await unlinkUserMutation()}}
         className='self-center ml-auto text-white bg-violet-900 rounded-full w-10 aspect-square m-1 grid place-content-center p-0 '>

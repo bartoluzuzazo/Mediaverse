@@ -12,7 +12,7 @@ namespace MediaVerse.Client.Api.Controllers;
 [Route("")]
 public class RatingsController(IMediator mediator) : BaseController
 {
-    [HttpGet("entries/{entryGuid}/ratings/users-rating")]
+    [HttpGet("entries/{entryGuid:guid}/ratings/users-rating")]
     public async Task<IActionResult> GetUsersRating(Guid entryGuid)
     {
         var query = new GetUsersRatingQuery(entryGuid);
@@ -28,7 +28,7 @@ public class RatingsController(IMediator mediator) : BaseController
         var command = new CreateRatingCommand(entryGuid, postRatingDto);
         var result = await mediator.Send(command);
 
-        return ResolveCode(result.Exception, CreatedAtAction(nameof(GetUsersRating), new {entryGuid = result.Data?.EntryId }));
+        return ResolveCode(result.Exception, CreatedAtAction(nameof(GetUsersRating), new {entryGuid = result.Data?.EntryId }, result.Data));
     }
 
     [HttpPut("ratings/{id:guid}")]
