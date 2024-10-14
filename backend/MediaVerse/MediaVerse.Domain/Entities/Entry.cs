@@ -14,6 +14,10 @@ public partial class Entry
 
     public Guid CoverPhotoId { get; set; }
 
+    public NpgsqlTsVector? SearchVector { get; set; }
+
+    public string? Type { get; set; }
+
     public virtual Album? Album { get; set; }
 
     public virtual Book? Book { get; set; }
@@ -39,6 +43,4 @@ public partial class Entry
     public virtual Song? Song { get; set; }
 
     public virtual ICollection<WorkOn> WorkOns { get; set; } = new List<WorkOn>();
-    
-    public NpgsqlTsVector SearchVector { get; set; }
 }

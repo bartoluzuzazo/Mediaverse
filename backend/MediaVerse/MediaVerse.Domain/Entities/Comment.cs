@@ -12,6 +12,10 @@ public partial class Comment
 
     public string Content { get; set; } = null!;
 
+    public DateOnly? DeletedAt { get; set; }
+
+    public DateOnly CreatedAt { get; set; }
+
     public virtual Entry Entry { get; set; } = null!;
 
     public virtual ICollection<Comment> InverseParentComment { get; set; } = new List<Comment>();
