@@ -52,4 +52,4 @@ $$;
 
 CREATE OR REPLACE TRIGGER entry_type_trigger
     AFTER INSERT OR UPDATE ON entry
-                                  FOR EACH ROW EXECUTE PROCEDURE lock_entry_type();
+    FOR EACH ROW EXECUTE PROCEDURE lock_entry_type();
