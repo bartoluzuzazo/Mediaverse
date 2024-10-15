@@ -19,20 +19,24 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: 'Build and push image'
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      - run: |
-          docker build backend/MediaVerse -f backend/MediaVerse/MediaVerse.Client.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
-          docker build frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
+#      - name: 'Build and push image'
+#        uses: azure/docker-login@v1
+#        with:
+#          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+#          username: ${{ secrets.REGISTRY_USERNAME }}
+#          password: ${{ secrets.REGISTRY_PASSWORD }}
+#      - run: |
+#          docker build backend/MediaVerse -f backend/MediaVerse/MediaVerse.Client.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
+#          docker build frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
+#          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
+#          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
+
+      - name: "Create an aci context"
+        run: 'docker context create aci --subscription-id $AZURE_SUBSCRIPTION_ID --resource-group mediaverse --location euwest mediaverse'
+        env:
+          AZURE_SUBSCRIPTION_ID: '${{ secrets.AZURE_SUBSCRIPTION_ID }}'
 
       - name: 'Deploy images'
         run: |
-          docker context create aci mediaverse
           docker context use mediaverse
           docker compose up
