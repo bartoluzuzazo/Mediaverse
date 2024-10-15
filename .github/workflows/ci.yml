@@ -29,31 +29,7 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build backend/MediaVerse/MediaVerse.Client.Api -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
+          docker build backend/MediaVerse -f backend/MediaVerse/MediaVerse.Client.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
           docker build frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
-
-      - name: 'Deploy backend to Azure Container Instances'
-        uses: 'azure/aci-deploy@v1'
-        with:
-          resource-group: ${{ secrets.RESOURCE_GROUP }}
-          dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
-          registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          registry-username: ${{ secrets.REGISTRY_USERNAME }}
-          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          name: mediaverse_backend
-          location: 'west eu'
-
-      - name: 'Deploy frontend to Azure Container Instances'
-        uses: 'azure/aci-deploy@v1'
-        with:
-          resource-group: ${{ secrets.RESOURCE_GROUP }}
-          dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
-          registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          registry-username: ${{ secrets.REGISTRY_USERNAME }}
-          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          name: mediaverse_frontend
-          location: 'west eu'
