@@ -34,7 +34,7 @@ jobs:
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
 
       - name: 'Deploy images'
-      - run: |
+        run: |
           docker context create aci mediaverse
           docker context use mediaverse
           docker compose up
