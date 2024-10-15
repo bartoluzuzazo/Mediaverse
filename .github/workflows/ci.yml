@@ -10,7 +10,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      # checkout the repo
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@main
 
@@ -38,15 +37,21 @@ jobs:
 #          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
 #          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
 
-      - name: "Create an aci context"
-        uses: actions-hub/docker/cli@master
-        env:
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          SKIP_LOGIN: true
-      - run: 'docker context create aci --subscription-id $AZURE_SUBSCRIPTION_ID --resource-group mediaverse --location euwest mediaverse'
+#      - name: "Create an aci context"
+#        uses: actions-hub/docker/cli@master
+#        env:
+#          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#          SKIP_LOGIN: true
+#      - run: 'docker context create aci --subscription-id $AZURE_SUBSCRIPTION_ID --resource-group mediaverse --location euwest mediaverse'
+#
+#      - name: 'Deploy images'
+#        run: |
+#          docker context use mediaverse
+#          docker compose up
 
 
-      - name: 'Deploy images'
-        run: |
-          docker context use mediaverse
-          docker compose up
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'mediaverse'
+          configuration-file: 'docker-compose.yml'
