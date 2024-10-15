@@ -3,7 +3,7 @@ services:
   
   backend:
     restart: always
-    image: mediaverse.azurecr.io/mediaverse_be:6d95f57ec47d32a9a5a61291043170c627efb4b5
+    image: mediaverse.azurecr.io/mediaverse_be:a30aa91f10d22d410dcb1b136929b0afdf2fee23
     ports:
       - 8080:8080
     depends_on:
@@ -14,7 +14,7 @@ services:
   
   frontend:
     restart: always
-    image: mediaverse.azurecr.io/mediaverse_fe:6d95f57ec47d32a9a5a61291043170c627efb4b5
+    image: mediaverse.azurecr.io/mediaverse_fe:a30aa91f10d22d410dcb1b136929b0afdf2fee23
     ports:
       - 3000:3000
   
