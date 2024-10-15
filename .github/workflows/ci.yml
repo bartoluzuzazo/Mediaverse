@@ -40,7 +40,7 @@ jobs:
 
       - name: "Create an aci context"
         uses: actions-hub/docker/cli@master
-        run: 'docker context create aci --subscription-id $AZURE_SUBSCRIPTION_ID --resource-group mediaverse --location euwest mediaverse'
+      - run: 'docker context create aci --subscription-id $AZURE_SUBSCRIPTION_ID --resource-group mediaverse --location euwest mediaverse'
         env:
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
