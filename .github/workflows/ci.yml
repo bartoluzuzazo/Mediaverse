@@ -14,10 +14,6 @@ jobs:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@main
 
-      - name: Install Docker Compose CLI
-        run: >
-          curl -L https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
-
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
         with:
