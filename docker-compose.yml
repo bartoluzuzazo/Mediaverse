@@ -3,9 +3,7 @@ services:
   
   backend:
     restart: always
-    build:
-      context: backend/MediaVerse
-      dockerfile: MediaVerse.Client.Api/Dockerfile
+    image: mediaverse.azurecr.io/mediaverse_be:6d95f57ec47d32a9a5a61291043170c627efb4b5
     ports:
       - 8080:8080
     depends_on:
@@ -16,9 +14,7 @@ services:
   
   frontend:
     restart: always
-    build:
-      context: frontend
-      dockerfile: Dockerfile
+    image: mediaverse.azurecr.io/mediaverse_fe:6d95f57ec47d32a9a5a61291043170c627efb4b5
     ports:
       - 3000:3000
   
