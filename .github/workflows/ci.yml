@@ -26,20 +26,25 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
-      #      - name: 'Build and push image'
-      #        uses: azure/docker-login@v1
-      #        with:
-      #          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-      #          username: ${{ secrets.REGISTRY_USERNAME }}
-      #          password: ${{ secrets.REGISTRY_PASSWORD }}
-      #      - run: |
-      #          docker build backend/MediaVerse -f backend/MediaVerse/MediaVerse.Client.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
-      #          docker build frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
-      #          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
-      #          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
+#      - name: 'Build and push image'
+#        uses: azure/docker-login@v1
+#        with:
+#          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+#          username: ${{ secrets.REGISTRY_USERNAME }}
+#          password: ${{ secrets.REGISTRY_PASSWORD }}
+#      - run: |
+#          docker build backend/MediaVerse -f backend/MediaVerse/MediaVerse.Client.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
+#          docker build frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
+#          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be:${{ github.sha }}
+#          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe:${{ github.sha }}
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'Mediaverse'
-          configuration-file: 'docker-compose.yml'
+      - name: "Create an aci context"
+        uses: actions-hub/docker/cli@master
+        run: 'docker context create aci --subscription-id $AZURE_SUBSCRIPTION_ID --resource-group mediaverse --location euwest mediaverse'
+        env:
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: 'Deploy images'
+        run: |
+          docker context use mediaverse
+          docker compose up
