@@ -1,3 +1,5 @@
+ARG VITE_API_ADDRESS='https://mediaverse-fzgmcvh4h5h2ddhk.westeurope-01.azurewebsites.net/'
+
 FROM node:lts-alpine AS build-stage
 
 WORKDIR /usr/src/app
