@@ -10,6 +10,7 @@ import CommentForm from './CommentForm.tsx'
 import { DropdownButton, DropDownChoice } from '../shared/DropdownChoice'
 import { FaArrowDown, FaArrowUp, FaClock, FaMedal } from 'react-icons/fa'
 import { RiNumbersFill } from 'react-icons/ri'
+import { Oval } from 'react-loader-spinner'
 
 
 type CommentSortProps = {
@@ -59,7 +60,7 @@ const CommentSection = ({ entryId }: CommentSectionProps) => {
     size: 20,
   })
   const queryKey = ['GET_ENTRY_COMMENTS', entryId, { commentParams }, { isAuthenticated }]
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: queryKey,
     queryFn: async ({ pageParam }) => {
       if (isAuthenticated) {
@@ -111,9 +112,22 @@ const CommentSection = ({ entryId }: CommentSectionProps) => {
             )
           }),
         )}
-      <div ref={viewBoxRef} className='min-h-1'>
-        {isFetchingNextPage && 'Loading...'}
-      </div>
+      {isFetching &&
+        <div className='pointer-events-none flex items-center justify-center'>
+          <Oval
+            visible={true}
+            height='80'
+            width='80'
+            color='#5b21b6'
+            secondaryColor=''
+            ariaLabel='oval-loading'
+            wrapperStyle={{}}
+            wrapperClass=''
+          />
+        </div>
+      }
+      <div ref={viewBoxRef} className='min-h-1' />
+
     </div>
   )
 }
