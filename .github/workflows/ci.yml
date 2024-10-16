@@ -26,26 +26,14 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: 'Build and push image'
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      - run: |
+        run: |
           docker build backend/MediaVerse -f backend/MediaVerse/MediaVerse.Client.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be
           docker build frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe
-          
-          - name: "Create an aci context"
-          uses: actions-hub/docker/cli@master
-          env:
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          SKIP_LOGIN: true
-          - run: 'docker context create aci --subscription-id $AZURE_SUBSCRIPTION_ID --resource-group mediaverse --location euwest mediaverse'
-          
-          - name: 'Deploy images'
-          run: |
+
+      - name: 'Deploy images'
+        run: |
           docker context use mediaverse
           docker compose up
 
