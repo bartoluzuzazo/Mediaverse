@@ -5,7 +5,7 @@ services:
     restart: always
     image: mediaverse.azurecr.io/mediaverse_be
     ports:
-      - 8081:8081
+      - 80:80
     depends_on:
       - database
     environment:
