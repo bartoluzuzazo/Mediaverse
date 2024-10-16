@@ -25,14 +25,17 @@ public class GetCommentsSpecification : Specification<Comment, GetCommentRespons
             {
                 Id = comment.Id,
                 EntryId = comment.EntryId,
-                Username = comment.User.Username,
-                UserProfile = comment.User.ProfilePicture == null
+                Username = comment.DeletedAt == null ? comment.User.Username : "[deleted]",
+                UserId = comment.DeletedAt == null ? comment.UserId : null,
+                UserProfile = comment.User.ProfilePicture == null || comment.DeletedAt != null
                     ? null
                     : Convert.ToBase64String(comment.User.ProfilePicture.Picture),
-                Content = comment.Content,
+                Content = comment.DeletedAt == null ? comment.Content : "[deleted]",
                 SubcommentCount = comment.InverseParentComment.Count(),
                 Upvotes = comment.Votes.Count(c => c.IsPositive),
                 Downvotes = comment.Votes.Count(c => !c.IsPositive),
+                CreatedAt = comment.CreatedAt,
+                IsDeleted = comment.DeletedAt != null,
 
                 UsersVote = userEmail == null
                     ? null

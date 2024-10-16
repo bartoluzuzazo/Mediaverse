@@ -136,4 +136,13 @@ public class CommentsController(IMediator mediator) : BaseController
         var result = await mediator.Send(query);
         return ResolveCode(result.Exception, Ok(result.Data));
     }
+    
+    [Authorize]
+    [HttpDelete("/comments/{commentId:Guid}")]
+    public async Task<IActionResult> DeleteComment(Guid commentId)
+    {
+        var command = new DeleteCommentCommand(commentId);
+        var exception = await mediator.Send(command);
+        return OkOrError(exception);
+    }
 }

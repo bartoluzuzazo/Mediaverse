@@ -48,6 +48,11 @@ public class CreateVoteCommandHandler : UserAccessHandler,IRequestHandler<Create
             return new BaseResponse<GetCommentVoteResponse>(new NotFoundException());
         }
 
+        if (comment.DeletedAt is not null)
+        {
+            return new BaseResponse<GetCommentVoteResponse>(new ConflictException("Cannot change vote on deleted comment"));
+        }
+
         var newVote = new Vote()
         {
             Comment = comment,

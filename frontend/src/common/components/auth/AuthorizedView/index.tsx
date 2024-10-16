@@ -21,7 +21,7 @@ export const AuthorizedView: FunctionComponent<Props> = ({
   if (!authUserData) {
     return notAuthView
   }
-  const hasAllowedRole = roles && roles.some((role) => authUserData?.roles.includes(role))
+  const hasAllowedRole = !roles || roles.some((role) => authUserData?.roles.includes(role))
   if (!hasAllowedRole) {
     return notAuthView
   }

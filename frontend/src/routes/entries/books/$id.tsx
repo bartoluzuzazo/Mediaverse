@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { FunctionComponent } from 'react'
+import { Fragment, FunctionComponent } from 'react'
 import EntryBanner from '../../../common/components/entries/entryBanner.tsx'
 import EntryRatingPicker from '../../../common/components/entryRatingPicker'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
@@ -38,14 +38,14 @@ const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
       <SectionHeader title={'Description'} />
       <div className="p-4">{book.entry.description}</div>
       {book.entry.authors.map((group) => (
-        <>
+        <Fragment key={group.role}>
           <SectionHeader title={group.role} />
           {group.authors.map((a) => (
-            <div className="p-2">
+            <div className="p-2" key={a.id}>
               <EntryAuthorPreview author={a} />
             </div>
           ))}
-        </>
+        </Fragment>
       ))}
       <SectionHeader title={'Synopsis'} />
       <div className="p-4">{book.synopsis}</div>

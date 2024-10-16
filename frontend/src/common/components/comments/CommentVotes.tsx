@@ -1,9 +1,5 @@
 import { Comment } from '../../../models/comments'
-import {
-  InfiniteData,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query'
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 import { Page } from '../../../models/common'
 import { commentService } from '../../../services/commentService.ts'
@@ -76,8 +72,9 @@ export const CommentVotes = ({
   })
 
   const { isAuthenticated } = useAuthContext()!
-  const sendIfAuthorized = (newVote?: boolean) => {
-    if (isAuthenticated) {
+  const isVotable = isAuthenticated && !comment.isDeleted
+  const sendIfVotable = (newVote?: boolean) => {
+    if (isVotable) {
       sendVoteMutation(newVote)
     }
   }
@@ -86,27 +83,27 @@ export const CommentVotes = ({
       <span>{comment.upvotes}</span>
       {comment.usersVote ? (
         <BiSolidLike
-          className={`mr-3 text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
+          className={`mr-3 text-2xl ${isVotable ? 'hover:scale-125' : ''}`}
           onClick={() => {
-            sendIfAuthorized(undefined)
+            sendIfVotable(undefined)
           }}
         />
       ) : (
         <BiLike
-          className={`mr-3 text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
-          onClick={() => sendIfAuthorized(true)}
+          className={`mr-3 text-2xl ${isVotable ? 'hover:scale-125' : ''}`}
+          onClick={() => sendIfVotable(true)}
         />
       )}
       <span>{comment.downvotes}</span>
       {!comment.usersVote && comment.usersVote != undefined ? (
         <BiSolidDislike
-          className={`text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
-          onClick={() => sendIfAuthorized(undefined)}
+          className={`text-2xl ${isVotable ? 'hover:scale-125' : ''}`}
+          onClick={() => sendIfVotable(undefined)}
         />
       ) : (
         <BiDislike
-          className={`text-2xl ${isAuthenticated ? 'hover:scale-125' : ''}`}
-          onClick={() => sendIfAuthorized(false)}
+          className={`text-2xl ${isVotable ? 'hover:scale-125' : ''}`}
+          onClick={() => sendIfVotable(false)}
         />
       )}
     </div>
