@@ -10,6 +10,8 @@ services:
       - database
     environment:
       - ConnectionStrings:DefaultConnection=User ID=postgres;Password=WeakPassword;Host=database;Port=5432;Database=postgres
+      - CORS:http=https://mediaverse-fzgmcvh4h5h2ddhk.westeurope-01.azurewebsites.net
+      - JWT:Audience=https://mediaverse-fzgmcvh4h5h2ddhk.westeurope-01.azurewebsites.net
       - ASPNETCORE_ENVIRONMENT=Development
   
   frontend:
