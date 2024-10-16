@@ -32,11 +32,6 @@ jobs:
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe
 
-      - name: 'Deploy images'
-        run: |
-          docker context use mediaverse
-          docker compose up
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
