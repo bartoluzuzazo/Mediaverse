@@ -17,6 +17,7 @@ export interface Comment {
 export enum CommentOrder {
   votes,
   voteCount,
+  createdAt
 }
 
 export interface GetCommentsParams extends PaginateRequest {

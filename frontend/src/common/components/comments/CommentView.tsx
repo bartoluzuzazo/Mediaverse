@@ -24,7 +24,7 @@ export const CommentView = ({
   const { isAuthenticated } = useAuthContext()!
   return (
     <>
-      <div className={`mb-4 mt-3 rounded-xl p-3 shadow-md ${comment.isDeleted ? 'opacity-80' : ''}`}>
+      <div className={`mb-4 mt-3 rounded-xl p-3 shadow-md ${comment.isDeleted ? 'opacity-75' : ''}`}>
         <div className='flex gap-6'>
           <div>
             <img
