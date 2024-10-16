@@ -1,4 +1,4 @@
-ARG VITE_API_ADDRESS='https://mediaverse-fzgmcvh4h5h2ddhk.westeurope-01.azurewebsites.net/'
+ARG VITE_API_ADDRESS='https://mediaverse-fzgmcvh4h5h2ddhk.westeurope-01.azurewebsites.net:8081'
 
 FROM node:lts-alpine AS build-stage
 
