@@ -55,7 +55,7 @@ interface DropdownButtonProps {
 export const DropdownButton: FunctionComponent<DropdownButtonProps> = ({ icon, text }) => {
   return (
     <div className='bg-slate-300 rounded-3xl flex items-center px-4 py-1 '>
-      {icon} <span className='ml-2 text-slate-900 text-lg font-semibold'>{text}</span>
+      {icon} <span className='ml-2 text-slate-900 text-lg font-semibold whitespace-nowrap'>{text}</span>
     </div>
   )
 }
