@@ -1,11 +1,15 @@
 CREATE OR REPLACE FUNCTION set_entry_type() RETURNS TRIGGER
     LANGUAGE plpgsql
-AS 
+AS
 $$
 BEGIN
-    UPDATE entry SET type = tg_argv[0]::text
-    WHERE id = new.id;
-    RETURN new;
+    IF (SELECT type FROM entry e WHERE e.id = new.id) IS NOT NULL THEN
+        RAISE EXCEPTION 'Entry type cannot be changed';
+end if;
+
+UPDATE entry e SET type = tg_argv[0]::text
+    WHERE e.id = new.id;
+RETURN new;
 END;
 $$;
 
@@ -52,4 +56,4 @@ $$;
 
 CREATE OR REPLACE TRIGGER entry_type_trigger
     AFTER INSERT OR UPDATE ON entry
-    FOR EACH ROW EXECUTE PROCEDURE lock_entry_type();
+                                  FOR EACH ROW EXECUTE PROCEDURE lock_entry_type();
