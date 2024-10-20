@@ -26,6 +26,8 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: 'Build and push image'
+        env:
+          VITE_API_ADDRESS=https://mediaverse-backend.yellowhill-e4cdcb39.westeurope.azurecontainerapps.io/
         run: |
           docker build backend/MediaVerse -f backend/MediaVerse/MediaVerse.Client.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be
           docker build frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe
