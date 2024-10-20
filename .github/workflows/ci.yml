@@ -31,9 +31,3 @@ jobs:
           docker build frontend -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_fe
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'mediaverse'
-          configuration-file: 'docker-compose.yml'
