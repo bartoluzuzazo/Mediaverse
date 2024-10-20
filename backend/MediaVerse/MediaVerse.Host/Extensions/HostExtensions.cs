@@ -13,7 +13,7 @@ public static class HostExtensions
         var configuration = host.Services.GetService<IConfiguration>() ?? throw new Exception("Configuration is null");
 
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection") ??
+        var connectionString = configuration["DefaultConnection"] ??
                                throw new Exception("Default connection string");
 
         var migrationService = new MigrationService(connectionString);
