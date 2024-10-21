@@ -73,7 +73,7 @@ builder.Services.AddCors(o =>
 {
     o.AddPolicy(name: defaultpolicy, policy =>
     {
-        policy.WithOrigins(builder.Configuration["CORS:http"], builder.Configuration["CORS:https"])
+        policy.WithOrigins(builder.Configuration["CORS_HTTP"], builder.Configuration["CORS_HTTPS"])
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -87,9 +87,9 @@ builder.Services.AddAuthentication().AddJwtBearer(o =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!))
+        ValidIssuer = builder.Configuration["JWT_ISSUER"],
+        ValidAudience = builder.Configuration["JWT_AUDIENCE"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]!))
     };
 });
 
