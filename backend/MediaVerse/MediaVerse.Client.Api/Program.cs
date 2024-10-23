@@ -106,6 +106,7 @@ if (app.Environment.IsDevelopment())
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
+    app.UseReactServing();
 }
 
 app.UseCors(defaultpolicy);
@@ -114,4 +115,6 @@ app.UsePathBase("/api");
 app.UseAuthentication();
 app.UseAuthorization();
 app.ExecuteDbMigrations();
+app.UseStaticFiles();
 app.Run();
+
