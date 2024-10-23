@@ -16,7 +16,7 @@ public static class HostExtensions
         app.Use(async (context, next) =>
         {
             var path = (string)context.Request.Path;
-            if (!path.StartsWith("/api"))
+            if (!path.StartsWith("/api") && !Path.HasExtension(path))
             {
                 context.Request.Path = (PathString)"/index.html";
             }
