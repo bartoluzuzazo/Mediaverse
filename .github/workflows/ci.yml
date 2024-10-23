@@ -26,6 +26,8 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: 'Build and push image'
+        env:
+          NODE_ENV: production
         run: |
           docker build . -f files/build/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be

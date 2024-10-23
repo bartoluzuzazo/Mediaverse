@@ -23,6 +23,9 @@ WORKDIR /usr/src/app
 
 COPY frontend/. .
 
+
+ENV VITE_API_URL=
+
 RUN npm install && npm run build
 
 FROM base AS final
