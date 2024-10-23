@@ -9,7 +9,7 @@ export default defineConfig({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'https://mediaverse-backend.yellowhill-e4cdcb39.westeurope.azurecontainerapps.io/',
+        target: 'http://localhost:8081',
       },
     },
   },
