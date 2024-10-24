@@ -18,7 +18,7 @@ const router = createRouter({
   },
 })
 
-axios.defaults.baseURL = import.meta.env.VITE_API_ADDRESS
+axios.defaults.baseURL = import.meta.env.PROD ? "/api/" : (import.meta.env.VITE_API_ADDRESS || "/api/")
 
 declare module '@tanstack/react-router' {
   interface Register {

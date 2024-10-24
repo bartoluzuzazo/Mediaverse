@@ -27,11 +27,11 @@ public class AuthService(IConfiguration configuration) : IAuthService
         var tokenDescription = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Issuer = configuration["JWT:Issuer"],
-            Audience = configuration["JWT:Audience"],
+            Issuer = configuration["JWT_ISSUER"],
+            Audience = configuration["JWT_AUDIENCE"],
             Expires = DateTime.UtcNow.AddDays(1),
             SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]!)),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT_KEY"]!)),
                 SecurityAlgorithms.HmacSha256
             )
         };

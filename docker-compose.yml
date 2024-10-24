@@ -3,36 +3,21 @@ services:
   
   backend:
     restart: always
-    build:
-      context: backend/MediaVerse
-      dockerfile: MediaVerse.Client.Api/Dockerfile
+    image: mediaverse.azurecr.io/mediaverse_be
     ports:
-      - 8080:8080
+      - 80:80
     depends_on:
       - database
     environment:
       - ConnectionStrings:DefaultConnection=User ID=postgres;Password=WeakPassword;Host=database;Port=5432;Database=postgres
+      - CORS:http=https://mediaverse-fzgmcvh4h5h2ddhk.westeurope-01.azurewebsites.net
+      - JWT:Audience=https://mediaverse-fzgmcvh4h5h2ddhk.westeurope-01.azurewebsites.net
       - ASPNETCORE_ENVIRONMENT=Development
   
   frontend:
     restart: always
-    build:
-      context: frontend
-      dockerfile: Dockerfile
+    image: mediaverse.azurecr.io/mediaverse_fe
     ports:
-      - 3000:3000
+      - 8080:8080
   
-  database:
-    restart: always
-    image: postgres
-    environment:
-      - POSTGRES_PASSWORD=WeakPassword
-    volumes:
-      - mediaverse-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./data:/data
-    ports:
-      - 5432:5432
 
-volumes:
-  mediaverse-data:

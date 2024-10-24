@@ -1,0 +1,32 @@
+name: CI/CD Pipeline for Mediaverse
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@main
+
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 'Login docker'
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: 'Build and push image'
+        env:
+          NODE_ENV: production
+        run: |
+          docker build . -f files/build/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/mediaverse_be
