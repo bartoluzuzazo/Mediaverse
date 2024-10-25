@@ -8,7 +8,6 @@ export const NavLinks: FunctionComponent = () => {
 
   return (
     <ul className="flex flex-col gap-2">
-
       <li className="flex flex-col">
         <Link
           to={'/users/search'}
@@ -16,22 +15,18 @@ export const NavLinks: FunctionComponent = () => {
         >
           Search users
         </Link>
-        <span className="text-mv-slate">
-            Find users by username
-          </span>
+        <span className="text-mv-slate">Find users by username</span>
       </li>
       <AuthorizedView>
         <li className="flex flex-col">
           <Link
-            to={'/users/edit/$id'}
+            to={'/users/$id'}
             params={{ id: authUserData!.id }}
             className="font-semibold text-black hover:text-mv-purple hover:underline"
           >
-            Edit User Profile
+            Your profile
           </Link>
-          <span className="text-mv-slate">
-            Change your profile picture, email or password.
-          </span>
+          <span className="text-mv-slate">View your profile</span>
         </li>
       </AuthorizedView>
       <AuthorizedView allowedRoles={'Administrator'}>
@@ -49,10 +44,13 @@ export const NavLinks: FunctionComponent = () => {
         <li className="flex flex-col">
           <Link
             to={'/entries/books/create'}
-            className="font-semibold text-black hover:text-mv-purple hover:underline">
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
             Add Book
           </Link>
-          <span className="text-mv-slate">Add information about a new book</span>
+          <span className="text-mv-slate">
+            Add information about a new book
+          </span>
         </li>
       </AuthorizedView>
     </ul>
