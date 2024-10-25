@@ -7,7 +7,7 @@ import {
   useRef,
 } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Link } from '@tanstack/react-router'
+import { NavLinks } from './NavLinks.tsx'
 
 interface NavBarBurgerProps {
   isOpen: boolean
@@ -53,31 +53,8 @@ const NavBarBurger: FunctionComponent<NavBarBurgerProps> = ({
           exit={{ opacity: 0 }}
           className="absolute top-[80px] z-40 origin-top rounded-md border border-solid border-mv-slate-200 bg-white p-5 shadow-md shadow-mv-slate-200"
         >
-          <ul className="flex flex-col gap-2">
-            <li className="flex flex-col">
-              <Link className="font-semibold text-black hover:text-mv-purple hover:underline">
-                {' '}
-                Quizzes
-              </Link>
-              <span className="text-mv-slate">
-                Quizzes to check your movie knowledge
-              </span>
-            </li>
-            <li className="flex flex-col">
-              <Link className="font-semibold text-black hover:text-mv-purple hover:underline">
-                Articles
-              </Link>
-              <span className="text-mv-slate">
-                News from the world of culture
-              </span>
-            </li>
-            <li className="flex flex-col">
-              <Link className="font-semibold text-black hover:text-mv-purple hover:underline">
-                Ask Me Anything
-              </Link>
-              <span className="text-mv-slate">Active AMA sessions</span>
-            </li>
-          </ul>
+          <NavLinks/>
+
         </motion.div>
       )}
     </AnimatePresence>
