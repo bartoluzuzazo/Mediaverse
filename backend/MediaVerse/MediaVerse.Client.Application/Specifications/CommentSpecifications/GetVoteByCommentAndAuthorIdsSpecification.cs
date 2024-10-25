@@ -7,6 +7,7 @@ public class GetVoteByCommentAndAuthorIdsSpecification : Specification<Vote>
 {
     public GetVoteByCommentAndAuthorIdsSpecification(Guid commentId, Guid userId)
     {
-        Query.Where(vote => vote.UserId == userId && vote.CommentId == commentId);
+        Query.Where(vote => vote.UserId == userId && vote.CommentId == commentId)
+            .Include(vote => vote.Comment);
     }
 }

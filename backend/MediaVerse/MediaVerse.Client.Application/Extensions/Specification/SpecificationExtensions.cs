@@ -47,6 +47,9 @@ public static class SpecificationExtensions
             case CommentOrder.VoteCount:
                 specificationBuilder.OrderByDirection(c => c.Votes.Count(), direction).ThenByDirection(c=>c.Id, OrderDirection.Descending);
                 break;
+            case CommentOrder.CreatedAt:
+                specificationBuilder.OrderByDirection(c=>c.CreatedAt, direction).ThenByDirection(c=>c.Id, OrderDirection.Descending);
+                break;
         }
 
         return specificationBuilder;

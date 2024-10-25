@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { FunctionComponent } from 'react'
+import { Fragment, FunctionComponent } from 'react'
 import EntryBanner from '../../../common/components/entries/entryBanner.tsx'
 import EntryRatingPicker from '../../../common/components/entryRatingPicker'
 import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
@@ -9,6 +9,9 @@ import { BookService } from '../../../services/bookService.ts'
 import EntryAuthorPreview from '../../../common/components/entries/entryAuthorPreview.tsx'
 import SectionHeader from '../../../common/components/entries/sectionHeader.tsx'
 import CommentSection from '../../../common/components/comments/CommentSection.tsx'
+import { AuthorizedView } from '../../../common/components/auth/AuthorizedView'
+import { LinkButton } from '../../../common/components/shared/LinkButton'
+import { FaPen } from 'react-icons/fa'
 
 interface BookEntryComponentProps {}
 
@@ -23,7 +26,6 @@ const bookQueryOptions = (id: string) => {
 }
 
 const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
-  const authContext = useAuthContext()
   const id = Route.useParams().id
   const bookQuery = useSuspenseQuery(bookQueryOptions(id))
   const book = bookQuery.data
@@ -32,20 +34,25 @@ const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
   return (
     <>
       <EntryBanner entry={book.entry} info={info} type={'Book'} />
-      {authContext?.isAuthenticated ? (
+      <AuthorizedView allowedRoles="Administrator">
+        <div className='max-w-32 mt-4 -mb-2'>
+          <LinkButton to={'/entries/books/edit/$id'} params={{id: book.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
+        </div>
+      </AuthorizedView>
+      <AuthorizedView>
         <EntryRatingPicker entryId={book.entry.id} />
-      ) : null}
+      </AuthorizedView>
       <SectionHeader title={'Description'} />
       <div className="p-4">{book.entry.description}</div>
       {book.entry.authors.map((group) => (
-        <>
+        <Fragment key={group.role}>
           <SectionHeader title={group.role} />
           {group.authors.map((a) => (
-            <div className="p-2">
+            <div className="p-2" key={a.id}>
               <EntryAuthorPreview author={a} />
             </div>
           ))}
-        </>
+        </Fragment>
       ))}
       <SectionHeader title={'Synopsis'} />
       <div className="p-4">{book.synopsis}</div>

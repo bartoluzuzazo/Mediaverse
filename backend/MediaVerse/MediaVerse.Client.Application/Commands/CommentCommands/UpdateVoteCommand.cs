@@ -37,6 +37,10 @@ public class UpdateVoteCommandHandler : IRequestHandler<UpdateVoteCommand, BaseR
 
         var spec = new GetVoteByCommentAndAuthorIdsSpecification(request.CommentId, userResp.Data!.Id);
         var vote = await _voteRepository.FirstOrDefaultAsync(spec, cancellationToken);
+        if (vote?.Comment.DeletedAt is not null)
+        {
+            return new BaseResponse<GetCommentVoteResponse>(new ConflictException("Cannot change vote on deleted comment"));
+        }
         if (vote is null)
         {
             return new BaseResponse<GetCommentVoteResponse>(new NotFoundException());

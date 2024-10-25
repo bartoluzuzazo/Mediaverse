@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { Page } from '../models/common'
-import { CommentFormData, GetCommentsParams, Vote } from '../models/comments'
-import { Comment } from '../models/comments'
+import { Comment, CommentFormData, GetCommentsParams, Vote } from '../models/comments'
 
 export class commentService {
   public static async getRootCommentsAuthorized(
@@ -67,5 +66,9 @@ export class commentService {
 
   public static async deleteVote(commentId: string) {
     return await axios.delete(`comments/${commentId}/votes/current-user`)
+  }
+
+  public static async deleteComment(commentId: string){
+    return await axios.delete(`comments/${commentId}`)
   }
 }

@@ -24,7 +24,7 @@ export const Subcomments = ({
   setIsReplying,
 }: Props) => {
   const { isAuthenticated } = useAuthContext()!
-  const queryKey = ['GET_SUBCOMMENTS', parentComment.id, { commentParams }]
+  const queryKey = ['GET_SUBCOMMENTS', parentComment.id, { commentParams }, {isAuthenticated}]
   const [isNotFirstRequest, setIsNotFirstRequest] = useState(false)
   const [isCollapsed, toggleCollapsed] = useToggle(false)
   const { data, fetchNextPage } = useInfiniteQuery({

@@ -9,6 +9,8 @@ import { FriendRequestCarousel } from '../../common/components/users/FriendReque
 import { RatedEntryCarousel } from '../../common/components/users/RatedEntryCarousel.tsx'
 import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
 import { RoleStatusList } from '../../common/components/users/RoleStatusList'
+import { LinkButton } from '../../common/components/shared/LinkButton'
+import { FaPen } from 'react-icons/fa'
 
 interface Props {
 }
@@ -31,6 +33,9 @@ const UserComponent: FunctionComponent<Props> = () => {
           {authUserData && authUserData.id !== user.id ? (
             <FriendshipButton friendId={user.id} />
           ) : null}
+          <AuthorizedView requiredUserId={user.id}>
+            <LinkButton icon={<FaPen/>} to={'/users/edit/$id'} params={{id: user.id}}>Edit</LinkButton>
+          </AuthorizedView>
         </div>
 
         <div className='flex-1'>

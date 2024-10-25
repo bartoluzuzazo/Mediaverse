@@ -44,6 +44,7 @@ public class
             Id = Guid.NewGuid(),
             Entry = entry,
             User = user,
+            CreatedAt = DateOnly.FromDateTime(DateTime.Now),
             Content = request.CommentDto.Content
         };
         comment = await commentRepository.AddAsync(comment, cancellationToken);

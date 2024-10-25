@@ -83,7 +83,7 @@ const LinkUserComponent: FunctionComponent<Props> = ({ authorId }) => {
 
   return (
     <>
-      <button className='mt-2 bg-violet-200 flex items-center rounded-md gap-3 p-1 w-full' onClick={() => setIsOpen(true)}>
+      <button className='mt-2 bg-violet-200 flex items-center rounded-md gap-3 p-1 w-full border-none hover:scale-105' onClick={() => setIsOpen(true)}>
         <div
           className='self-center text-white bg-violet-900 rounded-full w-10 aspect-square m-1 grid place-content-center'>
           <FaLink className='text-xl' />

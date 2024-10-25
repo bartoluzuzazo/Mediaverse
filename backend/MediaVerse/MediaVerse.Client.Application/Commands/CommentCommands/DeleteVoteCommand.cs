@@ -5,6 +5,7 @@ using MediaVerse.Client.Application.Services.UserAccessor;
 using MediaVerse.Client.Application.Specifications.CommentSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
+using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
 
 namespace MediaVerse.Client.Application.Commands.CommentCommands;
@@ -33,8 +34,14 @@ public class DeleteVoteCommandHandler : UserAccessHandler, IRequestHandler<Delet
             return userResp.Exception;
         }
         var user = userResp.Data!;
+        
+
         var spec = new GetVoteByCommentAndAuthorIdsSpecification(request.CommentId, user.Id);
         var vote = await _voteRepository.FirstOrDefaultAsync(spec, cancellationToken);
+        if (vote?.Comment.DeletedAt is not null)
+        {
+            return new ConflictException("Cannot change vote on deleted comment");
+        }
         if (vote is not null)
         {
             await _voteRepository.DeleteAsync(vote, cancellationToken);

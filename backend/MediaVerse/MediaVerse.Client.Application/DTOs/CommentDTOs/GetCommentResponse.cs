@@ -9,9 +9,12 @@ public class GetCommentResponse
 
     public string Username { get; set; } = null!;
     public string? UserProfile { get; set; }
+    public Guid? UserId { get; set; }
     public string Content { get; set; } = null!;
     public int SubcommentCount { get; set; }
     public int Upvotes { get; set; }
     public int Downvotes { get; set; }
     public bool? UsersVote { get; set; }
+    public DateOnly CreatedAt { get; set; }
+    public bool IsDeleted { get; set; }
 }

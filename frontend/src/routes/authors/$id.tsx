@@ -5,6 +5,8 @@ import AuthorEntryPreview from '../../common/components/authors/Entry/AuthorEntr
 import SectionHeader from '../../common/components/entries/sectionHeader.tsx'
 import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
 import { LinkedUser } from '../../common/components/authors/LinkedAuthor'
+import { LinkButton } from '../../common/components/shared/LinkButton'
+import { FaPen } from 'react-icons/fa'
 
 export const Route = createFileRoute('/authors/$id')({
   loader: async ({ params }) => {
@@ -32,6 +34,7 @@ export const Route = createFileRoute('/authors/$id')({
             <AuthorizedView allowedRoles='Administrator'>
               <LinkedUser authorId={author.id} />
             </AuthorizedView>
+            <LinkButton to={`/authors/edit/$id`} params={{id: author.id}} icon={<FaPen/>}>Edit author</LinkButton>
           </div>
 
           <div className="flex-1 md:ml-20">{author.bio}</div>
