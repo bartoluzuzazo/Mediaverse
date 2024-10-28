@@ -1,6 +1,7 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.AuthorCommands;
 using MediaVerse.Client.Application.DTOs.AuthorDTOs;
+using MediaVerse.Client.Application.Queries.AmaQueries;
 using MediaVerse.Client.Application.Queries.AuthorQueries;
 using Microsoft.AspNetCore.Authorization;
 
@@ -61,5 +62,12 @@ public class AuthorsController(IMediator mediator) : BaseController
         var response = await mediator.Send(command);
         return OkOrError(response);
     }
-    
+
+    [HttpGet("{id:guid}/ama-sessions")]
+    public async Task<IActionResult> GetAmaSessions(Guid id)
+    {
+        var command = new GetAuthorsAmaSessionsQuery(id);
+        var response = await mediator.Send(command);
+        return OkOrError(response);
+    }
 }
