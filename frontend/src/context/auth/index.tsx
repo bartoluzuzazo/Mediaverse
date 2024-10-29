@@ -47,10 +47,25 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
     axios.defaults.headers.common['Authorization'] = token && `Bearer ${token}`
   }, [token])
 
+  useEffect(() => { 
+    axios.interceptors.response.use(response => {
+      return response;
+   }, error => {
+     if (error.response.status === 401) {
+        removeToken();
+     }
+     return error;
+   });
+   return () => {
+    axios.interceptors.response.clear()
+   }
+  }, [axios]);
+
   const authUserData: AuthData | undefined = useMemo(() => {
     if (!token) {
       return undefined
     }
+  
     const jwtData = jwtDecode<JwtPayload>(token)
     const roles = Array.isArray(jwtData.role) ? jwtData.role : [jwtData.role]
     return {
