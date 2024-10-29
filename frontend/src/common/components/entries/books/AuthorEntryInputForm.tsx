@@ -53,11 +53,11 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({ label, collecti
                 onSubmit={form.handleSubmit(handleAdd)}
                 className="flex flex-col pt-2"
           >
-
             <FormField label={'ID'} register={form.register} errorValue={form.formState.errors.id}
                        registerPath={'id'} disabled={true} />
             <FormField label={'Name'} register={form.register} errorValue={form.formState.errors.name}
                        registerPath={'name'} disabled={true} />
+            <label>Search authors using name or surname</label>
             <UserSearch service={AuthorService} onClick={async (u) => addAuthor(u) } queryKey="SEARCH_AUTHOR"/>
             <FormField label={'Role'} register={form.register} errorValue={form.formState.errors.role}
                        registerPath={'role'} />

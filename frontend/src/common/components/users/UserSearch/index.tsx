@@ -31,7 +31,7 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick, service, queryKe
   const isDone = users?.pages.some(p => !p.hasNext)
 
   return (
-    <div className='max-w-[800px] mx-auto'>
+    <div className='w-full max-w-[800px] mx-auto'>
       <FormInput
         inputProps={{
           type: 'text',

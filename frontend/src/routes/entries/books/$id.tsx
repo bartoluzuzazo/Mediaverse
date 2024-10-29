@@ -46,11 +46,13 @@ const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
       {book.entry.authors.map((group) => (
         <Fragment key={group.role}>
           <SectionHeader title={group.role} />
-          {group.authors.map((a) => (
-            <div className="p-2" key={a.id}>
-              <EntryAuthorPreview author={a} />
-            </div>
-          ))}
+          <div className="flex flex-wrap">
+            {group.authors.map((a) => (
+              <div className="p-2" key={a.id}>
+                <EntryAuthorPreview author={a} />
+              </div>
+            ))}
+          </div>
         </Fragment>
       ))}
       <SectionHeader title={'Synopsis'} />
