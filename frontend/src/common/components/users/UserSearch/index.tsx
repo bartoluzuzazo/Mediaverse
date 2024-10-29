@@ -6,18 +6,20 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import FormInput from '../../form/input'
 import { FaSearch } from 'react-icons/fa'
 import { useDebounceValue } from 'usehooks-ts'
+import { Author } from '../../../../models/author/Author.ts'
 
 type Props = {
-  onClick?: (user: User) => void | Promise<void>
+  onClick?: (user: User | Author) => void | Promise<void>
   service: any
+  queryKey: string
 }
 
-export const UserSearch: FunctionComponent<Props> = ({ onClick, service }) => {
+export const UserSearch: FunctionComponent<Props> = ({ onClick, service, queryKey }) => {
   const [query, setQuery] = useState<string>('')
   const [debouncedQuery] = useDebounceValue(query, 300)
 
   const { data: users, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ['SEARCH_USER', { query: debouncedQuery }],
+    queryKey: [queryKey, { query: debouncedQuery }],
     queryFn: async ({ pageParam }) => {
       return (await service.search(debouncedQuery, { page: pageParam, size: 2 })).data
     },
@@ -57,9 +59,9 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick, service }) => {
   )
 }
 type WrapperProps = {
-  onClick?: (user: User) => void | Promise<void>
+  onClick?: (user: User | Author) => void | Promise<void>
   children: React.ReactNode
-  user: User
+  user: User | Author
 }
 
 const UserLinkWrapper: FunctionComponent<WrapperProps> = ({ onClick, children, user }) => {
@@ -71,14 +73,14 @@ const UserLinkWrapper: FunctionComponent<WrapperProps> = ({ onClick, children, u
     )
   }
   return (
-    <Link to='/users/$id' params={{ id: user.id }}>
+    <Link to={'username' in user ? '/users/$id' : '/authors/$id'} params={{ id: user.id }}>
       {children}
     </Link>
   )
 }
 
 type UserTileProps = {
-  user: User
+  user: User | Author
 }
 
 const UserTile: FunctionComponent<UserTileProps> = ({ user }) => {
@@ -89,7 +91,7 @@ const UserTile: FunctionComponent<UserTileProps> = ({ user }) => {
         src={`data:image/webp;base64,${user.profilePicture}`}
       />
       <div className='text-center text-lg font-semibold text-violet-700'>
-        {user.username}
+        {'username' in user ? user.username : `${user.name} ${user.surname}`}
       </div>
     </div>
   )

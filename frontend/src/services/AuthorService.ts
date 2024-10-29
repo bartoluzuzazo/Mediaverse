@@ -30,18 +30,6 @@ export class AuthorService {
   }
 
   public static async search(query: string, params: PaginateRequest) {
-    const authorPage = await axios.get<Page<Author>>(`/authors/search`, { params: { ...params, query } })
-
-    //Temporary mapping Author to User to avoid generics, TODO: replace both user and author with generic
-    // @ts-ignore
-    authorPage.data.contents = authorPage.data.contents.map(author => {
-      const user: User = {
-        id: author.id,
-        username: `${author.name} ${author.surname}`,
-        profilePicture: author.profilePicture,
-      }
-      return user
-    })
-    return authorPage
+    return await axios.get<Page<Author>>(`/authors/search`, { params: { ...params, query } })
   }
 }

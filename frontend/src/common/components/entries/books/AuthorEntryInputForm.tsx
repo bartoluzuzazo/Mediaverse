@@ -7,6 +7,8 @@ import { Modal } from '../../shared/Modal'
 import { UserSearch } from '../../users/UserSearch'
 import { FaMagnifyingGlass } from 'react-icons/fa6'
 import { AuthorService } from '../../../../services/AuthorService.ts'
+import { Author } from '../../../../models/author/Author.ts'
+import { User } from '../../../../models/user'
 
 interface Props {
   label: string
@@ -19,14 +21,15 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({ label, collecti
   const form = useForm<WorkOn>()
   const handleAdd = (data: WorkOn) => {
     setCollection((prev) => [...prev, data])
-    form.resetField('id')
   }
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  const addAuthor = (id: string, name: string) => {
-    form.setValue('id', id);
-    form.setValue('name', name);
+  const addAuthor = (u: User | Author) => {
+    if ('name' in u) {
+      form.setValue('id', u.id)
+      form.setValue('name', `${u.name} ${u.surname}`)
+    }
   }
 
   const displayFn = (wo: WorkOn) => {
@@ -52,12 +55,10 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({ label, collecti
           >
 
             <FormField label={'ID'} register={form.register} errorValue={form.formState.errors.id}
-                       registerPath={'id'} disabled={true}/>
+                       registerPath={'id'} disabled={true} />
             <FormField label={'Name'} register={form.register} errorValue={form.formState.errors.name}
-                       registerPath={'name'} disabled={true}/>
-            <UserSearch service={AuthorService} onClick={async (u) => {
-              addAuthor(u.id, u.username)
-            }} />
+                       registerPath={'name'} disabled={true} />
+            <UserSearch service={AuthorService} onClick={async (u) => addAuthor(u) } queryKey="SEARCH_AUTHOR"/>
             <FormField label={'Role'} register={form.register} errorValue={form.formState.errors.role}
                        registerPath={'role'} />
             <button

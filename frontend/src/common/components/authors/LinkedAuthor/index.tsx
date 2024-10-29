@@ -93,7 +93,7 @@ const LinkUserComponent: FunctionComponent<Props> = ({ authorId }) => {
       </button>
       {isOpen &&
         <Modal onOutsideClick={() => setIsOpen(false) }>
-          <UserSearch service={userService} onClick={async (u)=>{ await linkUserMutation(u.id)}}/>
+          <UserSearch service={userService} onClick={async (u)=>{ await linkUserMutation(u.id)}} queryKey="SEARCH_USER"/>
         </Modal>}
     </>
   )
