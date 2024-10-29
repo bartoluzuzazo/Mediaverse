@@ -22,7 +22,7 @@ export class AuthorService {
   }
 
   public static async addLinkedUser(authorId: string, userId: string) {
-    return await axios.put(`/authors/${authorId}/linked-user`, {userId})
+    return await axios.put(`/authors/${authorId}/linked-user`, { userId })
   }
 
   public static async deleteLinkedUser(authorId: string) {
@@ -30,6 +30,18 @@ export class AuthorService {
   }
 
   public static async search(query: string, params: PaginateRequest) {
-    return await axios.get<Page<Author>>(`/authors/search`, { params: { ...params, query } })
+    const authorPage = await axios.get<Page<Author>>(`/authors/search`, { params: { ...params, query } })
+
+    //Temporary mapping Author to User to avoid generics, TODO: replace both user and author with generic
+    // @ts-ignore
+    authorPage.data.contents = authorPage.data.contents.map(author => {
+      const user: User = {
+        id: author.id,
+        username: `${author.name} ${author.surname}`,
+        profilePicture: author.profilePicture,
+      }
+      return user
+    })
+    return authorPage
   }
 }
