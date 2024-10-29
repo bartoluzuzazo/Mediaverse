@@ -50,9 +50,7 @@ export class userService {
     return await axios.delete(`/user/${userId}/roles/${roleId}`)
   }
 
-  public static async searchUsers(query: string, params: PaginateRequest) {
+  public static async search(query: string, params: PaginateRequest) {
     return await axios.get<Page<User>>(`user/search`, { params: { ...params, query } })
   }
-
-
 }

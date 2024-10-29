@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AuthorService } from '../../services/AuthorService.ts'
+import { authorService } from '../../services/authorService.ts'
 import { Author } from '../../models/author/Author.ts'
 import AuthorEntryPreview from '../../common/components/authors/Entry/AuthorEntryPreview.tsx'
 import SectionHeader from '../../common/components/entries/sectionHeader.tsx'
@@ -10,7 +10,7 @@ import { FaPen } from 'react-icons/fa'
 
 export const Route = createFileRoute('/authors/$id')({
   loader: async ({ params }) => {
-    const response = await AuthorService.getAuthor(params.id)
+    const response = await authorService.getAuthor(params.id)
     return response.data
   },
   component: () => {

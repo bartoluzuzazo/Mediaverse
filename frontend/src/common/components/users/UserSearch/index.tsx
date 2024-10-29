@@ -3,23 +3,27 @@ import { User } from '../../../../models/user'
 import { Link } from '@tanstack/react-router'
 import CustomImage from '../../customImage'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { userService } from '../../../../services/userService.ts'
 import FormInput from '../../form/input'
 import { FaSearch } from 'react-icons/fa'
 import { useDebounceValue } from 'usehooks-ts'
+import { Author } from '../../../../models/author/Author.ts'
+import { Page, PaginateRequest } from '../../../../models/common'
+import { AxiosResponse } from 'axios'
 
 type Props = {
-  onClick?: (user: User) => void | Promise<void>
+  onClick?: (user: User | Author) => void | Promise<void>
+  searchFunction : (query: string, params: PaginateRequest) => Promise<AxiosResponse<Page<User | Author>>>
+  queryKey: string
 }
 
-export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
+export const UserSearch: FunctionComponent<Props> = ({ onClick, searchFunction, queryKey }) => {
   const [query, setQuery] = useState<string>('')
-  const [debouncedQuery]=useDebounceValue(query, 300)
+  const [debouncedQuery] = useDebounceValue(query, 300)
 
   const { data: users, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ['SEARCH_USER', { query: debouncedQuery }],
+    queryKey: [queryKey, { query: debouncedQuery }],
     queryFn: async ({ pageParam }) => {
-      return (await userService.searchUsers(debouncedQuery, { page: pageParam, size: 2 })).data
+      return (await searchFunction(debouncedQuery, { page: pageParam, size: 2 })).data
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
@@ -27,10 +31,9 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
   })
 
   const isDone = users?.pages.some(p => !p.hasNext)
-  console.log(isFetchingNextPage)
 
   return (
-    <div className='max-w-[800px] mx-auto'>
+    <div className='w-full max-w-[800px] mx-auto'>
       <FormInput
         inputProps={{
           type: 'text',
@@ -53,18 +56,16 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
           <span className="font-extrabold text-white rotate-12 block text-xl capitalize">next</span>
         </button>}
       </div>
-
-
-
     </div>
 
   )
 }
 type WrapperProps = {
-  onClick?: (user: User) => void | Promise<void>
+  onClick?: (user: User | Author) => void | Promise<void>
   children: React.ReactNode
-  user: User
+  user: User | Author
 }
+
 const UserLinkWrapper: FunctionComponent<WrapperProps> = ({ onClick, children, user }) => {
   if (onClick) {
     return (
@@ -73,17 +74,15 @@ const UserLinkWrapper: FunctionComponent<WrapperProps> = ({ onClick, children, u
       </button>
     )
   }
-
   return (
-    <Link to='/users/$id' params={{ id: user.id }}>
+    <Link to={'username' in user ? '/users/$id' : '/authors/$id'} params={{ id: user.id }}>
       {children}
     </Link>
   )
-
 }
 
 type UserTileProps = {
-  user: User
+  user: User | Author
 }
 
 const UserTile: FunctionComponent<UserTileProps> = ({ user }) => {
@@ -94,9 +93,8 @@ const UserTile: FunctionComponent<UserTileProps> = ({ user }) => {
         src={`data:image/webp;base64,${user.profilePicture}`}
       />
       <div className='text-center text-lg font-semibold text-violet-700'>
-        {user.username}
+        {'username' in user ? user.username : `${user.name} ${user.surname}`}
       </div>
-
     </div>
   )
 }

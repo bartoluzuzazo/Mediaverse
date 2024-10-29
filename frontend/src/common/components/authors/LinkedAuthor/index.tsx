@@ -1,6 +1,6 @@
 import { FunctionComponent, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AuthorService } from '../../../../services/AuthorService.ts'
+import { authorService } from '../../../../services/authorService.ts'
 import { serviceUtils } from '../../../../services/serviceUtils.ts'
 import { FaLink, FaUnlink } from 'react-icons/fa'
 import { Modal } from '../../shared/Modal'
@@ -8,6 +8,7 @@ import { UserSearch } from '../../users/UserSearch'
 import { User } from '../../../../models/user'
 import CustomImage from '../../customImage'
 import { Link } from '@tanstack/react-router'
+import { userService } from '../../../../services/userService.ts'
 
 type Props = {
   authorId: string
@@ -17,7 +18,7 @@ export const LinkedUser: FunctionComponent<Props> = ({ authorId }) => {
   const { data: linkedUser, isLoading } = useQuery({
     queryKey: ['GET_LINKED_AUTHOR', authorId],
     queryFn: async () => {
-      const getFn = () => AuthorService.getLinkedUser(authorId)
+      const getFn = () => authorService.getLinkedUser(authorId)
       return await serviceUtils.getIfFound(getFn)
     },
   })
@@ -41,7 +42,7 @@ type UnlinkUserProps={
 const UnlinkUserComponent: FunctionComponent<UnlinkUserProps> =({linkedUser, authorId})=>{
   const queryClient = useQueryClient()
   const { mutateAsync: unlinkUserMutation } = useMutation({
-    mutationFn: async ()=> await AuthorService.deleteLinkedUser(authorId),
+    mutationFn: async ()=> await authorService.deleteLinkedUser(authorId),
     onSuccess: async ()=>{
       await queryClient.invalidateQueries({
         queryKey: ['GET_LINKED_AUTHOR', authorId]
@@ -73,7 +74,7 @@ const LinkUserComponent: FunctionComponent<Props> = ({ authorId }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const queryClient = useQueryClient()
   const { mutateAsync: linkUserMutation } = useMutation({
-    mutationFn: async (userId: string)=> await AuthorService.addLinkedUser(authorId, userId ),
+    mutationFn: async (userId: string)=> await authorService.addLinkedUser(authorId, userId ),
     onSuccess: async ()=>{
       await queryClient.invalidateQueries({
         queryKey: ['GET_LINKED_AUTHOR', authorId]
@@ -92,7 +93,7 @@ const LinkUserComponent: FunctionComponent<Props> = ({ authorId }) => {
       </button>
       {isOpen &&
         <Modal onOutsideClick={() => setIsOpen(false) }>
-          <UserSearch  onClick={async (u)=>{ await linkUserMutation(u.id)}}/>
+          <UserSearch searchFunction={userService.search} onClick={async (u)=>{ await linkUserMutation(u.id)}} queryKey="SEARCH_USER"/>
         </Modal>}
     </>
   )
