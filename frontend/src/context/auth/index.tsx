@@ -44,8 +44,13 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
   )
 
   useEffect(() => {
+    if (!token) {
+      axios.defaults.headers.common['Authorization'] = undefined;
+    }
     axios.defaults.headers.common['Authorization'] = token && `Bearer ${token}`
   }, [token])
+
+ const tokenAxiosDefaults = useMemo(() => axios.defaults.headers.common['Authorization'], [axios.defaults.headers.common['Authorization']])
 
   useEffect(() => { 
     axios.interceptors.response.use(response => {
@@ -82,7 +87,7 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
         token,
         setToken,
         removeToken,
-        isAuthenticated: !!token,
+        isAuthenticated: !!tokenAxiosDefaults,
         authUserData: authUserData,
       }}
     >
