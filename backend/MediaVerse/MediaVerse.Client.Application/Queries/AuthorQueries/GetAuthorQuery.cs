@@ -41,7 +41,7 @@ public class GetAuthorQueryHandler(IRepository<Author> authorRepository)
                             CoverPhoto = wo.Entry.CoverPhoto.Photo,
                             AvgRating = score,
                             Description = wo.Entry.Description,
-                            Type = wo.Entry.GetTypeOfEntry(),
+                            Type = wo.Entry.Type!,
                             ReleaseDate = wo.Entry.Release
                         };
                     }).ToList()

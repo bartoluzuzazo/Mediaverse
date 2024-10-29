@@ -3,23 +3,23 @@ import { User } from '../../../../models/user'
 import { Link } from '@tanstack/react-router'
 import CustomImage from '../../customImage'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { userService } from '../../../../services/userService.ts'
 import FormInput from '../../form/input'
 import { FaSearch } from 'react-icons/fa'
 import { useDebounceValue } from 'usehooks-ts'
 
 type Props = {
   onClick?: (user: User) => void | Promise<void>
+  service: any
 }
 
-export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
+export const UserSearch: FunctionComponent<Props> = ({ onClick, service }) => {
   const [query, setQuery] = useState<string>('')
-  const [debouncedQuery]=useDebounceValue(query, 300)
+  const [debouncedQuery] = useDebounceValue(query, 300)
 
   const { data: users, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['SEARCH_USER', { query: debouncedQuery }],
     queryFn: async ({ pageParam }) => {
-      return (await userService.searchUsers(debouncedQuery, { page: pageParam, size: 2 })).data
+      return (await service.search(debouncedQuery, { page: pageParam, size: 2 })).data
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
@@ -27,7 +27,6 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
   })
 
   const isDone = users?.pages.some(p => !p.hasNext)
-  console.log(isFetchingNextPage)
 
   return (
     <div className='max-w-[800px] mx-auto'>
@@ -53,9 +52,6 @@ export const UserSearch: FunctionComponent<Props> = ({ onClick }) => {
           <span className="font-extrabold text-white rotate-12 block text-xl capitalize">next</span>
         </button>}
       </div>
-
-
-
     </div>
 
   )
@@ -65,6 +61,7 @@ type WrapperProps = {
   children: React.ReactNode
   user: User
 }
+
 const UserLinkWrapper: FunctionComponent<WrapperProps> = ({ onClick, children, user }) => {
   if (onClick) {
     return (
@@ -73,13 +70,11 @@ const UserLinkWrapper: FunctionComponent<WrapperProps> = ({ onClick, children, u
       </button>
     )
   }
-
   return (
     <Link to='/users/$id' params={{ id: user.id }}>
       {children}
     </Link>
   )
-
 }
 
 type UserTileProps = {
@@ -96,7 +91,6 @@ const UserTile: FunctionComponent<UserTileProps> = ({ user }) => {
       <div className='text-center text-lg font-semibold text-violet-700'>
         {user.username}
       </div>
-
     </div>
   )
 }

@@ -8,6 +8,7 @@ import { UserSearch } from '../../users/UserSearch'
 import { User } from '../../../../models/user'
 import CustomImage from '../../customImage'
 import { Link } from '@tanstack/react-router'
+import { userService } from '../../../../services/userService.ts'
 
 type Props = {
   authorId: string
@@ -92,7 +93,7 @@ const LinkUserComponent: FunctionComponent<Props> = ({ authorId }) => {
       </button>
       {isOpen &&
         <Modal onOutsideClick={() => setIsOpen(false) }>
-          <UserSearch  onClick={async (u)=>{ await linkUserMutation(u.id)}}/>
+          <UserSearch service={userService} onClick={async (u)=>{ await linkUserMutation(u.id)}}/>
         </Modal>}
     </>
   )
