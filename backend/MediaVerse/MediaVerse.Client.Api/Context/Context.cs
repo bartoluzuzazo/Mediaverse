@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MediaVerse.Client.Api.Entities;
+using MediaVerse.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediaVerse.Client.Api.Context;
