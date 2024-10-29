@@ -1,6 +1,6 @@
 import { Author } from '../../../models/author/Author.ts'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { AuthorService } from '../../../services/AuthorService.ts'
+import { authorService } from '../../../services/authorService.ts'
 import ProfilePicker from '../form/profilePicker'
 import FormButton from '../form/button'
 import { useNavigate } from '@tanstack/react-router'
@@ -40,11 +40,11 @@ const AuthorForm = ({ author }: Props) => {
 
   const onSubmit: SubmitHandler<AuthorFormData> = async (data) => {
     if (author == null) {
-      const response = await AuthorService.postAuthor(data)
+      const response = await authorService.postAuthor(data)
       const id = response.data.id
       await navigate({ to: `/authors/${id}` })
     } else {
-      await AuthorService.patchAuthor(data, author.id)
+      await authorService.patchAuthor(data, author.id)
       await navigate({ to: `/authors/${author.id}` })
     }
   }

@@ -4,7 +4,7 @@ import { User } from '../models/user'
 import { Page, PaginateRequest } from '../models/common'
 import { Author } from '../models/author/Author.ts'
 
-export class AuthorService {
+export class authorService {
   public static async postAuthor(author: AuthorFormData) {
     return await axios.post('/authors', author)
   }

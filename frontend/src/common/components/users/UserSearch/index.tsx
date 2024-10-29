@@ -7,21 +7,23 @@ import FormInput from '../../form/input'
 import { FaSearch } from 'react-icons/fa'
 import { useDebounceValue } from 'usehooks-ts'
 import { Author } from '../../../../models/author/Author.ts'
+import { Page, PaginateRequest } from '../../../../models/common'
+import { AxiosResponse } from 'axios'
 
 type Props = {
   onClick?: (user: User | Author) => void | Promise<void>
-  service: any
+  searchFunction : (query: string, params: PaginateRequest) => Promise<AxiosResponse<Page<User | Author>>>
   queryKey: string
 }
 
-export const UserSearch: FunctionComponent<Props> = ({ onClick, service, queryKey }) => {
+export const UserSearch: FunctionComponent<Props> = ({ onClick, searchFunction, queryKey }) => {
   const [query, setQuery] = useState<string>('')
   const [debouncedQuery] = useDebounceValue(query, 300)
 
   const { data: users, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: [queryKey, { query: debouncedQuery }],
     queryFn: async ({ pageParam }) => {
-      return (await service.search(debouncedQuery, { page: pageParam, size: 2 })).data
+      return (await searchFunction(debouncedQuery, { page: pageParam, size: 2 })).data
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,

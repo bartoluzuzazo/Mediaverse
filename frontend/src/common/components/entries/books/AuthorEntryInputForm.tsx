@@ -6,9 +6,9 @@ import { DeletableGrid } from '../../form/deletableGrid/DeletableGrid.tsx'
 import { Modal } from '../../shared/Modal'
 import { UserSearch } from '../../users/UserSearch'
 import { FaMagnifyingGlass } from 'react-icons/fa6'
-import { AuthorService } from '../../../../services/AuthorService.ts'
 import { Author } from '../../../../models/author/Author.ts'
 import { User } from '../../../../models/user'
+import { authorService } from '../../../../services/authorService.ts'
 
 interface Props {
   label: string
@@ -58,7 +58,7 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({ label, collecti
             <FormField label={'Name'} register={form.register} errorValue={form.formState.errors.name}
                        registerPath={'name'} disabled={true} />
             <label>Search authors using name or surname</label>
-            <UserSearch service={AuthorService} onClick={async (u) => addAuthor(u) } queryKey="SEARCH_AUTHOR"/>
+            <UserSearch searchFunction={authorService.search} onClick={async (u) => addAuthor(u) } queryKey="SEARCH_AUTHOR"/>
             <FormField label={'Role'} register={form.register} errorValue={form.formState.errors.role}
                        registerPath={'role'} />
             <button
