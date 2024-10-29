@@ -48,7 +48,7 @@ public class CreateSubCommentCommandHandler(
             EntryId = parentComment.EntryId,
             UserId = user.Id,
             Content = request.CommentDto.Content,
-            CreatedAt = DateOnly.FromDateTime(DateTime.Now)
+            CreatedAt = DateTime.Now,
         };
         newComment = await commentRepository.AddAsync(newComment, cancellationToken);
 

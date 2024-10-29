@@ -14,7 +14,7 @@ public partial class Comment
 
     public DateOnly? DeletedAt { get; set; }
 
-    public DateOnly CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     public virtual Entry Entry { get; set; } = null!;
 
