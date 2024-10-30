@@ -1,5 +1,4 @@
-﻿using MediaVerse.Infrastructure.Database;
-using MediaVerse.Infrastructure.Migrations;
+﻿using MediaVerse.Infrastructure.Migrations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

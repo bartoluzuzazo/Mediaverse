@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import AuthorForm from '../../../common/components/authors/AuthorForm.tsx'
-import { AuthorService } from '../../../services/AuthorService.ts'
+import { authorService } from '../../../services/authorService.ts'
 import { Author } from '../../../models/author/Author.ts'
 
 export const Route = createFileRoute('/authors/edit/$id')({
   loader: async ({ params }) => {
-    const response = await AuthorService.getAuthor(params.id)
+    const response = await authorService.getAuthor(params.id)
     return response.data
   },
   component: () => {

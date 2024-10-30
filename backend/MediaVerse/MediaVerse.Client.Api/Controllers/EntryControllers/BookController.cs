@@ -5,7 +5,6 @@ using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 

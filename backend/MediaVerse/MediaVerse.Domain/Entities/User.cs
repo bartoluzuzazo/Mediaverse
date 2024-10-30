@@ -10,7 +10,7 @@ public partial class User
 
     public string PasswordHash { get; set; } = null!;
 
-    public Guid ProfilePictureId { get; set; }
+    public Guid? ProfilePictureId { get; set; }
 
     public virtual ICollection<AmaQuestion> AmaQuestions { get; set; } = new List<AmaQuestion>();
 
@@ -24,7 +24,7 @@ public partial class User
 
     public virtual ICollection<Friendship> FriendshipUsers { get; set; } = new List<Friendship>();
 
-    public virtual ProfilePicture ProfilePicture { get; set; } = null!;
+    public virtual ProfilePicture? ProfilePicture { get; set; }
 
     public virtual ICollection<QuizTaking> QuizTakings { get; set; } = new List<QuizTaking>();
 

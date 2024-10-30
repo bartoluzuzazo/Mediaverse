@@ -17,7 +17,6 @@ export class BookService {
     return await axios.post('/book', book)
   }
 
-
   public static async patchBook(book: BookFormData, id: string) {
     return await axios.patch(`/book/${id}`, book)
   }

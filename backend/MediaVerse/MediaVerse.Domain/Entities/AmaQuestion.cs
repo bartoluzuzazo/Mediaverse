@@ -12,6 +12,8 @@ public partial class AmaQuestion
 
     public string? Answer { get; set; }
 
+    public DateTime CreatedAt { get; set; }
+
     public virtual AmaSession AmaSession { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;

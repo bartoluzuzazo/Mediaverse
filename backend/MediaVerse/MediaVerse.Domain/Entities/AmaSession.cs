@@ -10,6 +10,10 @@ public partial class AmaSession
 
     public DateTime End { get; set; }
 
+    public string Title { get; set; } = null!;
+
+    public string Description { get; set; } = null!;
+
     public virtual ICollection<AmaQuestion> AmaQuestions { get; set; } = new List<AmaQuestion>();
 
     public virtual Author Author { get; set; } = null!;

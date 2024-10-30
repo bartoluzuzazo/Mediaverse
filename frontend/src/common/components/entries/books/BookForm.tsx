@@ -47,7 +47,7 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
         isbn: book.isbn,
         genres: book.bookGenres,
         workOnRequests: book.entry.authors.flatMap(g => g.authors.map(a => {
-          const workOn : WorkOn = {id: a.id, role: g.role}
+          const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role}
           return workOn
         }))
       }

@@ -70,4 +70,12 @@ public class AuthorsController(IMediator mediator) : BaseController
         var response = await mediator.Send(command);
         return OkOrError(response);
     }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchAuthors(string query, int page, int size)
+    {
+        var request = new SearchAuthorsQuery(page, size, query);
+        var response = await mediator.Send(request);
+        return OkOrError(response);
+    }
 }

@@ -15,6 +15,6 @@ public class GetCommentResponse
     public int Upvotes { get; set; }
     public int Downvotes { get; set; }
     public bool? UsersVote { get; set; }
-    public DateOnly CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
     public bool IsDeleted { get; set; }
 }

@@ -11,5 +11,6 @@ export interface Book {
 
 export interface WorkOn {
   id: string,
+  name: string,
   role: string
 }

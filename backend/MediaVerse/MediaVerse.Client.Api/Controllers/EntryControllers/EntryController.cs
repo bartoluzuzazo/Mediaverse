@@ -7,18 +7,11 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 
 [Route("[controller]")]
 [ApiController]
-public class EntryController : BaseController
+public class EntryController(IMediator mediator) : BaseController
 {
-    private readonly IMediator _mediator;
-
-    public EntryController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetEntries([FromQuery] GetEntriesQuery query)
     {
-        return Ok(await _mediator.Send(query));
+        return Ok(await mediator.Send(query));
     }
 }
