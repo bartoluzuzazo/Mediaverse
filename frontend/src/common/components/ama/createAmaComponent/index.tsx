@@ -29,7 +29,6 @@ export const AmaSessionForm: FunctionComponent<AmaSessionFormProps> = ({
   const onSubmit: SubmitHandler<AmaSessionFormData> = async (data) => {
     const response = await amaSessionService.postAmaSession(data)
     const id = response.data.id
-
     await navigate({to: '/ama-sessions/$id', params: {id}})
   }
   return (

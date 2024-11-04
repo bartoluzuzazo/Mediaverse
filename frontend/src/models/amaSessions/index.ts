@@ -11,6 +11,8 @@ export interface AmaSession{
   end: string
   authorName: string
   authorSurname: string
-  ProfilePicture: string
+  profilePicture: string
+  title: string
+  description: string
 
 }

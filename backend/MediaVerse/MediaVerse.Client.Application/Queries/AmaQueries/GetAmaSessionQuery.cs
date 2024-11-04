@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.AmaDTOs;
+using MediaVerse.Client.Application.Specifications.AmaSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
@@ -14,7 +15,8 @@ public class GetAmaSessionQueryHandler(IRepository<AmaSession> amaSessionReposit
 {
     public async Task<BaseResponse<GetAmaSessionResponse>> Handle(GetAmaSessionQuery query, CancellationToken cancellationToken)
     {
-        var amaSession = await amaSessionRepository.GetByIdAsync(query.SessionId, cancellationToken);
+        var specification = new GetSessionWithAuthorSpecification(query.SessionId);
+        var amaSession = await amaSessionRepository.FirstOrDefaultAsync(specification, cancellationToken);
         if (amaSession is null)
         {
             return new BaseResponse<GetAmaSessionResponse>(new NotFoundException());
