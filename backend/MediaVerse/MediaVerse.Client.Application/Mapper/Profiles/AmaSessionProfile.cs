@@ -6,7 +6,7 @@ namespace MediaVerse.Client.Application.Mapper.Profiles;
 
 public class AmaSessionProfile : Profile
 {
-    protected AmaSessionProfile()
+    public AmaSessionProfile()
     {
         CreateMap<AmaSession, GetAmaSessionResponse>()
             .ForMember(s => s.AuthorName, opt => opt.MapFrom(s => s.Author.Name))
