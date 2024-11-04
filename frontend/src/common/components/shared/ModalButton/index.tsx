@@ -1,12 +1,13 @@
 import { FunctionComponent, ReactNode, useState } from 'react'
-import { FaLink } from 'react-icons/fa'
 import { Modal } from '../Modal'
 
 interface Props {
   children: ReactNode
+  icon: ReactNode
+  text: string
 }
 
-export const ModalButton: FunctionComponent<Props> = ({children}) => {
+export const ModalButton: FunctionComponent<Props> = ({children, text, icon}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
     <>
@@ -15,9 +16,9 @@ export const ModalButton: FunctionComponent<Props> = ({children}) => {
         onClick={() => setIsOpen(true)}
       >
         <div className="m-1 grid aspect-square w-10 place-content-center self-center rounded-full bg-violet-900 text-white">
-          <FaLink className="text-xl" />
+          {icon}
         </div>
-        <span className="text-lg font-semibold">Link Author</span>
+        <span className="text-lg font-semibold">{text}</span>
       </button>
       {isOpen && (
         <Modal onOutsideClick={() => setIsOpen(false)}>

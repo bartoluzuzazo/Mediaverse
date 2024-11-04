@@ -67,6 +67,8 @@ public class CreateAmaSessionCommandHandler(
             Author = author,
             Start = request.Start,
             End = request.End,
+            Title = request.Title,
+            Description = request.Description
         };
         var addedSession = await amaSessionRepository.AddAsync(amaSession, cancellationToken);
         var amaSessionResponse =mapper.Map<GetAmaSessionResponse>(addedSession);

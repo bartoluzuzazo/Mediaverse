@@ -1,4 +1,7 @@
-﻿namespace MediaVerse.Client.Application.DTOs.AmaDTOs;
+﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
+namespace MediaVerse.Client.Application.DTOs.AmaDTOs;
 
 public class GetAmaSessionResponse
 {
@@ -10,4 +13,7 @@ public class GetAmaSessionResponse
     public string AuthorName { get; set; }
     public string AuthorSurname { get; set; }
     public string ProfilePicture { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    
 }

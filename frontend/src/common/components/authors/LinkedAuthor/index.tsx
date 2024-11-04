@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { authorService } from '../../../../services/authorService.ts'
 import { serviceUtils } from '../../../../services/serviceUtils.ts'
-import { FaUnlink } from 'react-icons/fa'
+import { FaLink, FaUnlink } from 'react-icons/fa'
 import { UserSearch } from '../../users/UserSearch'
 import { User } from '../../../../models/user'
 import CustomImage from '../../customImage'
@@ -83,7 +83,7 @@ const LinkUserComponent: FunctionComponent<Props> = ({ authorId }) => {
   })
 
   return (
-    <ModalButton>
+    <ModalButton icon={<FaLink className="text-xl"/>}  text={"Link Author"}>
       <UserSearch
         searchFunction={userService.search}
         onClick={async (u) => {

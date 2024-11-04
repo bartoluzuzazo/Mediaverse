@@ -7,6 +7,7 @@ import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
 import { LinkedUser } from '../../common/components/authors/LinkedAuthor'
 import { LinkButton } from '../../common/components/shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
+import { CreateAmaComponent } from '../../common/components/ama/createAmaComponent'
 
 export const Route = createFileRoute('/authors/$id')({
   loader: async ({ params }) => {
@@ -35,6 +36,7 @@ export const Route = createFileRoute('/authors/$id')({
               <LinkedUser authorId={author.id} />
             </AuthorizedView>
             <LinkButton to={`/authors/edit/$id`} params={{id: author.id}} icon={<FaPen/>}>Edit author</LinkButton>
+            <CreateAmaComponent authorId={author.id}/>
           </div>
 
           <div className="flex-1 md:ml-20">{author.bio}</div>
