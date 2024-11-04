@@ -42,7 +42,7 @@ export const CommentForm = ({
   }
 
   return (
-    <TextForm
+    <TextForm<CommentFormData>
       onSubmit={onSubmit}
       name="content"
       maxLength={1000}
