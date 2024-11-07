@@ -1,8 +1,6 @@
 using AutoMapper;
 using MediatR;
-using MediaVerse.Client.Application.DTOs.EntryDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
-using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
 using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Client.Application.Specifications.WorkOnSpecifications;
@@ -26,7 +24,7 @@ public class UpdateBookCommandHandler(
 {
     public async Task<BaseResponse<Guid>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
-        var specification = new GetBookByIdSpecification(request.Id);
+        var specification = new GetEntryByIdSpecification(request.Id);
         var bookEntry = await entryRepository.FirstOrDefaultAsync(specification, cancellationToken);
         if (bookEntry is null)
         {
@@ -66,7 +64,7 @@ public class UpdateBookCommandHandler(
                 .Select(r => mapper.Map<WorkOn>(r, opt =>
                 {
                     opt.Items["roles"] = roles;
-                    opt.Items["book"] = bookEntry.Book;
+                    opt.Items["entry"] = bookEntry;
                 }))
                 .ToList();
 

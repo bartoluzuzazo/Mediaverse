@@ -14,10 +14,12 @@ public class BookController(IMediator mediator) : BaseController
 {
     [HttpPost]
     [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> AddBook(AddBookCommand request)
+    public async Task<IActionResult> AddBook(AddBookRequest request)
     {
-        var response = await mediator.Send(request);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data, response.Data));
+        var entryResponse = await mediator.Send(request.Entry);
+        var command = new AddBookCommand(entryResponse.Data.EntryId, request.Isbn, request.Synopsis, request.Genres);
+        var bookResponse = await mediator.Send(command);
+        return ResolveCode(entryResponse.Exception, CreatedAtAction(nameof(GetBook), entryResponse.Data, entryResponse.Data));
     }
     
     [HttpPatch("{id:guid}")]
@@ -32,9 +34,14 @@ public class BookController(IMediator mediator) : BaseController
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetBook(Guid id)
     {
-        var request = new GetBookQuery(id);
-        var response = await mediator.Send(request);
-        return ResolveCode(response.Exception, Ok(response.Data));
+        var entryRequest = new GetBaseEntryQuery(id);
+        var entryResponse = await mediator.Send(entryRequest);
+        if (entryResponse.Exception is not null) return ResolveException(entryResponse.Exception);
+        var bookRequest = new GetBookQuery(id);
+        var bookResponse = await mediator.Send(bookRequest);
+        if (bookResponse.Exception is not null) return ResolveException(bookResponse.Exception);
+        bookResponse.Data!.Entry = entryResponse.Data!;
+        return Ok(bookResponse);
     }
     
     [HttpGet("page")]
