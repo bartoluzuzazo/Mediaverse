@@ -7,6 +7,16 @@ namespace MediaVerse.Client.Application.Extensions.Specification;
 
 public static class SpecificationExtensions
 {
+    public static ISpecificationBuilder<Entry> IncludeEntry(
+        this ISpecificationBuilder<Entry> specificationBuilder)
+    {
+        specificationBuilder.Include(e => e.CoverPhoto)
+            .Include(e => e.Ratings)
+            .Include(e => e.WorkOns).ThenInclude(w => w.Author)
+            .Include(e => e.WorkOns).ThenInclude(w => w.AuthorRole);
+
+        return specificationBuilder;
+    }
     
     public static ISpecificationBuilder<Entry> OrderEntry(
         this ISpecificationBuilder<Entry> specificationBuilder,

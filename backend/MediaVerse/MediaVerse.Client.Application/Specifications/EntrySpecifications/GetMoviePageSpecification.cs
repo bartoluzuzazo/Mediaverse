@@ -5,12 +5,12 @@ using MediaVerse.Domain.ValueObjects.Enums;
 
 namespace MediaVerse.Client.Application.Specifications.EntrySpecifications;
 
-public sealed class GetBookPageSpecification : Specification<Entry>
+public class GetMoviePageSpecification : Specification<Entry>
 {
-    public GetBookPageSpecification(int page, int size, EntryOrder order, OrderDirection direction)
+    public GetMoviePageSpecification(int page, int size, EntryOrder order, OrderDirection direction)
     {
-        Query.Where(e => e.Book != null)
-            .Include(e => e.Book).ThenInclude(b => b!.BookGenres)
+        Query.Where(e => e.Movie != null)
+            .Include(e => e.Movie).ThenInclude(m => m!.CinematicGenres)
             .IncludeEntry().OrderEntry(order, direction).Paginate(page, size);
     }
 }
