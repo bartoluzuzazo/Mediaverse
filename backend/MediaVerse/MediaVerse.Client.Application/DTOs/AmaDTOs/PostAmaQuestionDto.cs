@@ -2,6 +2,6 @@
 
 public class PostAmaQuestionDto
 {
-    public string Content { get; set; }
-    
+  public string Content { get; set; } = null!;
+
 }

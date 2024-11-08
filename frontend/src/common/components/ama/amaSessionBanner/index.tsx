@@ -28,7 +28,7 @@ export const AmaSessionBanner: FunctionComponent<Props> = ({ amaSession }) => {
         </div>
         <div className="flex items-center justify-between py-1">
           <div className="text-md font-bold text-slate-700">
-            End of AMA session: {amaSession.end}
+            End of AMA session: {amaSession.end.replace('T', '  ')}
           </div>
           <button className="bg-violet-300 px-1.5 py-0.5 text-black">
             End Session
