@@ -17,14 +17,20 @@ export interface AmaSession {
   profilePicture: string
   title: string
   description: string
+  authorUserId: string
 }
 
 export interface AmaQuestionFormData {
   content: string
 }
 
+export interface AmaQuestionAnswerFormData {
+  answer: string
+}
+
 export enum AmaQuestionOrder {
   TotalVotes,
+  CreatedAt,
 }
 
 export enum AmaQuestionStatus {

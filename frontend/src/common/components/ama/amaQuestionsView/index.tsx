@@ -10,13 +10,16 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { amaSessionService } from '../../../../services/amaSessionService.ts'
 import { useInView } from 'framer-motion'
 import { AmaQuestionForm } from '../AmaQuestionForm'
+import { AmaQuestionComponent } from '../amaQuestionComponent'
 
 type Props = {
   amaSessionId: string
+  managingUserId: string
 }
 
 export const AmaQuestionsView: FunctionComponent<Props> = ({
   amaSessionId,
+  managingUserId,
 }) => {
   const { isAuthenticated } = useAuthContext()!
   const [questionsParams] = useState<Omit<GetAmaQuestionParams, 'page'>>({
@@ -66,8 +69,16 @@ export const AmaQuestionsView: FunctionComponent<Props> = ({
       <AmaQuestionForm amaSessionId={amaSessionId} parentQueryKeys={queryKey} />
       {data &&
         data.pages.map((page) =>
-          page.contents.map((c) => {
-            return <div>{c.content}</div>
+          page.contents.map((q) => {
+            return (
+              <AmaQuestionComponent
+                page={page.currentPage}
+                question={q}
+                managingUserId={managingUserId}
+                key={q.id}
+                parentQueryKey={queryKey}
+              />
+            )
           })
         )}
     </div>

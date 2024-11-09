@@ -1,5 +1,6 @@
 import {
   AmaQuestion,
+  AmaQuestionAnswerFormData,
   AmaQuestionFormData,
   AmaSession,
   AmaSessionFormData,
@@ -33,6 +34,7 @@ export class amaSessionService {
       { params }
     )
   }
+
   public static async getAmaQuestionsAuthorized(
     sessionId: string,
     params: GetAmaQuestionParams
@@ -40,6 +42,16 @@ export class amaSessionService {
     return await axios.get<Page<AmaQuestion>>(
       `/ama-sessions/${sessionId}/authorized-questions`,
       { params }
+    )
+  }
+
+  public static async putAmaSessionAnswer(
+    questionId: string,
+    answer: AmaQuestionAnswerFormData
+  ) {
+    return await axios.put(
+      `/ama-sessions/questions/${questionId}/answer`,
+      answer
     )
   }
 }

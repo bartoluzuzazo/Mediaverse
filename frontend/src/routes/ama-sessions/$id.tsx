@@ -4,7 +4,6 @@ import { AmaSession } from '../../models/amaSessions'
 import { FunctionComponent } from 'react'
 import { AmaSessionBanner } from '../../common/components/ama/amaSessionBanner'
 import { AmaQuestionsView } from '../../common/components/ama/amaQuestionsView'
-import { AmaQuestionForm } from '../../common/components/ama/AmaQuestionForm'
 
 export const Route = createFileRoute('/ama-sessions/$id')({
   loader: async ({ params }) => {
@@ -20,7 +19,10 @@ const AmaSessionView: FunctionComponent = () => {
     <div className="-mx-[calc(50vw-50%)] min-h-screen bg-slate-100">
       <div className="mx-auto max-w-[70rem] p-2 pt-10">
         <AmaSessionBanner amaSession={amaSession} />
-        <AmaQuestionsView amaSessionId={amaSession.id} />
+        <AmaQuestionsView
+          amaSessionId={amaSession.id}
+          managingUserId={amaSession.authorUserId}
+        />
       </div>
     </div>
   )
