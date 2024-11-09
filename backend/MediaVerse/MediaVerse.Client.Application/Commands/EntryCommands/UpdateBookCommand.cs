@@ -16,6 +16,7 @@ public record UpdateBookCommand(Guid Id, PatchBookRequest Dto) : IRequest<BaseRe
 
 public class UpdateBookCommandHandler(
     IRepository<Entry> entryRepository,
+    IRepository<Book> bookRepository,
     IRepository<CoverPhoto> coverPhotoRepository,
     IRepository<BookGenre> bookGenreRepository,
     IRepository<AuthorRole> roleRepository,
@@ -24,18 +25,20 @@ public class UpdateBookCommandHandler(
 {
     public async Task<BaseResponse<Guid>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
-        var specification = new GetEntryByIdSpecification(request.Id);
-        var bookEntry = await entryRepository.FirstOrDefaultAsync(specification, cancellationToken);
-        if (bookEntry is null)
+        var entrySpecification = new GetEntryByIdSpecification(request.Id);
+        var bookEntry = await entryRepository.FirstOrDefaultAsync(entrySpecification, cancellationToken);
+        var bookSpecification = new GetBookByIdSpecification(request.Id);
+        var book = await bookRepository.FirstOrDefaultAsync(bookSpecification, cancellationToken);
+        if (bookEntry is null || book is null)
         {
             return new BaseResponse<Guid>(new NotFoundException());
         }
-
-        bookEntry.Description = request.Dto.Description ?? bookEntry.Description;
-        bookEntry.Name = request.Dto.Name ?? bookEntry.Name;
-        bookEntry.Book!.Isbn = request.Dto.Isbn ?? bookEntry.Book.Isbn;
-        bookEntry.Book!.Synopsis = request.Dto.Synopsis ?? bookEntry.Book.Synopsis;
-        if (request.Dto.Release is not null) bookEntry.Release = DateOnly.FromDateTime(request.Dto.Release.Value);
+        
+        bookEntry.Description = request.Dto.Entry.Description ?? bookEntry.Description;
+        bookEntry.Name = request.Dto.Entry.Name ?? bookEntry.Name;
+        book.Isbn = request.Dto.Isbn ?? book.Isbn;
+        book.Synopsis = request.Dto.Synopsis ?? book.Synopsis;
+        if (request.Dto.Entry.Release is not null) bookEntry.Release = DateOnly.FromDateTime(request.Dto.Entry.Release.Value);
         if (request.Dto.Genres is not null)
         {
             var genreSpec = new GetBookGenresByNameSpecification(request.Dto.Genres);
@@ -45,12 +48,12 @@ public class UpdateBookCommandHandler(
                 .Select(genre => new BookGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
             await bookGenreRepository.AddRangeAsync(newGenres, cancellationToken);
             dbGenres.AddRange(newGenres);
-            bookEntry.Book.BookGenres = dbGenres;
+            book.BookGenres = dbGenres;
         }
 
-        if (!request.Dto.WorkOnRequests.IsNullOrEmpty())
+        if (!request.Dto.Entry.WorkOnRequests.IsNullOrEmpty())
         {
-            var roleNames = request.Dto.WorkOnRequests!.Select(r => r.Role).ToList();
+            var roleNames = request.Dto.Entry.WorkOnRequests!.Select(r => r.Role).ToList();
             var roleSpec = new GetAuthorRoleIdsByNameSpecification(roleNames);
             var roles = await roleRepository.ListAsync(roleSpec, cancellationToken);
             var dbRoleNames = roles.Select(r => r.Name).ToList();
@@ -60,7 +63,7 @@ public class UpdateBookCommandHandler(
             await roleRepository.AddRangeAsync(newRoles, cancellationToken);
             roles.AddRange(newRoles);
 
-            var newWorkOns = request.Dto.WorkOnRequests!
+            var newWorkOns = request.Dto.Entry.WorkOnRequests!
                 .Select(r => mapper.Map<WorkOn>(r, opt =>
                 {
                     opt.Items["roles"] = roles;
@@ -87,9 +90,9 @@ public class UpdateBookCommandHandler(
             await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
         }
 
-        if (request.Dto.CoverPhoto is not null)
+        if (request.Dto.Entry.CoverPhoto is not null)
         {
-            var photoData = Convert.FromBase64String(request.Dto.CoverPhoto);
+            var photoData = Convert.FromBase64String(request.Dto.Entry.CoverPhoto);
 
             var coverPhoto = new CoverPhoto()
             {

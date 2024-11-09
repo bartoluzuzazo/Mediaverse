@@ -15,10 +15,8 @@ import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
 
 export interface MovieFormData {
   entry: Entry
-  isbn: string,
   synopsis: string,
   genres: string[]
-  workOnRequests: WorkOn[]
 }
 
 type Props = {
@@ -26,6 +24,17 @@ type Props = {
 }
 
 const MovieForm: FunctionComponent<Props> = ({ movie }) => {
+
+  const getInitialWorkOns = () => {
+    if (movie === undefined){
+      return []
+    }
+
+    return movie!.entry.authors.flatMap(g => g.authors.map(a => {
+      const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role}
+      return workOn
+    }))
+  }
 
   const {
     register,
@@ -39,10 +48,6 @@ const MovieForm: FunctionComponent<Props> = ({ movie }) => {
       ? {
         entry : movie.entry,
         genres: movie.cinematicGenres,
-        workOnRequests: movie.entry.authors.flatMap(g => g.authors.map(a => {
-          const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role}
-          return workOn
-        }))
       }
       : undefined,
   })
@@ -50,11 +55,11 @@ const MovieForm: FunctionComponent<Props> = ({ movie }) => {
   const navigate = useNavigate()
 
   const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
-  const [authors, setAuthors] = useState<WorkOn[]>(getValues('workOnRequests')?getValues('workOnRequests'):[])
+  const [authors, setAuthors] = useState<WorkOn[]>(getInitialWorkOns())
 
   const onSubmit: SubmitHandler<MovieFormData> = async (data) => {
     data.genres = genres
-    data.workOnRequests = authors;
+    data.entry.workOnRequests = authors;
 
     if (movie == null) {
       const response = await MovieService.postMovie(data)
@@ -82,7 +87,7 @@ const MovieForm: FunctionComponent<Props> = ({ movie }) => {
           <FormTextArea label={'Description'} register={register} errorValue={errors.entry?.description} registerPath={'entry.description'} />
         </div>
         <div className="flex-1 md:ml-20">
-          <FormTextArea label={'Synopsis'} register={register} errorValue={errors.isbn} registerPath={'synopsis'}/>
+          <FormTextArea label={'Synopsis'} register={register} errorValue={errors.synopsis} registerPath={'synopsis'}/>
           <div className="flex flex-row-reverse">
             <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
               {isSubmitting ? 'Submitting...' : 'Submit'}

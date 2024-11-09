@@ -15,6 +15,7 @@ export class MovieService {
   }
 
   public static async postMovie(movie: MovieFormData) {
+    console.log(movie)
     return await axios.post('/movie', movie)
   }
 

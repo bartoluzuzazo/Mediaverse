@@ -1,4 +1,5 @@
 import { Rating } from './rating/Rating.ts'
+import { WorkOn } from './WorkOn.ts'
 
 export interface Entry {
   id: string
@@ -9,6 +10,7 @@ export interface Entry {
   ratingAvg: number
   usersRating?: Rating
   authors: EntryWorkOnGroup[]
+  workOnRequests: WorkOn[]
 }
 
 export enum EntryOrder {

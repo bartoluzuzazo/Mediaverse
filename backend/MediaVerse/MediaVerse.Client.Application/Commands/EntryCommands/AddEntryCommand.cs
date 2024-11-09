@@ -13,7 +13,7 @@ public record AddEntryCommand(
     string Name,
     string Description,
     DateTime Release,
-    string CoverPhoto,
+    string Photo,
     List<IEntryWorkOnRequest>? WorkOnRequests) : IRequest<BaseResponse<AddEntryResponse>>;
 
 public class AddEntryCommandHandler(
@@ -29,7 +29,7 @@ public class AddEntryCommandHandler(
         var photo = new CoverPhoto()
         {
             Id = Guid.NewGuid(),
-            Photo = Convert.FromBase64String(request.CoverPhoto),
+            Photo = Convert.FromBase64String(request.Photo),
         };
 
         var entry = new Entry()
