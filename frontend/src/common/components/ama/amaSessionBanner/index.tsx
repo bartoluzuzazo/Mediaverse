@@ -7,7 +7,7 @@ type Props = {
 
 export const AmaSessionBanner: FunctionComponent<Props> = ({ amaSession }) => {
   return (
-    <div className="space-y-6 md:flex md:items-stretch md:gap-6">
+    <div className="my-3 space-y-6 md:flex md:items-stretch md:gap-6">
       <div className="flex justify-center">
         <div>
           <img

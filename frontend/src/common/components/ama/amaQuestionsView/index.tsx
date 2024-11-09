@@ -15,23 +15,26 @@ import { AmaQuestionComponent } from '../amaQuestionComponent'
 type Props = {
   amaSessionId: string
   managingUserId: string
+  status: AmaQuestionStatus
 }
 
 export const AmaQuestionsView: FunctionComponent<Props> = ({
   amaSessionId,
   managingUserId,
+  status,
 }) => {
   const { isAuthenticated } = useAuthContext()!
-  const [questionsParams] = useState<Omit<GetAmaQuestionParams, 'page'>>({
+  const [questionsParams] = useState<
+    Omit<GetAmaQuestionParams, 'page' | 'status'>
+  >({
     order: AmaQuestionOrder.TotalVotes,
     direction: OrderDirection.Descending,
     size: 20,
-    status: AmaQuestionStatus.All,
   })
   const queryKey = [
     'GET_AMA_QUESTIONS',
     amaSessionId,
-    { questionsParams },
+    { ...questionsParams, status: status },
     { isAuthenticated },
   ]
 
@@ -41,13 +44,14 @@ export const AmaQuestionsView: FunctionComponent<Props> = ({
       if (isAuthenticated) {
         const res = await amaSessionService.getAmaQuestionsAuthorized(
           amaSessionId,
-          { ...questionsParams, page: pageParam }
+          { ...questionsParams, page: pageParam, status: status }
         )
         return res.data
       } else {
         const res = await amaSessionService.getAmaQuestions(amaSessionId, {
           ...questionsParams,
           page: pageParam,
+          status: status,
         })
         return res.data
       }

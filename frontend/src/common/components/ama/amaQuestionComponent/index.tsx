@@ -36,9 +36,11 @@ export const AmaQuestionComponent: FunctionComponent<Props> = ({
       <div className="flex flex-1 flex-col whitespace-pre-line">
         <div className="flex-1">
           <div>{question.content}</div>
-          <div className="qu ml-8 mt-2 rounded-md border-[1px] border-slate-200 bg-slate-50 px-2 py-1 shadow-md">
-            {question.answer}
-          </div>
+          {question.answer && (
+            <div className="qu ml-8 mt-2 rounded-md border-[1px] border-slate-200 bg-slate-50 px-2 py-1 shadow-md">
+              {question.answer}
+            </div>
+          )}
         </div>
         <div className="flex">
           <AuthorizedView requiredUserId={managingUserId}>
