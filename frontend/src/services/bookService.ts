@@ -10,7 +10,7 @@ export class BookService {
   }
 
   public static async getBooks(params: GetEntryPageRequest) {
-    return await axios.get<{ books: Entry[] }>('book/page', { params })
+    return await axios.get<{ entries: Entry[] }>('book/page', { params })
   }
 
   public static async postBook(book: BookFormData) {

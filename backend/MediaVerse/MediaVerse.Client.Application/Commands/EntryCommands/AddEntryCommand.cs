@@ -9,14 +9,12 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
-public record AddEntryCommand : IRequest<BaseResponse<AddEntryResponse>>
-{
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public DateTime Release { get; set; }
-    public string CoverPhoto { get; set; }
-    public List<IEntryWorkOnRequest>? WorkOnRequests { get; set; }
-}
+public record AddEntryCommand(
+    string Name,
+    string Description,
+    DateTime Release,
+    string CoverPhoto,
+    List<IEntryWorkOnRequest>? WorkOnRequests) : IRequest<BaseResponse<AddEntryResponse>>;
 
 public class AddEntryCommandHandler(
     IRepository<Entry> entryRepository,

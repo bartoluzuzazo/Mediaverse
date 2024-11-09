@@ -1,14 +1,14 @@
 import { useForm } from 'react-hook-form'
 import { Dispatch, FunctionComponent, SetStateAction, useState } from 'react'
-import FormField from '../../form/FormField/FormField.tsx'
-import { WorkOn } from '../../../../models/entry/book/Book.ts'
-import { DeletableGrid } from '../../form/deletableGrid/DeletableGrid.tsx'
-import { Modal } from '../../shared/Modal'
-import { UserSearch } from '../../users/UserSearch'
+import FormField from '../form/FormField/FormField.tsx'
+import { DeletableGrid } from '../form/deletableGrid/DeletableGrid.tsx'
+import { Modal } from '../shared/Modal'
+import { UserSearch } from '../users/UserSearch'
 import { FaMagnifyingGlass } from 'react-icons/fa6'
-import { Author } from '../../../../models/author/Author.ts'
-import { User } from '../../../../models/user'
-import { authorService } from '../../../../services/authorService.ts'
+import { Author } from '../../../models/author/Author.ts'
+import { User } from '../../../models/user'
+import { authorService } from '../../../services/authorService.ts'
+import { WorkOn } from '../../../models/entry/WorkOn.ts'
 
 interface Props {
   label: string

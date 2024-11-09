@@ -17,9 +17,10 @@ public class BookController(IMediator mediator) : BaseController
     [Authorize(Policy = "Admin")]
     public async Task<IActionResult> AddBook(AddBookRequest request)
     {
-        var entryResponse = await mediator.Send(request.Entry);
-        var command = new AddBookCommand(entryResponse.Data.EntryId, request.Isbn, request.Synopsis, request.Genres);
-        var bookResponse = await mediator.Send(command);
+        var entryCommand = new AddEntryCommand(request.Name, request.Description, request.Release, request.CoverPhoto, request.WorkOnRequests);
+        var entryResponse = await mediator.Send(entryCommand);
+        var bookCommand = new AddBookCommand(entryResponse.Data!.EntryId, request.Isbn, request.Synopsis, request.Genres);
+        var bookResponse = await mediator.Send(bookCommand);
         return ResolveCode(entryResponse.Exception, CreatedAtAction(nameof(GetBook), entryResponse.Data, entryResponse.Data));
     }
     
@@ -42,7 +43,7 @@ public class BookController(IMediator mediator) : BaseController
         var bookResponse = await mediator.Send(bookRequest);
         if (bookResponse.Exception is not null) return ResolveException(bookResponse.Exception);
         bookResponse.Data!.Entry = entryResponse.Data!;
-        return Ok(bookResponse);
+        return Ok(bookResponse.Data);
     }
     
     [HttpGet("page")]

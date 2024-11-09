@@ -14,7 +14,7 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class MovieController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    // [Authorize(Policy = "Admin")]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> AddBook(AddMovieRequest request)
     {
         var entryResponse = await mediator.Send(request.Entry);
@@ -33,7 +33,7 @@ public class MovieController(IMediator mediator) : BaseController
         var movieResponse = await mediator.Send(movieRequest);
         if (movieResponse.Exception is not null) return ResolveException(movieResponse.Exception);
         movieResponse.Data!.Entry = entryResponse.Data!;
-        return Ok(movieResponse);
+        return Ok(movieResponse.Data);
     }
     
     [HttpGet("page")]

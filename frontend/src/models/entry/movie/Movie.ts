@@ -1,12 +1,9 @@
 import { Entry } from '../Entry.ts'
 import { WorkOn } from '../WorkOn.ts'
 
-export interface Book {
-  id: string,
+export interface Movie {
   entry: Entry
-  isbn: string,
   synopsis: string,
-  bookGenres: string[]
+  cinematicGenres: string[]
   workOns: WorkOn[]
 }
-
