@@ -11,6 +11,7 @@ import { amaSessionService } from '../../../../services/amaSessionService.ts'
 import { useInView } from 'framer-motion'
 import { AmaQuestionForm } from '../AmaQuestionForm'
 import { AmaQuestionComponent } from '../amaQuestionComponent'
+import { AmaQuestionSort } from './AmaQuestionSort.tsx'
 
 type Props = {
   amaSessionId: string
@@ -24,13 +25,14 @@ export const AmaQuestionsView: FunctionComponent<Props> = ({
   status,
 }) => {
   const { isAuthenticated } = useAuthContext()!
-  const [questionsParams] = useState<
+  const [questionsParams, setQuestionsParams] = useState<
     Omit<GetAmaQuestionParams, 'page' | 'status'>
   >({
     order: AmaQuestionOrder.TotalVotes,
     direction: OrderDirection.Descending,
     size: 20,
   })
+
   const queryKey = [
     'GET_AMA_QUESTIONS',
     amaSessionId,
@@ -71,6 +73,7 @@ export const AmaQuestionsView: FunctionComponent<Props> = ({
   return (
     <div>
       <AmaQuestionForm amaSessionId={amaSessionId} parentQueryKeys={queryKey} />
+      <AmaQuestionSort setQuestionParams={setQuestionsParams} />
       {data &&
         data.pages.map((page) =>
           page.contents.map((q) => {

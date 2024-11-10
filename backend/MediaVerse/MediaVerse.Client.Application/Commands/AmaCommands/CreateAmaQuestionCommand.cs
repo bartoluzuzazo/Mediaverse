@@ -50,7 +50,8 @@ public class CreateAmaQuestionCommandHandler(
       User = user,
       Content = request.PostAmaQuestionDto.Content,
       Users = new List<User> { user },
-      AmaSession = amaSession
+      AmaSession = amaSession,
+      CreatedAt = DateTime.Now
     };
     await amaQuestionRepository.AddAsync(question, cancellationToken);
     var response = new GetAmaQuestionResponse
