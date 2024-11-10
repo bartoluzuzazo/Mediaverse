@@ -7,6 +7,7 @@ import { useToggle } from 'usehooks-ts'
 import { ToggleButton } from '../../shared/ToggleButton'
 import { AuthorizedView } from '../../auth/AuthorizedView'
 import { AmaQuestionReplyForm } from './AmaQuestionReplyForm.tsx'
+import { AmaQuestionLikes } from '../amaQuestionLikes'
 
 type Props = {
   page: number
@@ -16,7 +17,7 @@ type Props = {
 }
 
 export const AmaQuestionComponent: FunctionComponent<Props> = ({
-  // page,
+  page,
   question,
   managingUserId,
   parentQueryKey,
@@ -37,7 +38,7 @@ export const AmaQuestionComponent: FunctionComponent<Props> = ({
         <div className="flex-1">
           <div>{question.content}</div>
           {question.answer && (
-            <div className="qu ml-8 mt-2 rounded-md border-[1px] border-slate-200 bg-slate-50 px-2 py-1 shadow-md">
+            <div className="my-3 rounded-md border-[1px] border-slate-200 bg-slate-50 px-2 py-1 shadow-md">
               {question.answer}
             </div>
           )}
@@ -48,6 +49,11 @@ export const AmaQuestionComponent: FunctionComponent<Props> = ({
               Reply
             </ToggleButton>
           </AuthorizedView>
+          <AmaQuestionLikes
+            question={question}
+            parentPage={page}
+            parentQueryKey={parentQueryKey}
+          />
         </div>
         {isReplying && (
           <AmaQuestionReplyForm

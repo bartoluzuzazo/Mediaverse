@@ -54,4 +54,11 @@ export class amaSessionService {
       answer
     )
   }
+
+  public static async putQuestionLike(questionId: string) {
+    return await axios.put(`/ama-sessions/questions/${questionId}/like`)
+  }
+  public static async deleteQuestionLike(questionId: string) {
+    return await axios.delete(`/ama-sessions/questions/${questionId}/like`)
+  }
 }

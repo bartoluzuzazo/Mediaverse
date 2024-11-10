@@ -33,7 +33,7 @@ export const AmaQuestionReplyForm: FunctionComponent<Props> = ({
   }
   return (
     <TextForm<AmaQuestionAnswerFormData>
-      defaultValues={{ answer: '' }}
+      defaultValues={{ answer: question.answer || '' }}
       maxLength={300}
       name="answer"
       onSubmit={onSubmit}

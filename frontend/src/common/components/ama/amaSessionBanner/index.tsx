@@ -7,7 +7,7 @@ type Props = {
 
 export const AmaSessionBanner: FunctionComponent<Props> = ({ amaSession }) => {
   return (
-    <div className="my-3 space-y-6 md:flex md:items-stretch md:gap-6">
+    <div className="my-3 md:flex md:items-stretch md:gap-6">
       <div className="flex justify-center">
         <div>
           <img
@@ -22,11 +22,13 @@ export const AmaSessionBanner: FunctionComponent<Props> = ({ amaSession }) => {
         </div>
       </div>
       <div className="flex flex-col">
-        <h1 className="text-4xl font-bold md:text-6xl">{amaSession.title}</h1>
+        <h1 className="mb-6 text-4xl font-bold md:text-6xl">
+          {amaSession.title}
+        </h1>
         <div className="flex-1 rounded-md border-[1px] border-slate-300 bg-white px-3 py-2 text-lg font-medium shadow-sm">
           {amaSession.description}
         </div>
-        <div className="flex items-center justify-between py-1">
+        <div className="mt-2 flex items-center justify-between py-1">
           <div className="text-md font-bold text-slate-700">
             End of AMA session: {amaSession.end.replace('T', '  ')}
           </div>
