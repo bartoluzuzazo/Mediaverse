@@ -55,4 +55,11 @@ export interface AmaQuestion {
   answer?: string
   likes: number
   likedByUser: boolean
+  status: AmaStatus
+}
+export enum AmaStatus {
+  Upcoming,
+  Cancelled,
+  Active,
+  Finished,
 }

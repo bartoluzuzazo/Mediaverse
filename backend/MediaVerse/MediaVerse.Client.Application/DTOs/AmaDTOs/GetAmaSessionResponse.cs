@@ -1,4 +1,6 @@
 ﻿
+using MediaVerse.Domain.ValueObjects.Enums;
+
 namespace MediaVerse.Client.Application.DTOs.AmaDTOs;
 
 public class GetAmaSessionResponse
@@ -14,5 +16,6 @@ public class GetAmaSessionResponse
   public string Title { get; set; }
   public string Description { get; set; }
   public Guid AuthorUserId { get; set; }
+  public AmaStatus Status { get; set; }
 
 }

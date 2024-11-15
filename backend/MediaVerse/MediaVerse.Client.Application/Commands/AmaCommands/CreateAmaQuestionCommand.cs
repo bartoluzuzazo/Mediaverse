@@ -28,6 +28,11 @@ public class CreateAmaQuestionCommandHandler(
       return new BaseResponse<GetAmaQuestionResponse>(new NotFoundException());
     }
 
+    if (!(amaSession.Start >= DateTime.Now && amaSession.End <= DateTime.Now))
+    {
+      return new BaseResponse<GetAmaQuestionResponse>(new ConflictException());
+    }
+
 
     var email = userAccessor.Email;
     if (email is null)
