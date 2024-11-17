@@ -9,6 +9,8 @@ import { LinkButton } from '../../common/components/shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { CreateAmaComponent } from '../../common/components/ama/createAmaComponent'
 import { Fragment } from 'react'
+import { ToggledView } from '../../common/components/shared/ToggledView'
+import { AuthorsAmasComponent } from '../../common/components/ama/authorsAmasComponent'
 
 export const Route = createFileRoute('/authors/$id')({
   loader: async ({ params }) => {
@@ -33,17 +35,22 @@ export const Route = createFileRoute('/authors/$id')({
               {author.name}{' '}
               <span className="font-italic">{author.surname}</span>
             </div>
+            <AuthorsAmasComponent authorId={author.id} />
             <AuthorizedView allowedRoles="Administrator">
               <LinkedUser authorId={author.id} />
             </AuthorizedView>
-            <LinkButton
-              to={`/authors/edit/$id`}
-              params={{ id: author.id }}
-              icon={<FaPen />}
-            >
-              Edit author
-            </LinkButton>
-            <CreateAmaComponent authorId={author.id} />
+            <AuthorizedView requiredUserId={author.userId}>
+              <ToggledView containerClass="min-w-fit" title="Manage">
+                <LinkButton
+                  to={`/authors/edit/$id`}
+                  params={{ id: author.id }}
+                  icon={<FaPen />}
+                >
+                  Edit author
+                </LinkButton>
+                <CreateAmaComponent authorId={author.id} />
+              </ToggledView>
+            </AuthorizedView>
           </div>
 
           <div className="flex-1 md:ml-20">{author.bio}</div>

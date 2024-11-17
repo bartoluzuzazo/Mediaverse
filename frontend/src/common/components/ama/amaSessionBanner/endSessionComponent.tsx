@@ -15,7 +15,6 @@ export const EndSessionComponent: FunctionComponent<Props> = ({
   amaSessionId,
   authorId,
 }) => {
-  console.log({ amaSessionStatus })
   const navigate = useNavigate()
   const { mutateAsync: endSessionMutation } = useMutation({
     mutationFn: async () => {

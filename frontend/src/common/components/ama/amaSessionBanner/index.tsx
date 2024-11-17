@@ -1,7 +1,8 @@
 import { FunctionComponent } from 'react'
 import { AmaSession, AmaStatus } from '../../../../models/amaSessions'
 import { AuthorizedView } from '../../auth/AuthorizedView'
-import { EndSessionComponent } from './EndSessionComponent.tsx'
+import { EndSessionComponent } from './endSessionComponent.tsx'
+import { dateFormatter } from '../../../../utils/dateFormatter.ts'
 
 interface AmaSessionBannerProps {
   amaSession: AmaSession
@@ -55,18 +56,16 @@ const AmaSessionTimeComponent: FunctionComponent<
   AmaSessionTimeComponentProps
 > = ({ amaSession }) => {
   const status = amaSession.status
+  const startFormatted = dateFormatter.formatDate(amaSession.start)
+  const endFormatted = dateFormatter.formatDate(amaSession.end)
   const content =
     status === AmaStatus.Upcoming
-      ? `Start of AMA session: ${formatDate(amaSession.start)}`
+      ? `Start of AMA session: ${startFormatted}`
       : status === AmaStatus.Cancelled
-        ? `Session cancelled at: ${formatDate(amaSession.end)}`
+        ? `Session cancelled at: ${endFormatted}`
         : status === AmaStatus.Active
-          ? `End of AMA session: ${formatDate(amaSession.end)}`
-          : `AMA session ended at: ${formatDate(amaSession.end)}`
+          ? `End of AMA session: ${endFormatted}`
+          : `AMA session ended at: ${endFormatted}`
 
   return <div className="text-md font-bold text-slate-700">{content}</div>
-}
-
-const formatDate = (date: string) => {
-  return date.replace('T', ' ').slice(0, 16)
 }

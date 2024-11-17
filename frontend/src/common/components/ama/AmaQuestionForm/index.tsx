@@ -24,7 +24,6 @@ export const AmaQuestionForm: FunctionComponent<Props> = ({
       await queryClient.invalidateQueries({ queryKey: parentQueryKeys })
     },
     onError: async (e) => {
-      console.log(e)
       if (!axios.isAxiosError(e) || e.response?.status !== 409) {
         throw e
       }

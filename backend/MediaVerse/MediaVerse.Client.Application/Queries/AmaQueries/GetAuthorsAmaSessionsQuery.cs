@@ -21,8 +21,10 @@ public class GetAuthorsAmaSessionsQueryHandler(IRepository<Author> authorReposit
         {
             return new BaseResponse<List<GetAmaSessionResponse>>(new NotFoundException());
         }
+
+        var amaSessions = author.AmaSessions.OrderByDescending(s => s.Start);
         
-        var amaSessionResponse = mapper.Map<List<GetAmaSessionResponse>>(author.AmaSessions);
+        var amaSessionResponse = mapper.Map<List<GetAmaSessionResponse>>(amaSessions);
         return new BaseResponse<List<GetAmaSessionResponse>>(amaSessionResponse);
     }
 }

@@ -65,4 +65,8 @@ export class amaSessionService {
   public static async endSession(sessionId: string) {
     return await axios.put(`/ama-sessions/${sessionId}/ending`)
   }
+
+  public static async getAuthorsAmaSessions(authorId: string) {
+    return await axios.get<AmaSession[]>(`/authors/${authorId}/ama-sessions`)
+  }
 }

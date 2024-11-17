@@ -29,23 +29,25 @@ const EditUserComponent: FunctionComponent = () => {
   const onSubmit: SubmitHandler<UserFormData> = async (data) => {
     const { token } = (await userService.patchUser(data)).data
     setToken(token)
-    console.log(`/users/${user.id}`)
     await navigate({ to: `/users/${user.id}` })
   }
-  const validate = useCallback(async (value: string) => {
-    if (value === authUserData?.email) {
-      return null
-    }
-    try {
-      await userService.getUserByEmail(value)
-      return 'Email already taken'
-    } catch (_error) {
-      return null
-    }
-  }, [authUserData?.email])
+  const validate = useCallback(
+    async (value: string) => {
+      if (value === authUserData?.email) {
+        return null
+      }
+      try {
+        await userService.getUserByEmail(value)
+        return 'Email already taken'
+      } catch (_error) {
+        return null
+      }
+    },
+    [authUserData?.email]
+  )
 
   if (authUserData?.id !== user.id) {
-    return <Navigate to={'/'}/>
+    return <Navigate to={'/'} />
   }
   return (
     <div>
@@ -61,7 +63,7 @@ const EditUserComponent: FunctionComponent = () => {
             watch={watch}
             previousImageSrc={user.profilePicture}
           />
-          <UpdatePasswordForm/>
+          <UpdatePasswordForm />
         </div>
 
         <div className="flex-1 md:ml-20">
