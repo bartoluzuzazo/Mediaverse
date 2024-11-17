@@ -39,7 +39,9 @@ export const EndSessionComponent: FunctionComponent<Props> = ({
       }}
       className="bg-violet-300 px-1.5 py-0.5 text-black"
     >
-      End Session
+      {amaSessionStatus === AmaStatus.Upcoming
+        ? 'Cancel session'
+        : 'End session'}
     </button>
   )
 }
