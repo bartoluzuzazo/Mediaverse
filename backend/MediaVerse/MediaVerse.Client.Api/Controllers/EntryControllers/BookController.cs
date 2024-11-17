@@ -20,16 +20,18 @@ public class BookController(IMediator mediator) : BaseController
         var entryResponse = await mediator.Send(request.Entry);
         var bookCommand = new AddBookCommand(entryResponse.Data!.EntryId, request.Isbn, request.Synopsis, request.Genres);
         var bookResponse = await mediator.Send(bookCommand);
-        return ResolveCode(entryResponse.Exception, CreatedAtAction(nameof(GetBook), new { id = entryResponse.Data.EntryId },new { id = entryResponse.Data.EntryId }));
+        return ResolveCode(bookResponse.Exception, CreatedAtAction(nameof(GetBook), new { id = entryResponse.Data.EntryId },new { id = entryResponse.Data.EntryId }));
     }
     
     [HttpPatch("{id:guid}")]
     [Authorize(Policy = "Admin")]
     public async Task<IActionResult> PatchBook(Guid id, PatchBookRequest request)
     {
-        var command = new UpdateBookCommand(id, request);
-        var response = await mediator.Send(command);
-        return ResolveCode(response.Exception, Ok(nameof(GetBook)));
+        var updateEntryCommand = new UpdateEntryCommand(id, request.Entry);
+        var entryResponse = await mediator.Send(updateEntryCommand);
+        var updateBookCommand = new UpdateBookCommand(id, request);
+        var bookResponse = await mediator.Send(updateBookCommand);
+        return ResolveCode(bookResponse.Exception, Ok(nameof(GetBook)));
     }
     
     [HttpGet("{id:guid}")]

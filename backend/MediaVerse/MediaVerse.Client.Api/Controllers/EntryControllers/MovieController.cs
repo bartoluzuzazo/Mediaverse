@@ -21,16 +21,18 @@ public class MovieController(IMediator mediator) : BaseController
         var entryResponse = await mediator.Send(request.Entry);
         var command = new AddMovieCommand(entryResponse.Data!.EntryId, request.Synopsis, request.Genres);
         var movieResponse = await mediator.Send(command);
-        return ResolveCode(entryResponse.Exception, CreatedAtAction(nameof(GetMovie), new { id = entryResponse.Data.EntryId },new { id = entryResponse.Data.EntryId }));
+        return ResolveCode(movieResponse.Exception, CreatedAtAction(nameof(GetMovie), new { id = entryResponse.Data.EntryId },new { id = entryResponse.Data.EntryId }));
     }
     
     [HttpPatch("{id:guid}")]
     [Authorize(Policy = "Admin")]
     public async Task<IActionResult> PatchMovie(Guid id, PatchMovieRequest request)
     {
-        var command = new UpdateMovieCommand(id, request);
-        var response = await mediator.Send(command);
-        return ResolveCode(response.Exception, Ok(nameof(GetMovie)));
+        var updateEntryCommand = new UpdateEntryCommand(id, request.Entry);
+        var entryResponse = await mediator.Send(updateEntryCommand);
+        var updateMovieCommand = new UpdateMovieCommand(id, request);
+        var movieResponse = await mediator.Send(updateMovieCommand);
+        return ResolveCode(movieResponse.Exception, Ok(nameof(GetMovie)));
     }
     
     [HttpGet("{id:guid}")]
