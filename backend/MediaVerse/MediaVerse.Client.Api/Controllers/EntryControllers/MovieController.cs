@@ -1,5 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
+using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.MovieDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
@@ -15,12 +16,21 @@ public class MovieController(IMediator mediator) : BaseController
 {
     [HttpPost]
     [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> AddBook(AddMovieRequest request)
+    public async Task<IActionResult> AddMovie(AddMovieRequest request)
     {
         var entryResponse = await mediator.Send(request.Entry);
-        var command = new AddMovieCommand(entryResponse.Data.EntryId, request.Synopsis, request.Genres);
+        var command = new AddMovieCommand(entryResponse.Data!.EntryId, request.Synopsis, request.Genres);
         var movieResponse = await mediator.Send(command);
-        return ResolveCode(movieResponse.Exception, CreatedAtAction(nameof(GetMovie), entryResponse.Data, entryResponse.Data));
+        return ResolveCode(entryResponse.Exception, CreatedAtAction(nameof(GetMovie), new { id = entryResponse.Data.EntryId },new { id = entryResponse.Data.EntryId }));
+    }
+    
+    [HttpPatch("{id:guid}")]
+    [Authorize(Policy = "Admin")]
+    public async Task<IActionResult> PatchMovie(Guid id, PatchMovieRequest request)
+    {
+        var command = new UpdateMovieCommand(id, request);
+        var response = await mediator.Send(command);
+        return ResolveCode(response.Exception, Ok(nameof(GetMovie)));
     }
     
     [HttpGet("{id:guid}")]

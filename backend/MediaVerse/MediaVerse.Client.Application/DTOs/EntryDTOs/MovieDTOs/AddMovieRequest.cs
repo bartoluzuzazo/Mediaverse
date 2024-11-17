@@ -1,4 +1,5 @@
 using MediaVerse.Client.Application.Commands.EntryCommands;
+using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
 
 namespace MediaVerse.Client.Application.DTOs.EntryDTOs.MovieDTOs;
 

@@ -17,11 +17,10 @@ public class BookController(IMediator mediator) : BaseController
     [Authorize(Policy = "Admin")]
     public async Task<IActionResult> AddBook(AddBookRequest request)
     {
-        var entryCommand = new AddEntryCommand(request.Name, request.Description, request.Release, request.CoverPhoto, request.WorkOnRequests);
-        var entryResponse = await mediator.Send(entryCommand);
+        var entryResponse = await mediator.Send(request.Entry);
         var bookCommand = new AddBookCommand(entryResponse.Data!.EntryId, request.Isbn, request.Synopsis, request.Genres);
         var bookResponse = await mediator.Send(bookCommand);
-        return ResolveCode(entryResponse.Exception, CreatedAtAction(nameof(GetBook), entryResponse.Data, entryResponse.Data));
+        return ResolveCode(entryResponse.Exception, CreatedAtAction(nameof(GetBook), new { id = entryResponse.Data.EntryId },new { id = entryResponse.Data.EntryId }));
     }
     
     [HttpPatch("{id:guid}")]

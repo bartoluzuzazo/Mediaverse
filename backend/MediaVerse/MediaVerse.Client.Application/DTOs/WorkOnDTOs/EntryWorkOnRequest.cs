@@ -1,8 +1,6 @@
-using MediaVerse.Domain.Interfaces;
-
 namespace MediaVerse.Client.Application.DTOs.WorkOnDTOs;
 
-public class EntryWorkOnRequest : IEntryWorkOnRequest
+public class EntryWorkOnRequest
 {
     public Guid Id { get; set; }
     public string Role { get; set; }

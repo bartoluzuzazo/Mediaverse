@@ -6,6 +6,7 @@ using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
 using Microsoft.IdentityModel.Tokens;
+using EntryWorkOnRequest = MediaVerse.Client.Application.DTOs.WorkOnDTOs.EntryWorkOnRequest;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
@@ -14,7 +15,7 @@ public record AddEntryCommand(
     string Description,
     DateTime Release,
     string Photo,
-    List<IEntryWorkOnRequest>? WorkOnRequests) : IRequest<BaseResponse<AddEntryResponse>>;
+    List<EntryWorkOnRequest>? WorkOnRequests) : IRequest<BaseResponse<AddEntryResponse>>;
 
 public class AddEntryCommandHandler(
     IRepository<Entry> entryRepository,

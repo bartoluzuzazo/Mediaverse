@@ -48,6 +48,7 @@ const MovieForm: FunctionComponent<Props> = ({ movie }) => {
       ? {
         entry : movie.entry,
         genres: movie.cinematicGenres,
+        synopsis: movie.synopsis
       }
       : undefined,
   })
