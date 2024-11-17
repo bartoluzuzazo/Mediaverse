@@ -3,6 +3,7 @@ import { useAuthContext } from '../../../../context/auth/useAuthContext.ts'
 import {
   AmaQuestionOrder,
   AmaQuestionStatus,
+  AmaStatus,
   GetAmaQuestionParams,
 } from '../../../../models/amaSessions'
 import { OrderDirection } from '../../../../models/common'
@@ -15,12 +16,14 @@ import { AmaQuestionSort } from './AmaQuestionSort.tsx'
 
 type Props = {
   amaSessionId: string
+  amaSessionStatus: AmaStatus
   managingUserId: string
   status: AmaQuestionStatus
 }
 
 export const AmaQuestionsView: FunctionComponent<Props> = ({
   amaSessionId,
+  amaSessionStatus,
   managingUserId,
   status,
 }) => {
@@ -61,7 +64,6 @@ export const AmaQuestionsView: FunctionComponent<Props> = ({
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   })
-  // TODO: refactor maybe, or maybe not, idk
   const viewBoxRef = useRef(null)
   const isInView = useInView(viewBoxRef)
   useEffect(() => {
@@ -72,7 +74,12 @@ export const AmaQuestionsView: FunctionComponent<Props> = ({
 
   return (
     <div>
-      <AmaQuestionForm amaSessionId={amaSessionId} parentQueryKeys={queryKey} />
+      {amaSessionStatus == AmaStatus.Active ? (
+        <AmaQuestionForm
+          amaSessionId={amaSessionId}
+          parentQueryKeys={queryKey}
+        />
+      ) : null}
       <AmaQuestionSort setQuestionParams={setQuestionsParams} />
       {data &&
         data.pages.map((page) =>

@@ -5,11 +5,21 @@ import { FunctionComponent } from 'react'
 import { AmaSessionBanner } from '../../common/components/ama/amaSessionBanner'
 import { AmaQuestionsView } from '../../common/components/ama/amaQuestionsView'
 import { TabbedView } from '../../common/components/shared/TabbedView'
+import { queryOptions } from '@tanstack/react-query'
+
+const amaSessionQueryOptions = (id: string) => {
+  return queryOptions({
+    queryKey: ['GET_AMA_SESSION', id],
+    queryFn: async (): Promise<AmaSession> => {
+      const response = await amaSessionService.getAmaSession(id)
+      return response.data
+    },
+  })
+}
 
 export const Route = createFileRoute('/ama-sessions/$id')({
-  loader: async ({ params }) => {
-    const response = await amaSessionService.getAmaSession(params.id)
-    return response.data
+  loader: async ({ context: { queryClient }, params: { id } }) => {
+    return queryClient.ensureQueryData(amaSessionQueryOptions(id))
   },
   component: () => <AmaSessionView />,
 })
@@ -27,9 +37,10 @@ const AmaSessionView: FunctionComponent = () => {
               key: 'All',
               element: (
                 <AmaQuestionsView
+                  status={AmaQuestionStatus.All}
+                  amaSessionStatus={amaSession.status}
                   amaSessionId={amaSession.id}
                   managingUserId={amaSession.authorUserId}
-                  status={AmaQuestionStatus.All}
                 />
               ),
             },
@@ -37,9 +48,10 @@ const AmaSessionView: FunctionComponent = () => {
               key: 'Answered',
               element: (
                 <AmaQuestionsView
+                  status={AmaQuestionStatus.Answered}
+                  amaSessionStatus={amaSession.status}
                   amaSessionId={amaSession.id}
                   managingUserId={amaSession.authorUserId}
-                  status={AmaQuestionStatus.Answered}
                 />
               ),
             },
@@ -47,9 +59,10 @@ const AmaSessionView: FunctionComponent = () => {
               key: 'Unanswered',
               element: (
                 <AmaQuestionsView
+                  status={AmaQuestionStatus.Unanswered}
+                  amaSessionStatus={amaSession.status}
                   amaSessionId={amaSession.id}
                   managingUserId={amaSession.authorUserId}
-                  status={AmaQuestionStatus.Unanswered}
                 />
               ),
             },

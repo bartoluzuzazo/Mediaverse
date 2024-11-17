@@ -1,11 +1,15 @@
 import { FunctionComponent } from 'react'
-import { AmaSession } from '../../../../models/amaSessions'
+import { AmaSession, AmaStatus } from '../../../../models/amaSessions'
+import { AuthorizedView } from '../../auth/AuthorizedView'
+import { EndSessionComponent } from './EndSessionComponent.tsx'
 
-type Props = {
+interface AmaSessionBannerProps {
   amaSession: AmaSession
 }
 
-export const AmaSessionBanner: FunctionComponent<Props> = ({ amaSession }) => {
+export const AmaSessionBanner: FunctionComponent<AmaSessionBannerProps> = ({
+  amaSession,
+}) => {
   return (
     <div className="my-3 md:flex md:items-stretch md:gap-6">
       <div className="flex justify-center">
@@ -21,7 +25,7 @@ export const AmaSessionBanner: FunctionComponent<Props> = ({ amaSession }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-1 flex-col">
         <h1 className="mb-6 text-4xl font-bold md:text-6xl">
           {amaSession.title}
         </h1>
@@ -29,14 +33,40 @@ export const AmaSessionBanner: FunctionComponent<Props> = ({ amaSession }) => {
           {amaSession.description}
         </div>
         <div className="mt-2 flex items-center justify-between py-1">
-          <div className="text-md font-bold text-slate-700">
-            End of AMA session: {amaSession.end.replace('T', '  ')}
-          </div>
-          <button className="bg-violet-300 px-1.5 py-0.5 text-black">
-            End Session
-          </button>
+          <AmaSessionTimeComponent amaSession={amaSession} />
+          <AuthorizedView requiredUserId={amaSession.authorUserId}>
+            <EndSessionComponent
+              amaSessionId={amaSession.id}
+              amaSessionStatus={amaSession.status}
+              authorId={amaSession.authorId}
+            />
+          </AuthorizedView>
         </div>
       </div>
     </div>
   )
+}
+
+interface AmaSessionTimeComponentProps {
+  amaSession: AmaSession
+}
+
+const AmaSessionTimeComponent: FunctionComponent<
+  AmaSessionTimeComponentProps
+> = ({ amaSession }) => {
+  const status = amaSession.status
+  const content =
+    status === AmaStatus.Upcoming
+      ? `Start of AMA session: ${formatDate(amaSession.start)}`
+      : status === AmaStatus.Cancelled
+        ? `Session cancelled at: ${formatDate(amaSession.end)}`
+        : status === AmaStatus.Active
+          ? `End of AMA session: ${formatDate(amaSession.end)}`
+          : `AMA session ended at: ${formatDate(amaSession.end)}`
+
+  return <div className="text-md font-bold text-slate-700">{content}</div>
+}
+
+const formatDate = (date: string) => {
+  return date.replace('T', ' ').slice(0, 16)
 }

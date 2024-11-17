@@ -28,9 +28,9 @@ public class CreateAmaQuestionCommandHandler(
       return new BaseResponse<GetAmaQuestionResponse>(new NotFoundException());
     }
 
-    if (!(amaSession.Start >= DateTime.Now && amaSession.End <= DateTime.Now))
+    if (!(amaSession.Start <= DateTime.Now && DateTime.Now <= amaSession.End))
     {
-      return new BaseResponse<GetAmaQuestionResponse>(new ConflictException());
+      return new BaseResponse<GetAmaQuestionResponse>(new ConflictException("Can only create questions when session is active"));
     }
 
 

@@ -8,6 +8,7 @@ import { LinkedUser } from '../../common/components/authors/LinkedAuthor'
 import { LinkButton } from '../../common/components/shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { CreateAmaComponent } from '../../common/components/ama/createAmaComponent'
+import { Fragment } from 'react'
 
 export const Route = createFileRoute('/authors/$id')({
   loader: async ({ params }) => {
@@ -32,24 +33,30 @@ export const Route = createFileRoute('/authors/$id')({
               {author.name}{' '}
               <span className="font-italic">{author.surname}</span>
             </div>
-            <AuthorizedView allowedRoles='Administrator'>
+            <AuthorizedView allowedRoles="Administrator">
               <LinkedUser authorId={author.id} />
             </AuthorizedView>
-            <LinkButton to={`/authors/edit/$id`} params={{id: author.id}} icon={<FaPen/>}>Edit author</LinkButton>
-            <CreateAmaComponent authorId={author.id}/>
+            <LinkButton
+              to={`/authors/edit/$id`}
+              params={{ id: author.id }}
+              icon={<FaPen />}
+            >
+              Edit author
+            </LinkButton>
+            <CreateAmaComponent authorId={author.id} />
           </div>
 
           <div className="flex-1 md:ml-20">{author.bio}</div>
         </div>
         {author.workOns.map((group) => (
-          <>
+          <Fragment key={group.role}>
             <SectionHeader title={group.role} />
             {group.entries.map((e) => (
-              <div className="p-2">
+              <div className="p-2" key={e.id}>
                 <AuthorEntryPreview entry={e} />
               </div>
             ))}
-          </>
+          </Fragment>
         ))}
       </>
     )

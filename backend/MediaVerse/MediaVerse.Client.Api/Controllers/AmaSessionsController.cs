@@ -32,8 +32,9 @@ public class AmaSessionsController(IMediator mediator) : BaseController
 
   [HttpPut("{sessionId:guid}/ending")]
   [Authorize]
-  public async Task<IActionResult> PostSessionEnding(EndAmaSessionCommand command)
+  public async Task<IActionResult> PostSessionEnding(Guid sessionId)
   {
+    var command = new EndAmaSessionCommand(sessionId);
     var response = await mediator.Send(command);
     return OkOrError(response);
   }

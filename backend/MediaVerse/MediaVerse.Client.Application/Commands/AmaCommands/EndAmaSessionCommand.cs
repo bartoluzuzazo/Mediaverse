@@ -36,6 +36,11 @@ public class EndAmaSessionCommandHandler(IUserAccessor userAccessor, IRepository
         {
             return new BaseResponse<GetAmaSessionResponse>(new ForbiddenException());
         }
+        var now = DateTime.Now;
+        if (now > amaSession.End)
+        {
+            return new BaseResponse<GetAmaSessionResponse>(new ConflictException());
+        }
         amaSession.End= DateTime.Now;
         await amaSessionRepository.SaveChangesAsync(cancellationToken);
         var response = mapper.Map<GetAmaSessionResponse>(amaSession);

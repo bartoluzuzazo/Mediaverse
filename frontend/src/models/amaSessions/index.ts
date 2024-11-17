@@ -18,6 +18,8 @@ export interface AmaSession {
   title: string
   description: string
   authorUserId: string
+  authorId: string
+  status: AmaStatus
 }
 
 export interface AmaQuestionFormData {
@@ -55,7 +57,6 @@ export interface AmaQuestion {
   answer?: string
   likes: number
   likedByUser: boolean
-  status: AmaStatus
 }
 export enum AmaStatus {
   Upcoming,

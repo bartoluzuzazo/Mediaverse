@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AmaQuestionFormData } from '../../../../models/amaSessions'
 import { amaSessionService } from '../../../../services/amaSessionService.ts'
 import { SubmitHandler } from 'react-hook-form'
+import axios from 'axios'
 
 type Props = {
   amaSessionId: string
@@ -21,6 +22,15 @@ export const AmaQuestionForm: FunctionComponent<Props> = ({
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: parentQueryKeys })
+    },
+    onError: async (e) => {
+      console.log(e)
+      if (!axios.isAxiosError(e) || e.response?.status !== 409) {
+        throw e
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['GET_AMA_SESSION', amaSessionId],
+      })
     },
   })
   const onSubmit: SubmitHandler<AmaQuestionFormData> = async (data) => {

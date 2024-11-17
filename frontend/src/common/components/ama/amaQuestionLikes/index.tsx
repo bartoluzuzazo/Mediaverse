@@ -67,14 +67,14 @@ export const AmaQuestionLikes: FunctionComponent<Props> = ({
     },
   })
   return (
-    <div>
+    <div className="flex items-center">
       <button
-        className="hover:g-slate-100 flex items-center gap-2 rounded-full border-none bg-transparent p-2 text-xl text-violet-700 focus:outline-none"
+        className="gap-2 rounded-full border-none bg-transparent p-2 text-xl text-violet-700 transition-all hover:bg-slate-100 focus:outline-none"
         onClick={() => changeLikeAsync(!question.likedByUser)}
       >
         {question.likedByUser ? <FaHeart /> : <FaRegHeart />}
-        {question.likes}
       </button>
+      {question.likes}
     </div>
   )
 }
