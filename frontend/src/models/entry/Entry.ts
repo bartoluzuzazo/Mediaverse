@@ -1,3 +1,4 @@
+import { Author } from '../author/Author.ts'
 import { Rating } from './rating/Rating.ts'
 
 export interface Entry {
@@ -5,9 +6,10 @@ export interface Entry {
   name: string
   description: string
   photo: string
-  release: Date
+  release: string
   ratingAvg: number
   usersRating?: Rating
+  type?: string
   authors: EntryWorkOnGroup[]
 }
 
@@ -18,14 +20,21 @@ export enum EntryOrder {
   Id,
 }
 
-interface EntryWorkOnGroup{
-  role: string,
+interface EntryWorkOnGroup {
+  role: string
   authors: EntryAuthor[]
 }
 
-export interface EntryAuthor{
-  id: string,
-  name: string,
-  surname: string,
+export interface EntryAuthor {
+  id: string
+  name: string
+  surname: string
   profilePicture: string
+}
+
+export interface GetEntriesResponse {
+  data: {
+    entries: Entry[]
+    authros: Author[]
+  }
 }
