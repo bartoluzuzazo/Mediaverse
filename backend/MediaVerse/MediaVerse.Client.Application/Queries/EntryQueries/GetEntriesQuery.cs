@@ -1,38 +1,75 @@
 ﻿using AutoMapper;
 using MediatR;
+using MediaVerse.Client.Application.DTOs.AuthorDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
-using MediaVerse.Client.Application.Specifications.EntrySpecifications;
+using MediaVerse.Client.Application.Specifications.AuthorSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace MediaVerse.Client.Application.Queries.EntryQueries;
 
-public record GetEntriesQuery(string SearchTerm) : IRequest<BaseResponse<List<GetEntryResponse>>>;
+public record GetEntriesQuery(string SearchTerm, int? Page, string? Type) : IRequest<BaseResponse<GetEntriesQueryResponse>>;
 
-public class GetEntriesQueryHandler(IRepository<Entry> entryRepository, IMapper mapper)
-    : IRequestHandler<GetEntriesQuery, BaseResponse<List<GetEntryResponse>>>
+public class GetEntriesQueryResponse
 {
-    public async Task<BaseResponse<List<GetEntryResponse>>> Handle(GetEntriesQuery request,
+    public List<GetEntryResponse> Entries { get; set; }
+    public List<GetAuthorResponse> Authors { get; set; }
+}
+
+public class GetEntriesQueryHandler(
+    IRepository<Entry> entryRepository,
+    IRepository<Author> authorRepository,
+    IMapper mapper)
+    : IRequestHandler<GetEntriesQuery, BaseResponse<GetEntriesQueryResponse>>
+{
+    public async Task<BaseResponse<GetEntriesQueryResponse>> Handle(GetEntriesQuery request,
         CancellationToken cancellationToken)
     {
         var entryDbSet = entryRepository.GetDbSet();
-        var entries = await entryDbSet.FromSqlInterpolated($"""
-                                                            SELECT
-                                                                * 
-                                                            FROM
-                                                            full_text_search_entries({request.SearchTerm})
-                                                            LIMIT 5
-                                                            """)
+
+        FormattableString interpolatedString;
+
+        if (request.Type is null)
+        {
+            interpolatedString = $"""
+                                  SELECT
+                                      * 
+                                  FROM
+                                  full_text_search_entries({request.SearchTerm})
+                                  LIMIT 5
+                                  OFFSET {(request.Page ?? 0) * 5}
+                                  """;
+        }
+        else
+        {
+            interpolatedString = $"""
+                                  SELECT
+                                      * 
+                                  FROM
+                                  full_text_search_entries({request.SearchTerm}) e
+                                  WHERE e.type = {request.Type}
+                                  LIMIT 5
+                                  OFFSET {(request.Page ?? 0) * 5}
+                                  """;
+        }
+        
+        var entries = await entryDbSet.FromSqlInterpolated(interpolatedString)
             .AsNoTracking().Include(e => e.CoverPhoto).Include(e => e.Ratings)
             .ToListAsync(cancellationToken);
         entries.Reverse();
 
-        return new BaseResponse<List<GetEntryResponse>>(mapper.Map<List<GetEntryResponse>>(entries));
+        var authors =
+            await authorRepository.ListAsync(new GetAuthorFullTextSearchNoTrackingSpecification(request.SearchTerm),
+                cancellationToken);
+
+        return new BaseResponse<GetEntriesQueryResponse>(new GetEntriesQueryResponse
+        {
+            Entries = mapper.Map<List<GetEntryResponse>>(entries),
+            Authors = mapper.Map<List<GetAuthorResponse>>(authors)
+        });
     }
 }
 

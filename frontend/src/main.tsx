@@ -8,6 +8,7 @@ import axios from 'axios'
 import './index.css'
 import 'react-multi-carousel/lib/styles.css'
 import 'react-loading-skeleton/dist/skeleton.css'
+import 'react-tabs/style/react-tabs.css'
 
 const queryClient = new QueryClient()
 
@@ -18,7 +19,9 @@ const router = createRouter({
   },
 })
 
-axios.defaults.baseURL = import.meta.env.PROD ? "/api/" : (import.meta.env.VITE_API_ADDRESS || "/api/")
+axios.defaults.baseURL = import.meta.env.PROD
+  ? '/api/'
+  : import.meta.env.VITE_API_ADDRESS || '/api/'
 
 declare module '@tanstack/react-router' {
   interface Register {

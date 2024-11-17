@@ -15,6 +15,7 @@ public class GetEntryResponse
     public string Photo { get; set; } = null!;
 
     public decimal RatingAvg { get; set; }
-
+    
+    public string Type { get; set; }
     public List<GetEntryAuthorGroupResponse> Authors { get; set; }
 }
