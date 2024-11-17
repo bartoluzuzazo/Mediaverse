@@ -38,16 +38,16 @@ export const Route = createFileRoute('/authors/$id')({
             <AuthorsAmasComponent authorId={author.id} />
             <AuthorizedView allowedRoles="Administrator">
               <LinkedUser authorId={author.id} />
+              <LinkButton
+                to={`/authors/edit/$id`}
+                params={{ id: author.id }}
+                icon={<FaPen />}
+              >
+                Edit author
+              </LinkButton>
             </AuthorizedView>
             <AuthorizedView requiredUserId={author.userId}>
               <ToggledView containerClass="min-w-fit" title="Manage">
-                <LinkButton
-                  to={`/authors/edit/$id`}
-                  params={{ id: author.id }}
-                  icon={<FaPen />}
-                >
-                  Edit author
-                </LinkButton>
                 <CreateAmaComponent authorId={author.id} />
               </ToggledView>
             </AuthorizedView>
