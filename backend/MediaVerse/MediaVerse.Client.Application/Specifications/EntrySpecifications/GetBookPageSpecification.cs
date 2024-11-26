@@ -11,10 +11,6 @@ public sealed class GetBookPageSpecification : Specification<Entry>
     {
         Query.Where(e => e.Book != null)
             .Include(e => e.Book).ThenInclude(b => b!.BookGenres)
-            .Include(e => e.CoverPhoto)
-            .Include(e => e.Ratings)
-            .Include(e => e.WorkOns).ThenInclude(w => w.Author)
-            .Include(e => e.WorkOns).ThenInclude(w => w.AuthorRole)
-            .OrderEntry(order, direction).Paginate(page, size);
+            .IncludeEntry().OrderEntry(order, direction).Paginate(page, size);
     }
 }

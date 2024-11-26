@@ -1,4 +1,5 @@
 using System.Text;
+using MediaVerse.Client.Api.Filters;
 using MediaVerse.Client.Application.Extensions.MediatR;
 using MediaVerse.Client.Application.Queries.Test;
 using MediaVerse.Client.Application.Services.Authentication;
@@ -13,7 +14,6 @@ using MediaVerse.Infrastructure.UserAccessor;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Serilog;
 using Microsoft.OpenApi.Models;
 
 const string defaultpolicy = "default";
@@ -55,6 +55,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers(options =>
 {
     options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+    options.Filters.Add(new ValidateModelAttribute());
 });
 builder.Services.AddDbContext<Context>(options =>
     options.UseNpgsql(builder.Configuration["DefaultConnection"]));

@@ -5,19 +5,20 @@ export interface Author {
   bio: string
   workOns: AuthorWorkOnGroup[]
   profilePicture: string
+  userId?: string
 }
 
 interface AuthorWorkOnGroup {
-  role: string,
+  role: string
   entries: AuthorEntry[]
 }
 
 export interface AuthorEntry {
-  id: string,
-  name: string,
-  releaseDate: Date,
-  avgRating: number,
-  description: string,
-  type: string,
+  id: string
+  name: string
+  releaseDate: Date
+  avgRating: number
+  description: string
+  type: string
   coverPhoto: string
 }

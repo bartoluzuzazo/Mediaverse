@@ -1,10 +1,10 @@
 using MediatR;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
 using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
+using EntryWorkOnRequest = MediaVerse.Client.Application.DTOs.WorkOnDTOs.EntryWorkOnRequest;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 

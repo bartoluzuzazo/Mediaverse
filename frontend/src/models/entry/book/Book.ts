@@ -1,4 +1,5 @@
 import { Entry } from '../Entry.ts'
+import { WorkOn } from '../WorkOn.ts'
 
 export interface Book {
   id: string,
@@ -9,8 +10,3 @@ export interface Book {
   workOns: WorkOn[]
 }
 
-export interface WorkOn {
-  id: string,
-  name: string,
-  role: string
-}

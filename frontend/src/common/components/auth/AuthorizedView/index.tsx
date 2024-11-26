@@ -17,15 +17,15 @@ export const AuthorizedView: FunctionComponent<Props> = ({
                                                            allowedRoles,
                                                          }) => {
   const roles = allowedRoles && (Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles])
-  const { authUserData } = useAuthContext()!
-  if (!authUserData) {
+  const { authUserData, isAuthenticated } = useAuthContext()!
+  if (!isAuthenticated || !authUserData) {
     return notAuthView
   }
   const hasAllowedRole = !roles || roles.some((role) => authUserData?.roles.includes(role))
   if (!hasAllowedRole) {
     return notAuthView
   }
-  if (requiredUserId && authUserData.id !== requiredUserId) {
+  if (requiredUserId && authUserData!.id !== requiredUserId) {
     return notAuthView
   }
   return children

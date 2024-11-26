@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
-import FormField from '../../form/FormField/FormField.tsx'
-import { DeletableGrid } from '../../form/deletableGrid/DeletableGrid.tsx'
+import FormField from '../form/FormField/FormField.tsx'
+import { DeletableGrid } from '../form/deletableGrid/DeletableGrid.tsx'
 
 interface FormFieldData {
   field: string

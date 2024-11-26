@@ -28,11 +28,11 @@ const AuthorForm = ({ author }: Props) => {
   } = useForm<AuthorFormData>({
     defaultValues: author
       ? {
-        id: author.id,
-        name: author.name,
-        surname: author.surname,
-        bio: author.bio,
-      }
+          id: author.id,
+          name: author.name,
+          surname: author.surname,
+          bio: author.bio,
+        }
       : undefined,
   })
 
@@ -57,13 +57,33 @@ const AuthorForm = ({ author }: Props) => {
         className="flex flex-col p-4 md:flex-row"
       >
         <div>
-          <ProfilePicker<AuthorFormData> control={control} name={'profilePicture'} watch={watch} previousImageSrc={author?.profilePicture} />
-          <FormField label={'Name'} register={register} errorValue={errors.name} registerPath={'name'} />
-          <FormField label={'Surname'} register={register} errorValue={errors.surname} registerPath={'surname'} />
+          <ProfilePicker<AuthorFormData>
+            control={control}
+            name={'profilePicture'}
+            watch={watch}
+            previousImageSrc={author?.profilePicture}
+          />
+          <FormField
+            label={'Name'}
+            register={register}
+            errorValue={errors.name}
+            registerPath={'name'}
+          />
+          <FormField
+            label={'Surname'}
+            register={register}
+            errorValue={errors.surname}
+            registerPath={'surname'}
+          />
         </div>
 
         <div className="flex-1 md:ml-20">
-          <FormTextArea label={'Bio'} register={register} errorValue={errors.bio} registerPath={'bio'} />
+          <FormTextArea
+            label={'Bio'}
+            register={register}
+            errorValue={errors.bio}
+            registerPath={'bio'}
+          />
           <div className="flex flex-row-reverse">
             <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
               {isSubmitting ? 'Submitting...' : 'Submit'}

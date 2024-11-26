@@ -2,6 +2,7 @@ using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ public class BookController(IMediator mediator) : BaseController
     public async Task<IActionResult> AddBook(AddBookCommand request)
     {
         var response = await mediator.Send(request);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetBook), response.Data, response.Data));
+        return CreatedOrError(response, nameof(GetBook));
     }
     
     [HttpPatch("{id:guid}")]
@@ -34,13 +35,14 @@ public class BookController(IMediator mediator) : BaseController
     {
         var request = new GetBookQuery(id);
         var response = await mediator.Send(request);
-        return ResolveCode(response.Exception, Ok(response.Data));
+        return OkOrError(response);
     }
     
     [HttpGet("page")]
     public async Task<IActionResult> GetBooks(int page, int size, EntryOrder order, OrderDirection direction)
     {
-        var request = new GetBookPageQuery(page, size, order, direction);
+        var spec = new GetBookPageSpecification(page, size, order, direction);
+        var request = new GetEntryPageQuery(spec);
         var response = await mediator.Send(request);
         return ResolveCode(response.Exception, Ok(response.Data));
     }

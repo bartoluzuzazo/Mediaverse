@@ -12,14 +12,19 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SearchIndexImport } from './routes/search/index'
 import { Route as UsersSearchImport } from './routes/users/search'
 import { Route as UsersIdImport } from './routes/users/$id'
 import { Route as AuthorsIdImport } from './routes/authors/$id'
+import { Route as AmaSessionsIdImport } from './routes/ama-sessions/$id'
 import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
 import { Route as UsersEditIdImport } from './routes/users/edit/$id'
+import { Route as EntriesMoviesIdImport } from './routes/entries/movies/$id'
 import { Route as EntriesBooksIdImport } from './routes/entries/books/$id'
 import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
+import { Route as EntriesMoviesCreateIndexImport } from './routes/entries/movies/create/index'
 import { Route as EntriesBooksCreateIndexImport } from './routes/entries/books/create/index'
+import { Route as EntriesMoviesEditIdImport } from './routes/entries/movies/edit/$id'
 import { Route as EntriesBooksEditIdImport } from './routes/entries/books/edit/$id'
 
 // Create/Update Routes
@@ -28,6 +33,11 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const SearchIndexRoute = SearchIndexImport.update({
+  path: '/search/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const UsersSearchRoute = UsersSearchImport.update({
   path: '/users/search',
@@ -44,6 +54,11 @@ const AuthorsIdRoute = AuthorsIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AmaSessionsIdRoute = AmaSessionsIdImport.update({
+  path: '/ama-sessions/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthorsCreateIndexRoute = AuthorsCreateIndexImport.update({
   path: '/authors/create/',
   getParentRoute: () => rootRoute,
@@ -51,6 +66,11 @@ const AuthorsCreateIndexRoute = AuthorsCreateIndexImport.update({
 
 const UsersEditIdRoute = UsersEditIdImport.update({
   path: '/users/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EntriesMoviesIdRoute = EntriesMoviesIdImport.update({
+  path: '/entries/movies/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -64,8 +84,18 @@ const AuthorsEditIdRoute = AuthorsEditIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EntriesMoviesCreateIndexRoute = EntriesMoviesCreateIndexImport.update({
+  path: '/entries/movies/create/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const EntriesBooksCreateIndexRoute = EntriesBooksCreateIndexImport.update({
   path: '/entries/books/create/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EntriesMoviesEditIdRoute = EntriesMoviesEditIdImport.update({
+  path: '/entries/movies/edit/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -83,6 +113,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/ama-sessions/$id': {
+      id: '/ama-sessions/$id'
+      path: '/ama-sessions/$id'
+      fullPath: '/ama-sessions/$id'
+      preLoaderRoute: typeof AmaSessionsIdImport
       parentRoute: typeof rootRoute
     }
     '/authors/$id': {
@@ -106,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersSearchImport
       parentRoute: typeof rootRoute
     }
+    '/search/': {
+      id: '/search/'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/authors/edit/$id': {
       id: '/authors/edit/$id'
       path: '/authors/edit/$id'
@@ -118,6 +162,13 @@ declare module '@tanstack/react-router' {
       path: '/entries/books/$id'
       fullPath: '/entries/books/$id'
       preLoaderRoute: typeof EntriesBooksIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/entries/movies/$id': {
+      id: '/entries/movies/$id'
+      path: '/entries/movies/$id'
+      fullPath: '/entries/movies/$id'
+      preLoaderRoute: typeof EntriesMoviesIdImport
       parentRoute: typeof rootRoute
     }
     '/users/edit/$id': {
@@ -141,11 +192,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EntriesBooksEditIdImport
       parentRoute: typeof rootRoute
     }
+    '/entries/movies/edit/$id': {
+      id: '/entries/movies/edit/$id'
+      path: '/entries/movies/edit/$id'
+      fullPath: '/entries/movies/edit/$id'
+      preLoaderRoute: typeof EntriesMoviesEditIdImport
+      parentRoute: typeof rootRoute
+    }
     '/entries/books/create/': {
       id: '/entries/books/create/'
       path: '/entries/books/create'
       fullPath: '/entries/books/create'
       preLoaderRoute: typeof EntriesBooksCreateIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/entries/movies/create/': {
+      id: '/entries/movies/create/'
+      path: '/entries/movies/create'
+      fullPath: '/entries/movies/create'
+      preLoaderRoute: typeof EntriesMoviesCreateIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -155,15 +220,20 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  AmaSessionsIdRoute,
   AuthorsIdRoute,
   UsersIdRoute,
   UsersSearchRoute,
+  SearchIndexRoute,
   AuthorsEditIdRoute,
   EntriesBooksIdRoute,
+  EntriesMoviesIdRoute,
   UsersEditIdRoute,
   AuthorsCreateIndexRoute,
   EntriesBooksEditIdRoute,
+  EntriesMoviesEditIdRoute,
   EntriesBooksCreateIndexRoute,
+  EntriesMoviesCreateIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -175,19 +245,27 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/ama-sessions/$id",
         "/authors/$id",
         "/users/$id",
         "/users/search",
+        "/search/",
         "/authors/edit/$id",
         "/entries/books/$id",
+        "/entries/movies/$id",
         "/users/edit/$id",
         "/authors/create/",
         "/entries/books/edit/$id",
-        "/entries/books/create/"
+        "/entries/movies/edit/$id",
+        "/entries/books/create/",
+        "/entries/movies/create/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/ama-sessions/$id": {
+      "filePath": "ama-sessions/$id.tsx"
     },
     "/authors/$id": {
       "filePath": "authors/$id.tsx"
@@ -198,11 +276,17 @@ export const routeTree = rootRoute.addChildren({
     "/users/search": {
       "filePath": "users/search.tsx"
     },
+    "/search/": {
+      "filePath": "search/index.tsx"
+    },
     "/authors/edit/$id": {
       "filePath": "authors/edit/$id.tsx"
     },
     "/entries/books/$id": {
       "filePath": "entries/books/$id.tsx"
+    },
+    "/entries/movies/$id": {
+      "filePath": "entries/movies/$id.tsx"
     },
     "/users/edit/$id": {
       "filePath": "users/edit/$id.tsx"
@@ -213,8 +297,14 @@ export const routeTree = rootRoute.addChildren({
     "/entries/books/edit/$id": {
       "filePath": "entries/books/edit/$id.tsx"
     },
+    "/entries/movies/edit/$id": {
+      "filePath": "entries/movies/edit/$id.tsx"
+    },
     "/entries/books/create/": {
       "filePath": "entries/books/create/index.tsx"
+    },
+    "/entries/movies/create/": {
+      "filePath": "entries/movies/create/index.tsx"
     }
   }
 }

@@ -14,35 +14,44 @@ interface Props<T> {
 }
 
 export const DropDownChoice = <T extends unknown>({
-                                                    options,
-                                                    onChange,
-                                                    defaultIndex = 0,
-                                                    containerClassName,
-                                                  }: Props<T>) => {
+  options,
+  onChange,
+  defaultIndex = 0,
+  containerClassName,
+}: Props<T>) => {
   const [isOpen, toggleIsOpen] = useToggle()
   const [chosenOption, setChosenOption] = useState(options[defaultIndex])
   return (
-    <div className='relative'>
-      <button onClick={toggleIsOpen} className='p-0 outline-none border-none'>
+    <div className="relative">
+      <button
+        onClick={toggleIsOpen}
+        className="border-none bg-transparent p-0 outline-none"
+      >
         {chosenOption.element}
       </button>
-      {isOpen &&
-        <div className={`absolute ${containerClassName} bg-white rounded-md shadow-lg p-2.5 border border-solid border-slate-200 z-20 space-y-2`}>
-          {options.filter(o => o.value != chosenOption.value).map((o,i) => {
-            return (
-              <button  key={i}
-                className='p-0 outline-none border-none w-full'
-                      onClick={() => {
-                        onChange(o.value)
-                        setChosenOption(o)
-                        toggleIsOpen()
-                      }}>
-                {o.element}
-              </button>
-            )
-          })}
+      {isOpen && (
+        <div
+          className={`absolute ${containerClassName} z-20 space-y-2 rounded-md border border-solid border-slate-200 bg-white p-2.5 shadow-lg`}
+        >
+          {options
+            .filter((o) => o.value != chosenOption.value)
+            .map((o, i) => {
+              return (
+                <button
+                  key={i}
+                  className="w-full border-none bg-transparent p-0 outline-none"
+                  onClick={() => {
+                    onChange(o.value)
+                    setChosenOption(o)
+                    toggleIsOpen()
+                  }}
+                >
+                  {o.element}
+                </button>
+              )
+            })}
         </div>
-      }
+      )}
     </div>
   )
 }
@@ -52,10 +61,16 @@ interface DropdownButtonProps {
   text: string
 }
 
-export const DropdownButton: FunctionComponent<DropdownButtonProps> = ({ icon, text }) => {
+export const DropdownButton: FunctionComponent<DropdownButtonProps> = ({
+  icon,
+  text,
+}) => {
   return (
-    <div className='bg-slate-300 rounded-3xl flex items-center px-4 py-1 '>
-      {icon} <span className='ml-2 text-slate-900 text-lg font-semibold whitespace-nowrap'>{text}</span>
+    <div className="flex items-center rounded-3xl bg-slate-300 px-4 py-1">
+      {icon}{' '}
+      <span className="ml-2 whitespace-nowrap text-lg font-semibold text-slate-900">
+        {text}
+      </span>
     </div>
   )
 }

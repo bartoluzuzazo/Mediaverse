@@ -4,21 +4,13 @@ using Microsoft.AspNetCore.Http;
 
 namespace MediaVerse.Infrastructure.UserAccessor;
 
-public class HttpUserAccessor : IUserAccessor
+public class HttpUserAccessor(IHttpContextAccessor httpContextAccessor) : IUserAccessor
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public HttpUserAccessor(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
-
     public string? Email
     {
         get
         {
-            return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
+            return httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email);
         }
     }
 
@@ -26,7 +18,17 @@ public class HttpUserAccessor : IUserAccessor
     {
         get
         {
-            return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+            return httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
         }
+    }
+
+    public Guid? Id
+    {
+        get
+        {
+            var idString = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return idString is null ? null : Guid.Parse(idString);
+        }
+        
     }
 }

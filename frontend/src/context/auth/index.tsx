@@ -32,34 +32,58 @@ interface JwtPayload {
 }
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
-  undefined,
+  undefined
 )
 
 const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
-                                                                            children,
-                                                                          }) => {
+  children,
+}) => {
   const [token, setToken, removeToken] = useLocalStorage<string | undefined>(
     'token',
-    undefined,
+    undefined
   )
 
   useEffect(() => {
+    if (!token) {
+      axios.defaults.headers.common['Authorization'] = undefined
+    }
     axios.defaults.headers.common['Authorization'] = token && `Bearer ${token}`
   }, [token])
 
-  const authUserData: AuthData | undefined = useMemo(() => {
-    if (!token) {
-      return undefined
+  const [tokenAxiosDefaults, authUserData] = useMemo(() => {
+    const token = axios.defaults.headers.common['Authorization']
+    if(typeof token !== "string"){
+      return [token, undefined]
     }
     const jwtData = jwtDecode<JwtPayload>(token)
     const roles = Array.isArray(jwtData.role) ? jwtData.role : [jwtData.role]
-    return {
+    const authUserData = {
       email: jwtData.email,
       id: jwtData.nameid,
       username: jwtData.unique_name,
-      roles
+      roles,
     }
-  }, [token])
+    return [token, authUserData]
+  }, [axios.defaults.headers.common['Authorization']])
+
+  useEffect(() => {
+    axios.interceptors.response.use(
+      (response) => {
+        return response
+      },
+      (error) => {
+        if (error.response.status === 401) {
+          removeToken()
+        }
+        return error
+      }
+    )
+    return () => {
+      axios.interceptors.response.clear()
+    }
+  }, [axios])
+
+
 
   return (
     <AuthContext.Provider
@@ -67,7 +91,7 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
         token,
         setToken,
         removeToken,
-        isAuthenticated: !!token,
+        isAuthenticated: !!tokenAxiosDefaults,
         authUserData: authUserData,
       }}
     >

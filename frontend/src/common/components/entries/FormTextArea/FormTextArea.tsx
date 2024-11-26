@@ -6,9 +6,10 @@ interface Props <T extends FieldValues>{
   registerPath: Path<T>
   register:  UseFormRegister<T>
   errorValue: FieldError | undefined
+  rows?: number
 }
 
-const FormTextArea = <T extends FieldValues> ({label, registerPath, register, errorValue} : Props<T>) => {
+const FormTextArea = <T extends FieldValues> ({label, registerPath, register, errorValue, rows=20} : Props<T>) => {
   return (
     <div className="mb-2 block">
       <label>
@@ -16,7 +17,7 @@ const FormTextArea = <T extends FieldValues> ({label, registerPath, register, er
         <textarea
           {...register(registerPath, { required: `${label} is required` })}
           className="block w-full rounded-md border-2 border-slate-500 p-1"
-          rows={20}
+          rows={rows}
         />
       </label>
       {errorValue && (

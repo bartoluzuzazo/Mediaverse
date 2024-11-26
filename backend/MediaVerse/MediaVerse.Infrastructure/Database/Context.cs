@@ -1,22 +1,17 @@
 ﻿using MediaVerse.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace MediaVerse.Infrastructure.Database;
 
 public partial class Context : DbContext
 {
-    private readonly IConfiguration _configuration;
-    
-    public Context(IConfiguration configuration)
+    public Context()
     {
-        _configuration = configuration;
     }
 
-    public Context(DbContextOptions<Context> options, IConfiguration configuration)
+    public Context(DbContextOptions<Context> options)
         : base(options)
     {
-        _configuration = configuration;
     }
 
     public virtual DbSet<Album> Albums { get; set; }
@@ -86,7 +81,8 @@ public partial class Context : DbContext
     public virtual DbSet<WorkOn> WorkOns { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql(_configuration["DefaultConnection"]);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=localhost;User ID=postgres;Password=admin;Port=5432;Database=pro-test;Pooling=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -143,6 +139,9 @@ public partial class Context : DbContext
             entity.Property(e => e.Content)
                 .HasMaxLength(1000)
                 .HasColumnName("content");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.AmaSession).WithMany(p => p.AmaQuestions)
@@ -185,12 +184,18 @@ public partial class Context : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.AuthorId).HasColumnName("author_id");
+            entity.Property(e => e.Description)
+                .HasMaxLength(1000)
+                .HasColumnName("description");
             entity.Property(e => e.End)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("end");
             entity.Property(e => e.Start)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("start");
+            entity.Property(e => e.Title)
+                .HasMaxLength(100)
+                .HasColumnName("title");
 
             entity.HasOne(d => d.Author).WithMany(p => p.AmaSessions)
                 .HasForeignKey(d => d.AuthorId)
@@ -253,6 +258,10 @@ public partial class Context : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Bio).HasColumnName("bio");
+            entity.HasIndex(e => e.SearchVector, "author_ts_idx").HasMethod("gin");
+            entity.Property(e => e.SearchVector)
+                .HasComputedColumnSql("to_tsvector('english'::regconfig, ((COALESCE(name, ''::text) || ' '::text) || (COALESCE(surname, ''::character varying))::text))", true)
+                .HasColumnName("search_vector");
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .HasColumnName("name");
@@ -365,7 +374,9 @@ public partial class Context : DbContext
             entity.Property(e => e.Content)
                 .HasMaxLength(1000)
                 .HasColumnName("content");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
             entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
             entity.Property(e => e.EntryId).HasColumnName("entry_id");
             entity.Property(e => e.ParentCommentId).HasColumnName("parent_comment_id");
@@ -418,7 +429,6 @@ public partial class Context : DbContext
 
             entity.ToTable("entry");
 
-            entity.HasIndex(e => e.SearchVector, "entry_ts_idx").HasMethod("gin");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -429,6 +439,7 @@ public partial class Context : DbContext
                 .HasMaxLength(150)
                 .HasColumnName("name");
             entity.Property(e => e.Release).HasColumnName("release");
+            entity.HasIndex(e => e.SearchVector, "entry_ts_idx").HasMethod("gin");
             entity.Property(e => e.SearchVector)
                 .HasComputedColumnSql("to_tsvector('english'::regconfig, ((COALESCE(description, ''::text) || ' '::text) || (COALESCE(name, ''::character varying))::text))", true)
                 .HasColumnName("search_vector");
@@ -900,7 +911,6 @@ public partial class Context : DbContext
 
             entity.HasOne(d => d.ProfilePicture).WithMany(p => p.Users)
                 .HasForeignKey(d => d.ProfilePictureId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("user_profile_picture");
 
             entity.HasMany(d => d.Quizzes).WithMany(p => p.Users)

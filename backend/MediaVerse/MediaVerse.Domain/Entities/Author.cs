@@ -1,4 +1,6 @@
-﻿namespace MediaVerse.Domain.Entities;
+﻿using NpgsqlTypes;
+
+namespace MediaVerse.Domain.Entities;
 
 public partial class Author
 {
@@ -21,4 +23,7 @@ public partial class Author
     public virtual User? User { get; set; }
 
     public virtual ICollection<WorkOn> WorkOns { get; set; } = new List<WorkOn>();
+    
+    public NpgsqlTsVector? SearchVector { get; set; }
+
 }
