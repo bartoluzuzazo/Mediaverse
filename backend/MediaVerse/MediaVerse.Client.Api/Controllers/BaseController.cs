@@ -15,6 +15,11 @@ public abstract class BaseController : ControllerBase
     {
         return ResolveCode(response.Exception, Ok(response.Data));
     }
+    
+    protected IActionResult CreatedOrError<T>(BaseResponse<T> response, string getPath)
+    {
+        return ResolveCode(response.Exception, CreatedAtAction(getPath, new { id = response.Data }, new { id = response.Data }));
+    }
 
     protected IActionResult OkOrError(Exception? exception)
     {

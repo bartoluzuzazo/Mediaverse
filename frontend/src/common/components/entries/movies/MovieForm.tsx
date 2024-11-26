@@ -1,37 +1,36 @@
 import FormButton from '../../form/button'
 import { useNavigate } from '@tanstack/react-router'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Book } from '../../../../models/entry/book/Book.ts'
+import { Movie } from '../../../../models/entry/movie/Movie.ts'
 import { FunctionComponent, useState } from 'react'
 import FormField from '../../form/FormField/FormField.tsx'
-import { BookService } from '../../../../services/bookService.ts'
+import { MovieService } from '../../../../services/movieService.ts'
 import FormTextArea from '../FormTextArea/FormTextArea.tsx'
 import FormDateInput from '../../form/FormDateInput/FormDateInput.tsx'
 import CoverPicker from '../../form/CoverPicker/CoverPicker.tsx'
-import { MultipleInputForm } from '../MultipleInputForm.tsx'
-import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
 import { Entry } from '../../../../models/entry/Entry.ts'
 import { WorkOn } from '../../../../models/entry/WorkOn.ts'
+import { MultipleInputForm } from '../MultipleInputForm.tsx'
+import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
 
-export interface BookFormData {
+export interface MovieFormData {
   entry: Entry
-  isbn: string,
   synopsis: string,
   genres: string[]
 }
 
 type Props = {
-  book?: Book
+  movie?: Movie
 }
 
-const BookForm: FunctionComponent<Props> = ({ book }) => {
+const MovieForm: FunctionComponent<Props> = ({ movie }) => {
 
   const getInitialWorkOns = () => {
-    if (book === undefined){
+    if (movie === undefined){
       return []
     }
 
-    return book!.entry.authors.flatMap(g => g.authors.map(a => {
+    return movie!.entry.authors.flatMap(g => g.authors.map(a => {
       const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role}
       return workOn
     }))
@@ -44,13 +43,12 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
     control,
     getValues,
     formState: { errors, isSubmitting },
-  } = useForm<BookFormData>({
-    defaultValues: book
+  } = useForm<MovieFormData>({
+    defaultValues: movie
       ? {
-        entry : book.entry,
-        isbn: book.isbn,
-        genres: book.bookGenres,
-        synopsis: book.synopsis
+        entry : movie.entry,
+        genres: movie.cinematicGenres,
+        synopsis: movie.synopsis
       }
       : undefined,
   })
@@ -60,17 +58,17 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
   const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
   const [authors, setAuthors] = useState<WorkOn[]>(getInitialWorkOns())
 
-  const onSubmit: SubmitHandler<BookFormData> = async (data) => {
+  const onSubmit: SubmitHandler<MovieFormData> = async (data) => {
     data.genres = genres
     data.entry.workOnRequests = authors;
-    console.log(data)
-    if (book == null) {
-      const response = await BookService.postBook(data)
+
+    if (movie == null) {
+      const response = await MovieService.postMovie(data)
       const id = response.data.id
-      await navigate({ to: `/entries/books/${id}` })
+      await navigate({ to: `/entries/movies/${id}` })
     } else {
-      await BookService.patchBook(data, book.entry.id)
-      await navigate({ to: `/entries/books/${book.entry.id}` })
+      await MovieService.patchMovie(data, movie.entry.id)
+      await navigate({ to: `/entries/movies/${movie.entry.id}` })
     }
   }
 
@@ -82,9 +80,8 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
         className="flex flex-col p-4 md:flex-row"
       >
         <div>
-          <CoverPicker<BookFormData> control={control} name={'entry.photo'} watch={watch} previousImageSrc={book?.entry.photo} />
+          <CoverPicker<MovieFormData> control={control} name={'entry.photo'} watch={watch} previousImageSrc={movie?.entry.photo} />
           <FormField label={'Name'} register={register} errorValue={errors.entry?.name} registerPath={'entry.name'} />
-          <FormField label={'ISBN'} register={register} errorValue={errors.isbn} registerPath={'isbn'} />
           <FormDateInput label={'Release'} register={register} errorValue={errors.entry?.release} registerPath={'entry.release'} />
         </div>
         <div className="flex-1 md:ml-20">
@@ -107,4 +104,4 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
   )
 }
 
-export default BookForm
+export default MovieForm

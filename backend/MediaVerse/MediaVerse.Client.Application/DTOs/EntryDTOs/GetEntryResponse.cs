@@ -1,5 +1,3 @@
-using MediaVerse.Client.Application.DTOs.AuthorDTOs;
-
 namespace MediaVerse.Client.Application.DTOs.EntryDTOs;
 
 public class GetEntryResponse
@@ -17,5 +15,6 @@ public class GetEntryResponse
     public decimal RatingAvg { get; set; }
     
     public string Type { get; set; }
+    
     public List<GetEntryAuthorGroupResponse> Authors { get; set; }
 }

@@ -10,11 +10,11 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
   return (
     <div className="mt-10 flex flex-col gap-5">
       <EntryCarousel
-        entries={topBooks?.data.books || []}
+        entries={topBooks?.data.entries || []}
         title="Top Books This Month"
       />
       <EntryCarousel
-        entries={newestBooks?.data.books || []}
+        entries={newestBooks?.data.entries || []}
         title="Newest Books This Month"
       />
     </div>

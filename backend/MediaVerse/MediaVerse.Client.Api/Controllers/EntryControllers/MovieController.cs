@@ -1,6 +1,6 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
+using MediaVerse.Client.Application.DTOs.EntryDTOs.MovieDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.ValueObjects.Enums;
@@ -11,37 +11,37 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 
 [Route("[controller]")]
 [ApiController]
-public class BookController(IMediator mediator) : BaseController
+public class MovieController(IMediator mediator) : BaseController
 {
     [HttpPost]
     [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> AddBook(AddBookCommand request)
+    public async Task<IActionResult> AddMovie(AddMovieCommand request)
     {
         var response = await mediator.Send(request);
-        return CreatedOrError(response, nameof(GetBook));
+        return CreatedOrError(response, nameof(GetMovie));
     }
     
     [HttpPatch("{id:guid}")]
     [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> PatchBook(Guid id, PatchBookRequest request)
+    public async Task<IActionResult> PatchMovie(Guid id, PatchMovieRequest request)
     {
-        var command = new UpdateBookCommand(id, request);
+        var command = new UpdateMovieCommand(id, request);
         var response = await mediator.Send(command);
-        return ResolveCode(response.Exception, Ok(nameof(GetBook)));
+        return ResolveCode(response.Exception, Ok(nameof(GetMovie)));
     }
     
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetBook(Guid id)
+    public async Task<IActionResult> GetMovie(Guid id)
     {
-        var request = new GetBookQuery(id);
+        var request = new GetMovieQuery(id);
         var response = await mediator.Send(request);
         return OkOrError(response);
     }
     
     [HttpGet("page")]
-    public async Task<IActionResult> GetBooks(int page, int size, EntryOrder order, OrderDirection direction)
+    public async Task<IActionResult> GetMovies(int page, int size, EntryOrder order, OrderDirection direction)
     {
-        var spec = new GetBookPageSpecification(page, size, order, direction);
+        var spec = new GetMoviePageSpecification(page, size, order, direction);
         var request = new GetEntryPageQuery(spec);
         var response = await mediator.Send(request);
         return ResolveCode(response.Exception, Ok(response.Data));

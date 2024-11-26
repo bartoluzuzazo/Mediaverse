@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MediaVerse.Client.Application.Queries.EntryQueries;
-using MediaVerse.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaVerse.Client.Api.Controllers.EntryControllers;
