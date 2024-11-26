@@ -32,18 +32,18 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
             <Loader />
           ) : (
             <div className="flex">
-              {(searchPanelContext?.searchQuery?.data?.data.length || 0) <=
-              0 ? (
+              {(searchPanelContext?.searchQuery?.data?.data.entries.length ||
+                0) <= 0 ? (
                 <div className="flex h-full w-full items-center justify-center text-2xl font-semibold text-mv-gray">
                   No entries
                 </div>
               ) : (
-                searchPanelContext?.searchQuery?.data?.data.map((e) => (
+                searchPanelContext?.searchQuery?.data?.data.entries.map((e) => (
                   <Link
                     onClick={() => searchPanelContext.setSearchValue('')}
                     to="/entries/books/$id"
                     key={e.id}
-                    className="flex h-[300px] w-[200px] flex-col gap-2 p-3 font-bold text-black"
+                    className="flex min-h-[300px] w-[200px] flex-col gap-2 p-3 font-bold text-black"
                     params={{ id: e.id }}
                   >
                     <CustomImage
@@ -51,15 +51,27 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
                       src={`data:image/webp;base64,${e.photo}`}
                     />
                     <p className="text-xl">{e.name}</p>
-                    <div className="flex items-center gap-1">
-                      {e.ratingAvg}
-                      <AiFillStar />
+                    <div className="flex w-full justify-between">
+                      <div className="flex items-center gap-1">
+                        {e.ratingAvg}
+                        <AiFillStar />
+                      </div>
+                      <div className="flex items-center justify-center bg-violet-200 px-2">
+                        <span className="text-[12px] uppercase text-violet-900">
+                          {e.type}
+                        </span>
+                      </div>
                     </div>
                   </Link>
                 ))
               )}
             </div>
           )}
+        </div>
+        <div className="flex flex-col">
+          <p className="flex w-full justify-between text-2xl font-semibold">
+            <span>Authors</span>{' '}
+          </p>
         </div>
       </div>
     )

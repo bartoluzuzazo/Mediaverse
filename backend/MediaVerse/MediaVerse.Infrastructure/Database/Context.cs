@@ -258,6 +258,10 @@ public partial class Context : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Bio).HasColumnName("bio");
+            entity.HasIndex(e => e.SearchVector, "author_ts_idx").HasMethod("gin");
+            entity.Property(e => e.SearchVector)
+                .HasComputedColumnSql("to_tsvector('english'::regconfig, ((COALESCE(name, ''::text) || ' '::text) || (COALESCE(surname, ''::character varying))::text))", true)
+                .HasColumnName("search_vector");
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .HasColumnName("name");
@@ -425,7 +429,6 @@ public partial class Context : DbContext
 
             entity.ToTable("entry");
 
-            entity.HasIndex(e => e.SearchVector, "entry_ts_idx").HasMethod("gin");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -436,6 +439,7 @@ public partial class Context : DbContext
                 .HasMaxLength(150)
                 .HasColumnName("name");
             entity.Property(e => e.Release).HasColumnName("release");
+            entity.HasIndex(e => e.SearchVector, "entry_ts_idx").HasMethod("gin");
             entity.Property(e => e.SearchVector)
                 .HasComputedColumnSql("to_tsvector('english'::regconfig, ((COALESCE(description, ''::text) || ' '::text) || (COALESCE(name, ''::character varying))::text))", true)
                 .HasColumnName("search_vector");

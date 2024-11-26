@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { RxHamburgerMenu } from 'react-icons/rx'
@@ -8,6 +8,7 @@ import FormInput from '../form/input'
 import AuthPanel from './authPanel'
 import NavBarBurger from './navBarBurger'
 import { useSearchPanelContext } from '../../../context/searchPanel'
+import { useForm } from 'react-hook-form'
 
 interface NavBarProps {}
 
@@ -25,6 +26,10 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
     }
   }, [authContext?.token])
 
+  const { handleSubmit } = useForm()
+
+  const navigate = useNavigate()
+
   return (
     <div className="z-10 flex h-[90px] w-full items-center justify-between px-[40px] shadow-xl">
       <div className="relative flex w-[200px] items-center gap-6">
@@ -41,16 +46,26 @@ const NavBar: FunctionComponent<NavBarProps> = () => {
         </Link>
       </div>
       <div className="w-[600px]">
-        <FormInput
-          inputProps={{
-            type: 'text',
-            placeholder: 'search...',
-            value: searchPanelContext?.searchValue || '',
-            onChange: (e) =>
-              searchPanelContext?.setSearchValue?.(e.target.value),
-          }}
-          rightElement={<FaSearch />}
-        />
+        <form
+          onSubmit={handleSubmit(() => {
+            navigate({
+              to: '/search',
+              search: { searchQuery: searchPanelContext?.searchValue || '' },
+            })
+            searchPanelContext?.setSearchValue('')
+          })}
+        >
+          <FormInput
+            inputProps={{
+              type: 'text',
+              placeholder: 'search...',
+              value: searchPanelContext?.searchValue || '',
+              onChange: (e) =>
+                searchPanelContext?.setSearchValue?.(e.target.value),
+            }}
+            rightElement={<FaSearch />}
+          />
+        </form>
       </div>
       <div className="relative w-[200px]">
         {authContext?.token ? (

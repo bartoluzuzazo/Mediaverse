@@ -9,17 +9,12 @@ import {
 } from 'react'
 import { EntryService } from '../../services/entryService'
 import { useDebounceValue } from 'usehooks-ts'
-import { Entry } from '../../models/entry/Entry'
+import { GetEntriesResponse } from '../../models/entry/Entry'
 
 interface SearchPanelContextType {
   setSearchValue: Dispatch<SetStateAction<string>>
   searchValue: string
-  searchQuery: UseQueryResult<
-    {
-      data: Entry[]
-    },
-    Error
-  >
+  searchQuery: UseQueryResult<GetEntriesResponse, Error>
   debounceSearchValue: string
 }
 

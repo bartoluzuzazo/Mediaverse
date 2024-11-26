@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SearchIndexImport } from './routes/search/index'
 import { Route as UsersSearchImport } from './routes/users/search'
 import { Route as UsersIdImport } from './routes/users/$id'
 import { Route as AuthorsIdImport } from './routes/authors/$id'
@@ -31,6 +32,11 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const SearchIndexRoute = SearchIndexImport.update({
+  path: '/search/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const UsersSearchRoute = UsersSearchImport.update({
   path: '/users/search',
@@ -124,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersSearchImport
       parentRoute: typeof rootRoute
     }
+    '/search/': {
+      id: '/search/'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/authors/edit/$id': {
       id: '/authors/edit/$id'
       path: '/authors/edit/$id'
@@ -197,6 +210,7 @@ export const routeTree = rootRoute.addChildren({
   AuthorsIdRoute,
   UsersIdRoute,
   UsersSearchRoute,
+  SearchIndexRoute,
   AuthorsEditIdRoute,
   EntriesBooksIdRoute,
   EntriesMoviesIdRoute,
@@ -220,6 +234,7 @@ export const routeTree = rootRoute.addChildren({
         "/authors/$id",
         "/users/$id",
         "/users/search",
+        "/search/",
         "/authors/edit/$id",
         "/entries/books/$id",
         "/entries/movies/$id",
@@ -242,6 +257,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/users/search": {
       "filePath": "users/search.tsx"
+    },
+    "/search/": {
+      "filePath": "search/index.tsx"
     },
     "/authors/edit/$id": {
       "filePath": "authors/edit/$id.tsx"
