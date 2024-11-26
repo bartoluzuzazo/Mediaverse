@@ -16,6 +16,7 @@ import { Route as SearchIndexImport } from './routes/search/index'
 import { Route as UsersSearchImport } from './routes/users/search'
 import { Route as UsersIdImport } from './routes/users/$id'
 import { Route as AuthorsIdImport } from './routes/authors/$id'
+import { Route as AmaSessionsIdImport } from './routes/ama-sessions/$id'
 import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
 import { Route as UsersEditIdImport } from './routes/users/edit/$id'
 import { Route as EntriesMoviesIdImport } from './routes/entries/movies/$id'
@@ -50,6 +51,11 @@ const UsersIdRoute = UsersIdImport.update({
 
 const AuthorsIdRoute = AuthorsIdImport.update({
   path: '/authors/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AmaSessionsIdRoute = AmaSessionsIdImport.update({
+  path: '/ama-sessions/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -107,6 +113,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/ama-sessions/$id': {
+      id: '/ama-sessions/$id'
+      path: '/ama-sessions/$id'
+      fullPath: '/ama-sessions/$id'
+      preLoaderRoute: typeof AmaSessionsIdImport
       parentRoute: typeof rootRoute
     }
     '/authors/$id': {
@@ -207,6 +220,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
+  AmaSessionsIdRoute,
   AuthorsIdRoute,
   UsersIdRoute,
   UsersSearchRoute,
@@ -231,6 +245,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/ama-sessions/$id",
         "/authors/$id",
         "/users/$id",
         "/users/search",
@@ -248,6 +263,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/ama-sessions/$id": {
+      "filePath": "ama-sessions/$id.tsx"
     },
     "/authors/$id": {
       "filePath": "authors/$id.tsx"

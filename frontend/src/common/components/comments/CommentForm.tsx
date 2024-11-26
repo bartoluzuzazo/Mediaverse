@@ -1,8 +1,8 @@
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler} from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 import { commentService } from '../../../services/commentService.ts'
 import { CommentFormData } from '../../../models/comments'
+import { TextForm } from '../shared/TextForm'
 
 type Props = {
   entryId: string
@@ -16,20 +16,7 @@ export const CommentForm = ({
   parentCommentId,
   onFormSent,
 }: Props) => {
-  const { isAuthenticated } = useAuthContext()!
   const queryClient = useQueryClient()
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-    reset,
-  } = useForm<CommentFormData>({
-    defaultValues: {
-      entryId: entryId,
-      content: '',
-      commentId: parentCommentId,
-    },
-  })
 
   const { mutateAsync: sendCommentMutation } = useMutation({
     mutationFn: async (comment: CommentFormData) => {
@@ -45,7 +32,6 @@ export const CommentForm = ({
           queryKey: key,
         })
       }
-      reset()
       if (onFormSent !== undefined) {
         onFormSent()
       }
@@ -54,23 +40,18 @@ export const CommentForm = ({
   const onSubmit: SubmitHandler<CommentFormData> = async (data) => {
     await sendCommentMutation(data)
   }
-  if (!isAuthenticated) {
-    return null
-  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
-      <textarea
-        {...register('content', { required: 'Cannot send an empty comment' })}
-        rows={10}
-        className="block w-full rounded-md border-2 border-black p-1"
-      />
-      <button
-        className={`mt-2 text-white ${isSubmitting ? 'bg-violet-400' : 'bg-violet-700'}`}
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? 'Submitting...' : 'Submit'}
-      </button>
-    </form>
+    <TextForm<CommentFormData>
+      onSubmit={onSubmit}
+      name="content"
+      maxLength={1000}
+      defaultValues={{
+        entryId: entryId,
+        content: '',
+        commentId: parentCommentId,
+      }}
+    />
   )
 }
 

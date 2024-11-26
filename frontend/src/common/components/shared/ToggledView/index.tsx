@@ -8,23 +8,33 @@ type Props = {
   containerClass?: string
 }
 
-export const ToggledView: FunctionComponent<Props> = ({ children, containerClass, title }) => {
+export const ToggledView: FunctionComponent<Props> = ({
+  children,
+  containerClass,
+  title,
+}) => {
   const [isOpen, toggleOpen] = useToggle()
   return (
     <div className={containerClass}>
-      <button type="button" onClick={toggleOpen} className="flex gap-2 items-baseline mb-2 bg-transparent p-0 outline-none border-none">
-        <div  className="bg-transparent p-0 m-0 outline-none shadow-none">
-          <TbTriangleInvertedFilled className={`text-lg transition-all ${!isOpen ? `-rotate-90` : ``}`}/>
+      <button
+        type="button"
+        onClick={toggleOpen}
+        className="mb-2 flex items-baseline gap-2 border-none bg-transparent p-0 outline-none"
+      >
+        <div className="m-0 bg-transparent p-0 shadow-none outline-none">
+          <TbTriangleInvertedFilled
+            className={`text-lg transition-all ${!isOpen ? `-rotate-90` : ``}`}
+          />
         </div>
-        <span className="font-semibold text-xl">{title}</span>
+        <span className="text-xl font-semibold">{title}</span>
       </button>
-      {isOpen &&
-        <div className='relative'>
-          <div className='absolute top-0 left-0 right-0 bg-white rounded-md shadow-lg p-1 pl-[1.83rem] border border-solid border-slate-200'>
+      {isOpen && (
+        <div className="relative">
+          <div className="absolute left-0 right-0 top-0 rounded-md border border-solid border-slate-200 bg-white pb-2 pl-[1.83rem] pr-1.5 shadow-lg">
             {children}
           </div>
         </div>
-      }
+      )}
     </div>
   )
 }

@@ -1,4 +1,5 @@
 using System.Text;
+using MediaVerse.Client.Api.Filters;
 using MediaVerse.Client.Application.Extensions.MediatR;
 using MediaVerse.Client.Application.Queries.Test;
 using MediaVerse.Client.Application.Services.Authentication;
@@ -54,6 +55,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers(options =>
 {
     options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+    options.Filters.Add(new ValidateModelAttribute());
 });
 builder.Services.AddDbContext<Context>(options =>
     options.UseNpgsql(builder.Configuration["DefaultConnection"]));

@@ -4,4 +4,5 @@ public interface IUserAccessor
 {
     public string? Email { get;}
     public string? Name { get; }
+    public Guid? Id { get; }
 }
