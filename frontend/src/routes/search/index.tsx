@@ -1,6 +1,6 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent } from 'react'
 import { EntryService } from '../../services/entryService'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Oval } from 'react-loader-spinner'
@@ -23,7 +23,6 @@ interface Tab {
 }
 
 const SearchPage: FunctionComponent<SearchPageProps> = () => {
-  const [tab, setTab] = useState<Tab>({ label: 'Books', value: 'Book' })
   const { searchQuery } = Route.useSearch()
 
   return (
