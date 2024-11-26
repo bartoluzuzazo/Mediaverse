@@ -35,7 +35,7 @@ const EntryBanner: FunctionComponent<props> = ({ entry, info, type }) => {
               </div>
             </div>
           </div>
-          <div className="text-5xl font-bold">{entry.ratingAvg}★</div>
+          <div className="text-5xl font-bold">{entry.ratingAvg.toFixed(2)}★</div>
         </div>
       </div>
     </>
