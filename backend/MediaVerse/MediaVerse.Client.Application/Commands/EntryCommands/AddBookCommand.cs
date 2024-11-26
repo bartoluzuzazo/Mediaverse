@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.AggregatesModel;
@@ -7,19 +8,28 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
-public record AddBookCommand(Guid EntryId, string Isbn, string Synopsis, List<string>? Genres) : IRequest<BaseResponse<Guid>>;
+public record AddBookCommand(AddEntryCommand Entry, string Isbn, string Synopsis, List<string>? Genres)
+    : IRequest<BaseResponse<Guid>>;
 
 public class AddBookCommandHandler(
     IRepository<Book> bookRepository,
-    IRepository<BookGenre> bookGenreRepository)
-    : IRequestHandler<AddBookCommand, BaseResponse<Guid>>
+    IRepository<BookGenre> bookGenreRepository,
+    IRepository<Entry> entryRepository,
+    IRepository<CoverPhoto> photoRepository,
+    IRepository<WorkOn> workOnRepository,
+    IRepository<AuthorRole> roleRepository,
+    IMapper mapper)
+    : AddEntryCommandHandler(entryRepository, photoRepository, workOnRepository, roleRepository, mapper), 
+        IRequestHandler<AddBookCommand, BaseResponse<Guid>>
 {
     public async Task<BaseResponse<Guid>> Handle(AddBookCommand request,
         CancellationToken cancellationToken)
     {
+        var entryResponse = await base.Handle(request.Entry, cancellationToken);
+        
         var book = new Book()
         {
-            Id = request.EntryId,
+            Id = entryResponse.Data.EntryId,
             Isbn = request.Isbn,
             Synopsis = request.Synopsis,
             BookGenres = new List<BookGenre>()
@@ -36,7 +46,7 @@ public class AddBookCommandHandler(
             dbGenres.AddRange(newGenres);
             book.BookGenres = dbGenres;
         }
-        
+
         await bookRepository.AddAsync(book, cancellationToken);
 
         return new BaseResponse<Guid>(book.Id);

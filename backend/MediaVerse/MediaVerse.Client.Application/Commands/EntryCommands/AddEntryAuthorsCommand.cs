@@ -1,5 +1,4 @@
 using MediatR;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
 using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Domain.AggregatesModel;

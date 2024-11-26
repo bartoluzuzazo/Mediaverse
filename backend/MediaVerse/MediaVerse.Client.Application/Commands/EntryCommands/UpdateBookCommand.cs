@@ -1,13 +1,10 @@
+using AutoMapper;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
-using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
-using MediaVerse.Client.Application.Specifications.WorkOnSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
-using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
-using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
@@ -15,10 +12,21 @@ public record UpdateBookCommand(Guid Id, PatchBookRequest Dto) : IRequest<BaseRe
 
 public class UpdateBookCommandHandler(
     IRepository<Book> bookRepository,
-    IRepository<BookGenre> bookGenreRepository) : IRequestHandler<UpdateBookCommand, BaseResponse<Guid>>
+    IRepository<BookGenre> bookGenreRepository,
+    IRepository<Entry> entryRepository,
+    IRepository<CoverPhoto> coverPhotoRepository,
+    IRepository<AuthorRole> roleRepository,
+    IRepository<WorkOn> workOnRepository,
+    IMapper mapper) 
+    : UpdateEntryCommandHandler(entryRepository, coverPhotoRepository, roleRepository, workOnRepository, mapper), 
+        IRequestHandler<UpdateBookCommand, BaseResponse<Guid>>
 {
     public async Task<BaseResponse<Guid>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
+        var command = new UpdateEntryCommand(request.Id, request.Dto.Entry);
+        var response = await base.Handle(command, cancellationToken);
+        if (response.Exception is not null) return new BaseResponse<Guid>(response.Exception);
+        
         var bookSpecification = new GetBookByIdSpecification(request.Id);
         var book = await bookRepository.FirstOrDefaultAsync(bookSpecification, cancellationToken);
         

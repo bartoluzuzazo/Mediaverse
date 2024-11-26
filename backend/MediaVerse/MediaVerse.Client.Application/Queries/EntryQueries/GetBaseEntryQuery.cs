@@ -1,7 +1,5 @@
-using MediatR;
 using MediaVerse.Client.Application.DTOs.AuthorDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
@@ -11,10 +9,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Queries.EntryQueries;
 
-public record GetBaseEntryQuery(Guid Id) : IRequest<BaseResponse<GetEntryResponse>>;
+public record GetBaseEntryQuery(Guid Id);
 
-public class GetBaseEntryQueryHandler(IRepository<Entry> entryRepository)
-    : IRequestHandler<GetBaseEntryQuery, BaseResponse<GetEntryResponse>>
+public abstract class GetBaseEntryQueryHandler(IRepository<Entry> entryRepository)
 {
     public async Task<BaseResponse<GetEntryResponse>> Handle(GetBaseEntryQuery request, CancellationToken cancellationToken)
     {

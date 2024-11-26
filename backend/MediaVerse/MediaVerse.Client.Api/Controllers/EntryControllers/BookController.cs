@@ -15,36 +15,27 @@ public class BookController(IMediator mediator) : BaseController
 {
     [HttpPost]
     [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> AddBook(AddBookRequest request)
+    public async Task<IActionResult> AddBook(AddBookCommand request)
     {
-        var entryResponse = await mediator.Send(request.Entry);
-        var bookCommand = new AddBookCommand(entryResponse.Data!.EntryId, request.Isbn, request.Synopsis, request.Genres);
-        var bookResponse = await mediator.Send(bookCommand);
-        return ResolveCode(bookResponse.Exception, CreatedAtAction(nameof(GetBook), new { id = entryResponse.Data.EntryId },new { id = entryResponse.Data.EntryId }));
+        var response = await mediator.Send(request);
+        return CreatedOrError(response, nameof(GetBook));
     }
     
     [HttpPatch("{id:guid}")]
     [Authorize(Policy = "Admin")]
     public async Task<IActionResult> PatchBook(Guid id, PatchBookRequest request)
     {
-        var updateEntryCommand = new UpdateEntryCommand(id, request.Entry);
-        var entryResponse = await mediator.Send(updateEntryCommand);
-        var updateBookCommand = new UpdateBookCommand(id, request);
-        var bookResponse = await mediator.Send(updateBookCommand);
-        return ResolveCode(bookResponse.Exception, Ok(nameof(GetBook)));
+        var command = new UpdateBookCommand(id, request);
+        var response = await mediator.Send(command);
+        return ResolveCode(response.Exception, Ok(nameof(GetBook)));
     }
     
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetBook(Guid id)
     {
-        var entryRequest = new GetBaseEntryQuery(id);
-        var entryResponse = await mediator.Send(entryRequest);
-        if (entryResponse.Exception is not null) return ResolveException(entryResponse.Exception);
-        var bookRequest = new GetBookQuery(id);
-        var bookResponse = await mediator.Send(bookRequest);
-        if (bookResponse.Exception is not null) return ResolveException(bookResponse.Exception);
-        bookResponse.Data!.Entry = entryResponse.Data!;
-        return Ok(bookResponse.Data);
+        var request = new GetBookQuery(id);
+        var response = await mediator.Send(request);
+        return OkOrError(response);
     }
     
     [HttpGet("page")]

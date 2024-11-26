@@ -1,6 +1,5 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.MovieDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
@@ -16,36 +15,27 @@ public class MovieController(IMediator mediator) : BaseController
 {
     [HttpPost]
     [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> AddMovie(AddMovieRequest request)
+    public async Task<IActionResult> AddMovie(AddMovieCommand request)
     {
-        var entryResponse = await mediator.Send(request.Entry);
-        var command = new AddMovieCommand(entryResponse.Data!.EntryId, request.Synopsis, request.Genres);
-        var movieResponse = await mediator.Send(command);
-        return ResolveCode(movieResponse.Exception, CreatedAtAction(nameof(GetMovie), new { id = entryResponse.Data.EntryId },new { id = entryResponse.Data.EntryId }));
+        var response = await mediator.Send(request);
+        return CreatedOrError(response, nameof(GetMovie));
     }
     
     [HttpPatch("{id:guid}")]
     [Authorize(Policy = "Admin")]
     public async Task<IActionResult> PatchMovie(Guid id, PatchMovieRequest request)
     {
-        var updateEntryCommand = new UpdateEntryCommand(id, request.Entry);
-        var entryResponse = await mediator.Send(updateEntryCommand);
-        var updateMovieCommand = new UpdateMovieCommand(id, request);
-        var movieResponse = await mediator.Send(updateMovieCommand);
-        return ResolveCode(movieResponse.Exception, Ok(nameof(GetMovie)));
+        var command = new UpdateMovieCommand(id, request);
+        var response = await mediator.Send(command);
+        return ResolveCode(response.Exception, Ok(nameof(GetMovie)));
     }
     
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetMovie(Guid id)
     {
-        var entryRequest = new GetBaseEntryQuery(id);
-        var entryResponse = await mediator.Send(entryRequest);
-        if (entryResponse.Exception is not null) return ResolveException(entryResponse.Exception);
-        var movieRequest = new GetMovieQuery(id);
-        var movieResponse = await mediator.Send(movieRequest);
-        if (movieResponse.Exception is not null) return ResolveException(movieResponse.Exception);
-        movieResponse.Data!.Entry = entryResponse.Data!;
-        return Ok(movieResponse.Data);
+        var request = new GetMovieQuery(id);
+        var response = await mediator.Send(request);
+        return OkOrError(response);
     }
     
     [HttpGet("page")]

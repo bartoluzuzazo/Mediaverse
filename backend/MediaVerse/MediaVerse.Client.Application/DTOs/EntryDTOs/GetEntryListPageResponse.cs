@@ -1,3 +1,3 @@
-namespace MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
+namespace MediaVerse.Client.Application.DTOs.EntryDTOs;
 
 public record GetEntryListPageResponse(List<GetEntryPageResponse> Entries);

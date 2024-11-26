@@ -1,5 +1,4 @@
 using AutoMapper;
-using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
 using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Domain.AggregatesModel;
@@ -15,15 +14,14 @@ public record AddEntryCommand(
     string Description,
     DateTime Release,
     string Photo,
-    List<EntryWorkOnRequest>? WorkOnRequests) : IRequest<BaseResponse<AddEntryResponse>>;
+    List<EntryWorkOnRequest>? WorkOnRequests);
 
 public class AddEntryCommandHandler(
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> photoRepository,
     IRepository<WorkOn> workOnRepository,
     IRepository<AuthorRole> roleRepository,
-    IMapper mapper) 
-    : IRequestHandler<AddEntryCommand, BaseResponse<AddEntryResponse>>
+    IMapper mapper)
 {
     public async Task<BaseResponse<AddEntryResponse>> Handle(AddEntryCommand request, CancellationToken cancellationToken)
     {

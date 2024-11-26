@@ -1,5 +1,4 @@
 using AutoMapper;
-using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs;
 using MediaVerse.Client.Application.Specifications.AuthorRoleSpecifications;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
@@ -12,23 +11,20 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands;
 
-public record UpdateEntryCommand(Guid Id, PatchEntryRequest Dto) : IRequest<BaseResponse<Guid>>;
+public record UpdateEntryCommand(Guid Id, PatchEntryRequest Dto);
 
 public class UpdateEntryCommandHandler(
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> coverPhotoRepository,
     IRepository<AuthorRole> roleRepository,
     IRepository<WorkOn> workOnRepository,
-    IMapper mapper) : IRequestHandler<UpdateEntryCommand, BaseResponse<Guid>>
+    IMapper mapper)
 {
     public async Task<BaseResponse<Guid>> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
     {
         var entrySpecification = new GetEntryByIdSpecification(request.Id);
         var entry = await entryRepository.FirstOrDefaultAsync(entrySpecification, cancellationToken);
-        if (entry is null)
-        {
-            return new BaseResponse<Guid>(new NotFoundException());
-        }
+        if (entry is null) return new BaseResponse<Guid>(new NotFoundException());
         
         entry.Description = request.Dto.Description ?? entry.Description;
         entry.Name = request.Dto.Name ?? entry.Name;
