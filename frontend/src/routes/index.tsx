@@ -3,6 +3,7 @@ import { BookService } from '../services/bookService'
 import { EntryOrder } from '../models/entry/Entry'
 import { OrderDirection } from '../models/common'
 import { Oval } from 'react-loader-spinner'
+import { MovieService } from '../services/movieService.ts'
 
 export const Route = createFileRoute('/')({
   pendingComponent: () => (
@@ -35,6 +36,27 @@ export const Route = createFileRoute('/')({
         queryKey: ['newest', 'books'],
         queryFn: async () =>
           await BookService.getBooks({
+            page: 1,
+            size: 10,
+            order: EntryOrder.Release,
+            direction: OrderDirection.Descending,
+          }),
+      }),
+
+      await queryClient.ensureQueryData({
+        queryKey: ['top', 'movies'],
+        queryFn: async () =>
+          await MovieService.getMovies({
+            page: 1,
+            size: 10,
+            order: EntryOrder.Rating,
+            direction: OrderDirection.Descending,
+          }),
+      }),
+      await queryClient.ensureQueryData({
+        queryKey: ['newest', 'movies'],
+        queryFn: async () =>
+          await MovieService.getMovies({
             page: 1,
             size: 10,
             order: EntryOrder.Release,

@@ -12,7 +12,7 @@ const AuthorEntryPreview: FunctionComponent<Props> = ({ entry }) => {
   const maxDescLen = 400
   const navigate = useNavigate()
   const handleLink = async () => {
-    await navigate({ to: `/entries/books/${entry.id}` })
+    await navigate({ to: `/entries/${entry.id}` })
   }
   return (
     <div
