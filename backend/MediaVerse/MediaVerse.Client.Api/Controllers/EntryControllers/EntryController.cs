@@ -13,4 +13,12 @@ public class EntryController(IMediator mediator) : BaseController
     {
         return Ok(await mediator.Send(query));
     }
+    
+    [HttpGet("type/{id:guid}")]
+    public async Task<IActionResult> GetEntryType(Guid id)
+    {
+        var query = new GetEntryTypeQuery(id);
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+    }
 }

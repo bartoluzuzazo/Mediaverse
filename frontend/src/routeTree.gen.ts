@@ -15,12 +15,11 @@ import { Route as IndexImport } from './routes/index'
 import { Route as SearchIndexImport } from './routes/search/index'
 import { Route as UsersSearchImport } from './routes/users/search'
 import { Route as UsersIdImport } from './routes/users/$id'
+import { Route as EntriesIdImport } from './routes/entries/$id'
 import { Route as AuthorsIdImport } from './routes/authors/$id'
 import { Route as AmaSessionsIdImport } from './routes/ama-sessions/$id'
 import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
 import { Route as UsersEditIdImport } from './routes/users/edit/$id'
-import { Route as EntriesMoviesIdImport } from './routes/entries/movies/$id'
-import { Route as EntriesBooksIdImport } from './routes/entries/books/$id'
 import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
 import { Route as EntriesMoviesCreateIndexImport } from './routes/entries/movies/create/index'
 import { Route as EntriesBooksCreateIndexImport } from './routes/entries/books/create/index'
@@ -49,6 +48,11 @@ const UsersIdRoute = UsersIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EntriesIdRoute = EntriesIdImport.update({
+  path: '/entries/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AuthorsIdRoute = AuthorsIdImport.update({
   path: '/authors/$id',
   getParentRoute: () => rootRoute,
@@ -66,16 +70,6 @@ const AuthorsCreateIndexRoute = AuthorsCreateIndexImport.update({
 
 const UsersEditIdRoute = UsersEditIdImport.update({
   path: '/users/edit/$id',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const EntriesMoviesIdRoute = EntriesMoviesIdImport.update({
-  path: '/entries/movies/$id',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const EntriesBooksIdRoute = EntriesBooksIdImport.update({
-  path: '/entries/books/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -129,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorsIdImport
       parentRoute: typeof rootRoute
     }
+    '/entries/$id': {
+      id: '/entries/$id'
+      path: '/entries/$id'
+      fullPath: '/entries/$id'
+      preLoaderRoute: typeof EntriesIdImport
+      parentRoute: typeof rootRoute
+    }
     '/users/$id': {
       id: '/users/$id'
       path: '/users/$id'
@@ -155,20 +156,6 @@ declare module '@tanstack/react-router' {
       path: '/authors/edit/$id'
       fullPath: '/authors/edit/$id'
       preLoaderRoute: typeof AuthorsEditIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/entries/books/$id': {
-      id: '/entries/books/$id'
-      path: '/entries/books/$id'
-      fullPath: '/entries/books/$id'
-      preLoaderRoute: typeof EntriesBooksIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/entries/movies/$id': {
-      id: '/entries/movies/$id'
-      path: '/entries/movies/$id'
-      fullPath: '/entries/movies/$id'
-      preLoaderRoute: typeof EntriesMoviesIdImport
       parentRoute: typeof rootRoute
     }
     '/users/edit/$id': {
@@ -222,12 +209,11 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AmaSessionsIdRoute,
   AuthorsIdRoute,
+  EntriesIdRoute,
   UsersIdRoute,
   UsersSearchRoute,
   SearchIndexRoute,
   AuthorsEditIdRoute,
-  EntriesBooksIdRoute,
-  EntriesMoviesIdRoute,
   UsersEditIdRoute,
   AuthorsCreateIndexRoute,
   EntriesBooksEditIdRoute,
@@ -247,12 +233,11 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/ama-sessions/$id",
         "/authors/$id",
+        "/entries/$id",
         "/users/$id",
         "/users/search",
         "/search/",
         "/authors/edit/$id",
-        "/entries/books/$id",
-        "/entries/movies/$id",
         "/users/edit/$id",
         "/authors/create/",
         "/entries/books/edit/$id",
@@ -270,6 +255,9 @@ export const routeTree = rootRoute.addChildren({
     "/authors/$id": {
       "filePath": "authors/$id.tsx"
     },
+    "/entries/$id": {
+      "filePath": "entries/$id.tsx"
+    },
     "/users/$id": {
       "filePath": "users/$id.tsx"
     },
@@ -281,12 +269,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/authors/edit/$id": {
       "filePath": "authors/edit/$id.tsx"
-    },
-    "/entries/books/$id": {
-      "filePath": "entries/books/$id.tsx"
-    },
-    "/entries/movies/$id": {
-      "filePath": "entries/movies/$id.tsx"
     },
     "/users/edit/$id": {
       "filePath": "users/edit/$id.tsx"

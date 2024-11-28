@@ -65,10 +65,10 @@ const MovieForm: FunctionComponent<Props> = ({ movie }) => {
     if (movie == null) {
       const response = await MovieService.postMovie(data)
       const id = response.data.id
-      await navigate({ to: `/entries/movies/${id}` })
+      await navigate({ to: `/entries/${id}` })
     } else {
       await MovieService.patchMovie(data, movie.entry.id)
-      await navigate({ to: `/entries/movies/${movie.entry.id}` })
+      await navigate({ to: `/entries/${movie.entry.id}` })
     }
   }
 

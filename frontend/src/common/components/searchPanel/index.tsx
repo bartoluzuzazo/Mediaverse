@@ -5,6 +5,7 @@ import CustomImage from '../customImage'
 import { AiFillStar } from 'react-icons/ai'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { IoMdClose } from 'react-icons/io'
+import AuthorEntryPreview from '../entries/entryAuthorPreview'
 
 interface SearchPanelProps {}
 
@@ -41,7 +42,7 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
                 searchPanelContext?.searchQuery?.data?.data.entries.map((e) => (
                   <Link
                     onClick={() => searchPanelContext.setSearchValue('')}
-                    to="/entries/books/$id"
+                    to="/entries/$id"
                     key={e.id}
                     className="flex min-h-[300px] w-[200px] flex-col gap-2 p-3 font-bold text-black"
                     params={{ id: e.id }}
@@ -53,7 +54,7 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
                     <p className="text-xl">{e.name}</p>
                     <div className="flex w-full justify-between">
                       <div className="flex items-center gap-1">
-                        {e.ratingAvg}
+                        {e.ratingAvg.toFixed(2)}
                         <AiFillStar />
                       </div>
                       <div className="flex items-center justify-center bg-violet-200 px-2">
@@ -72,6 +73,24 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
           <p className="flex w-full justify-between text-2xl font-semibold">
             <span>Authors</span>{' '}
           </p>
+          <div className="flex">
+            {searchPanelContext?.searchQuery.isFetching ? (
+              <Loader />
+            ) : (
+              <div className="flex">
+                {(searchPanelContext?.searchQuery?.data?.data.authors.length ||
+                  0) <= 0 ? (
+                  <div className="flex h-full w-full items-center justify-center text-2xl font-semibold text-mv-gray">
+                    No authors
+                  </div>
+                ) : (
+                  searchPanelContext?.searchQuery?.data?.data.authors.map(
+                    (e) => <AuthorEntryPreview author={e} />
+                  )
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     )

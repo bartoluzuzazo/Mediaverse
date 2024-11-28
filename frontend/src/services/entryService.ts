@@ -13,4 +13,10 @@ export class EntryService {
       })
     ).data
   }
+
+  public static async getEntryType(id: string) : Promise<string>{
+    return (
+      await axios.get<string>(`entry/type/${id}`)
+    ).data
+  }
 }

@@ -67,10 +67,10 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
     if (book == null) {
       const response = await BookService.postBook(data)
       const id = response.data.id
-      await navigate({ to: `/entries/books/${id}` })
+      await navigate({ to: `/entries/${id}` })
     } else {
       await BookService.patchBook(data, book.entry.id)
-      await navigate({ to: `/entries/books/${book.entry.id}` })
+      await navigate({ to: `/entries/${book.entry.id}` })
     }
   }
 

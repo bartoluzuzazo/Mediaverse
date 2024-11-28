@@ -37,6 +37,6 @@ export interface EntryAuthor {
 export interface GetEntriesResponse {
   data: {
     entries: Entry[]
-    authros: Author[]
+    authors: Author[]
   }
 }
