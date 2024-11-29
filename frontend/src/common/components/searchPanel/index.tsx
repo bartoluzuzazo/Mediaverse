@@ -42,7 +42,7 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
                 searchPanelContext?.searchQuery?.data?.data.entries.map((e) => (
                   <Link
                     onClick={() => searchPanelContext.setSearchValue('')}
-                    to="/entries/books/$id"
+                    to="/entries/$id"
                     key={e.id}
                     className="flex min-h-[300px] w-[200px] flex-col gap-2 p-3 font-bold text-black"
                     params={{ id: e.id }}

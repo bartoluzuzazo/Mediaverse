@@ -43,7 +43,7 @@ const SearchPage: FunctionComponent<SearchPageProps> = () => {
         <SearchTab type={'Movie'} />
       </TabPanel>
       <TabPanel>
-        <SearchTab type={'Serie'} />
+        <SearchTab type={'Series'} />
       </TabPanel>
       <TabPanel>
         <SearchTab type={'Book'} />
@@ -119,7 +119,7 @@ const EntryComponent: FunctionComponent<Entry> = ({
 }) => {
   return (
     <Link
-      to="/entries/books/$id"
+      to="/entries/$id"
       className="group flex h-[170px] gap-10 p-3 font-bold text-black"
       params={{ id }}
     >
