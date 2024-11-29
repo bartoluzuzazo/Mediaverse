@@ -57,6 +57,7 @@ public class GetAuthorQueryHandler(IRepository<Author> authorRepository)
             Surname = author.Surname,
             WorkOns = workons,
             ProfilePicture = Convert.ToBase64String(author.ProfilePicture.Picture),
+            UserId = author.UserId
         };
         return new BaseResponse<GetAuthorResponse>(authorResponse);
     }

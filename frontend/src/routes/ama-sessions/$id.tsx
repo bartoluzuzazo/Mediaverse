@@ -6,13 +6,19 @@ import { AmaSessionBanner } from '../../common/components/ama/amaSessionBanner'
 import { AmaQuestionsView } from '../../common/components/ama/amaQuestionsView'
 import { TabbedView } from '../../common/components/shared/TabbedView'
 import { queryOptions } from '@tanstack/react-query'
+import { dateUtil } from '../../utils/dateUtil.ts'
 
 const amaSessionQueryOptions = (id: string) => {
   return queryOptions({
     queryKey: ['GET_AMA_SESSION', id],
     queryFn: async (): Promise<AmaSession> => {
       const response = await amaSessionService.getAmaSession(id)
-      return response.data
+      const data = response.data
+      return {
+        ...data,
+        end: dateUtil.toHumanReadable(data.end),
+        start: dateUtil.toHumanReadable(data.start),
+      }
     },
   })
 }

@@ -4,6 +4,7 @@ import { FaQuestion } from 'react-icons/fa'
 import { useQuery } from '@tanstack/react-query'
 import { amaSessionService } from '../../../../services/amaSessionService.ts'
 import { AmaSessionTile } from './amaSessionTile.tsx'
+import { dateUtil } from '../../../../utils/dateUtil.ts'
 
 interface AuthorsAmasComponentProps {
   authorId: string
@@ -30,7 +31,14 @@ const AuthorsAmasView: FunctionComponent<AuthorsAmasViewProps> = ({
     queryKey: ['GET_AUTHORS_SESSIONS', authorId],
     queryFn: async () => {
       const response = await amaSessionService.getAuthorsAmaSessions(authorId)
-      return response.data
+      const data = response.data
+      return data.map((sesh) => {
+        return {
+          ...sesh,
+          end: dateUtil.toHumanReadable(sesh.end),
+          start: dateUtil.toHumanReadable(sesh.end),
+        }
+      })
     },
   })
 
