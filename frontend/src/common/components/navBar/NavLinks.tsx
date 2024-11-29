@@ -17,18 +17,20 @@ export const NavLinks: FunctionComponent = () => {
         </Link>
         <span className="text-mv-slate">Find users by username</span>
       </li>
-      <AuthorizedView>
-        <li className="flex flex-col">
-          <Link
-            to={'/users/$id'}
-            params={{ id: authUserData!.id }}
-            className="font-semibold text-black hover:text-mv-purple hover:underline"
-          >
-            Your profile
-          </Link>
-          <span className="text-mv-slate">View your profile</span>
-        </li>
-      </AuthorizedView>
+      {authUserData && (
+        <AuthorizedView>
+          <li className="flex flex-col">
+            <Link
+              to={'/users/$id'}
+              params={{ id: authUserData.id }}
+              className="font-semibold text-black hover:text-mv-purple hover:underline"
+            >
+              Your profile
+            </Link>
+            <span className="text-mv-slate">View your profile</span>
+          </li>
+        </AuthorizedView>
+      )}
       <AuthorizedView allowedRoles={'Administrator'}>
         <li className="flex flex-col">
           <Link
