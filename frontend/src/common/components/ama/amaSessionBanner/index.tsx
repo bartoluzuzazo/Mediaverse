@@ -2,7 +2,6 @@ import { FunctionComponent } from 'react'
 import { AmaSession, AmaStatus } from '../../../../models/amaSessions'
 import { AuthorizedView } from '../../auth/AuthorizedView'
 import { EndSessionComponent } from './endSessionComponent.tsx'
-import { dateFormatter } from '../../../../utils/dateFormatter.ts'
 
 interface AmaSessionBannerProps {
   amaSession: AmaSession
@@ -56,16 +55,16 @@ const AmaSessionTimeComponent: FunctionComponent<
   AmaSessionTimeComponentProps
 > = ({ amaSession }) => {
   const status = amaSession.status
-  const startFormatted = dateFormatter.formatDate(amaSession.start)
-  const endFormatted = dateFormatter.formatDate(amaSession.end)
+  const start = amaSession.start
+  const end = amaSession.end
   const content =
     status === AmaStatus.Upcoming
-      ? `Start of AMA session: ${startFormatted}`
+      ? `Start of AMA session: ${start}`
       : status === AmaStatus.Cancelled
-        ? `Session cancelled at: ${endFormatted}`
+        ? `Session cancelled at: ${end}`
         : status === AmaStatus.Active
-          ? `End of AMA session: ${endFormatted}`
-          : `AMA session ended at: ${endFormatted}`
+          ? `End of AMA session: ${end}`
+          : `AMA session ended at: ${end}`
 
   return <div className="text-md font-bold text-slate-700">{content}</div>
 }

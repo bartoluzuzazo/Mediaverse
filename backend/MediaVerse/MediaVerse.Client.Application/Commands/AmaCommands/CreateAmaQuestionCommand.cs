@@ -28,7 +28,7 @@ public class CreateAmaQuestionCommandHandler(
       return new BaseResponse<GetAmaQuestionResponse>(new NotFoundException());
     }
 
-    if (!(amaSession.Start <= DateTime.Now && DateTime.Now <= amaSession.End))
+    if (!(amaSession.Start <= DateTime.UtcNow && DateTime.UtcNow <= amaSession.End))
     {
       return new BaseResponse<GetAmaQuestionResponse>(new ConflictException("Can only create questions when session is active"));
     }
@@ -56,7 +56,7 @@ public class CreateAmaQuestionCommandHandler(
       Content = request.PostAmaQuestionDto.Content,
       Users = new List<User> { user },
       AmaSession = amaSession,
-      CreatedAt = DateTime.Now
+      CreatedAt = DateTime.UtcNow
     };
     await amaQuestionRepository.AddAsync(question, cancellationToken);
     var response = new GetAmaQuestionResponse

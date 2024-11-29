@@ -1,7 +1,6 @@
 import { AmaSession } from '../../../../models/amaSessions'
 import { FunctionComponent } from 'react'
 import { Link } from '@tanstack/react-router'
-import { dateFormatter } from '../../../../utils/dateFormatter.ts'
 import { AmaStatusIndicator } from './amaStatusIndicator.tsx'
 
 interface AmaSessionTileProps {
@@ -20,8 +19,8 @@ export const AmaSessionTile: FunctionComponent<AmaSessionTileProps> = ({
         {amaSession.title}
       </div>
       <div className="flex-[2] basis-0">
-        <div>Start: {dateFormatter.formatDate(amaSession.start)}</div>
-        <div>End: {' ' + dateFormatter.formatDate(amaSession.end)}</div>
+        <div>Start: {amaSession.start}</div>
+        <div>End: {amaSession.end}</div>
       </div>
       <div className="grid flex-1 basis-0 place-content-center">
         <AmaStatusIndicator status={amaSession.status} />
