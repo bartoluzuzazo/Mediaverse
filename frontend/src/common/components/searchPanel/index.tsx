@@ -44,7 +44,7 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
                     onClick={() => searchPanelContext.setSearchValue('')}
                     to="/entries/$id"
                     key={e.id}
-                    className="flex min-h-[300px] w-[200px] flex-col gap-2 p-3 font-bold text-black"
+                    className="flex h-[300px] w-[200px] flex-col gap-2 p-3 font-bold text-black"
                     params={{ id: e.id }}
                   >
                     <CustomImage
@@ -73,24 +73,22 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
           <p className="flex w-full justify-between text-2xl font-semibold">
             <span>Authors</span>{' '}
           </p>
-          <div className="flex">
-            {searchPanelContext?.searchQuery.isFetching ? (
-              <Loader />
-            ) : (
-              <div className="flex">
-                {(searchPanelContext?.searchQuery?.data?.data.authors.length ||
-                  0) <= 0 ? (
-                  <div className="flex h-full w-full items-center justify-center text-2xl font-semibold text-mv-gray">
-                    No authors
-                  </div>
-                ) : (
-                  searchPanelContext?.searchQuery?.data?.data.authors.map(
-                    (e) => <AuthorEntryPreview author={e} />
-                  )
-                )}
-              </div>
-            )}
-          </div>
+          {searchPanelContext?.searchQuery.isFetching ? (
+            <Loader />
+          ) : (
+            <div className="flex">
+              {(searchPanelContext?.searchQuery?.data?.data.authors.length ||
+                0) <= 0 ? (
+                <div className="flex h-full w-full items-center justify-center text-2xl font-semibold text-mv-gray">
+                  No authors
+                </div>
+              ) : (
+                searchPanelContext?.searchQuery?.data?.data.authors.map((e) => (
+                  <AuthorEntryPreview author={e} />
+                ))
+              )}
+            </div>
+          )}
         </div>
       </div>
     )

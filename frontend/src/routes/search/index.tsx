@@ -10,6 +10,7 @@ import CustomImage from '../../common/components/customImage'
 import { AiFillStar } from 'react-icons/ai'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import './styles.css'
+import { FaLessThanEqual } from 'react-icons/fa6'
 
 type SearchQueryParams = {
   searchQuery: string
@@ -94,7 +95,7 @@ const SearchTab: FunctionComponent<SearchTabProps> = ({ type }) => {
         </div>
       }
     >
-      {(data?.pages.at(0)?.data?.entries?.length || 0) > 1 ? (
+      {(data?.pages.at(0)?.data?.entries?.length || 0) >= 1 ? (
         data?.pages.map((group, i) => (
           <React.Fragment key={i}>
             {group?.data?.entries.map((project) => (

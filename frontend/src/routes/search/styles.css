@@ -1,7 +1,4 @@
 .search {
-  .react-tabs__tab-list {
-  }
-
   .react-tabs__tab--selected {
     border-bottom: 2px solid black;
     border-top: 0;
