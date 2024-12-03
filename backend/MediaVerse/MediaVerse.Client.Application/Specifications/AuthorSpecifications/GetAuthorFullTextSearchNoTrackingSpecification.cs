@@ -11,7 +11,7 @@ public sealed class GetAuthorFullTextSearchNoTrackingSpecification : Specificati
         Query
             .Where(e => e.SearchVector != null &&
                         e.SearchVector.Matches(EF.Functions.ToTsQuery("english", searchTerm)));
-        
+        Query.Include(e => e.ProfilePicture);
         Query.AsNoTracking();
     }
 }
