@@ -10,7 +10,6 @@ import CustomImage from '../../common/components/customImage'
 import { AiFillStar } from 'react-icons/ai'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import './styles.css'
-import { FaLessThanEqual } from 'react-icons/fa6'
 
 type SearchQueryParams = {
   searchQuery: string
