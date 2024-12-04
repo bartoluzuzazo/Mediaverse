@@ -8,6 +8,7 @@ import {
 import { amaSessionService } from '../../../../services/amaSessionService.ts'
 import { Page } from '../../../../models/common'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
+import { useAuthContext } from '../../../../context/auth/useAuthContext.ts'
 
 type Props = {
   question: AmaQuestion
@@ -21,6 +22,7 @@ export const AmaQuestionLikes: FunctionComponent<Props> = ({
   parentPage,
 }) => {
   const parentIndex = parentPage - 1
+  const { isAuthenticated } = useAuthContext()!
   const queryClient = useQueryClient()
   const { mutateAsync: changeLikeAsync } = useMutation({
     mutationFn: async (isLiked: boolean) => {
@@ -70,7 +72,11 @@ export const AmaQuestionLikes: FunctionComponent<Props> = ({
     <div className="flex items-center">
       <button
         className="gap-2 rounded-full border-none bg-transparent p-2 text-xl text-violet-700 transition-all hover:bg-slate-100 focus:outline-none"
-        onClick={() => changeLikeAsync(!question.likedByUser)}
+        onClick={() => {
+          if (isAuthenticated) {
+            changeLikeAsync(!question.likedByUser)
+          }
+        }}
       >
         {question.likedByUser ? <FaHeart /> : <FaRegHeart />}
       </button>

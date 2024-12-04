@@ -1,6 +1,12 @@
 import { ReactNode } from '@tanstack/react-router'
 import axios from 'axios'
-import { createContext, FunctionComponent, useEffect, useMemo } from 'react'
+import {
+  createContext,
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 import { jwtDecode } from 'jwt-decode'
 import { Role } from '../../models/user'
@@ -43,7 +49,10 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
     undefined
   )
 
+  const [, setUglyForceRerenderHack] = useState(true)
+
   useEffect(() => {
+    setUglyForceRerenderHack((v) => !v)
     if (!token) {
       axios.defaults.headers.common['Authorization'] = undefined
     }
@@ -52,7 +61,7 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
 
   const [tokenAxiosDefaults, authUserData] = useMemo(() => {
     const token = axios.defaults.headers.common['Authorization']
-    if(typeof token !== "string"){
+    if (typeof token !== 'string') {
       return [token, undefined]
     }
     const jwtData = jwtDecode<JwtPayload>(token)
@@ -82,8 +91,6 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
       axios.interceptors.response.clear()
     }
   }, [axios])
-
-
 
   return (
     <AuthContext.Provider
