@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class EntryController(IMediator mediator) : BaseController
 {

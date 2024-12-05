@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediaVerse.Client.Api.Controllers;
 
 [Authorize]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class FriendshipsController(IMediator mediator) : BaseController
 {

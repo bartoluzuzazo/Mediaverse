@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediaVerse.Client.Api.Controllers;
 
 [ApiController]
-[Route("")]
+[Route("api/")]
 public class CommentsController(IMediator mediator) : BaseController
 {
     [HttpPost("comments/{commentId:guid}/votes")]
