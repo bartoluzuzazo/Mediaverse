@@ -1,6 +1,6 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent } from 'react'
 import { EntryService } from '../../services/entryService'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Oval } from 'react-loader-spinner'
@@ -23,7 +23,6 @@ interface Tab {
 }
 
 const SearchPage: FunctionComponent<SearchPageProps> = () => {
-  const [tab, setTab] = useState<Tab>({ label: 'Books', value: 'Book' })
   const { searchQuery } = Route.useSearch()
 
   return (
@@ -44,7 +43,7 @@ const SearchPage: FunctionComponent<SearchPageProps> = () => {
         <SearchTab type={'Movie'} />
       </TabPanel>
       <TabPanel>
-        <SearchTab type={'Serie'} />
+        <SearchTab type={'Series'} />
       </TabPanel>
       <TabPanel>
         <SearchTab type={'Book'} />
@@ -95,7 +94,7 @@ const SearchTab: FunctionComponent<SearchTabProps> = ({ type }) => {
         </div>
       }
     >
-      {(data?.pages.at(0)?.data?.entries?.length || 0) > 1 ? (
+      {(data?.pages.at(0)?.data?.entries?.length || 0) >= 1 ? (
         data?.pages.map((group, i) => (
           <React.Fragment key={i}>
             {group?.data?.entries.map((project) => (
@@ -120,7 +119,7 @@ const EntryComponent: FunctionComponent<Entry> = ({
 }) => {
   return (
     <Link
-      to="/entries/books/$id"
+      to="/entries/$id"
       className="group flex h-[170px] gap-10 p-3 font-bold text-black"
       params={{ id }}
     >

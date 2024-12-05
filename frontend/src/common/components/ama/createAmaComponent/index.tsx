@@ -9,6 +9,7 @@ import FormButton from '../../form/button'
 import { FaQuestion } from 'react-icons/fa'
 import { amaSessionService } from '../../../../services/amaSessionService.ts'
 import { IoIosWarning } from 'react-icons/io'
+import { dateUtil } from '../../../../utils/dateUtil.ts'
 
 interface AmaSessionFormProps {
   authorId: string
@@ -33,6 +34,8 @@ export const AmaSessionForm: FunctionComponent<AmaSessionFormProps> = ({
       setError('root', { message: 'Start date must be before end date' })
       return
     }
+    data.start = dateUtil.toUtcIsoString(data.start)
+    data.end = dateUtil.toUtcIsoString(data.end)
     const response = await amaSessionService.postAmaSession(data)
     const id = response.data.id
     await navigate({ to: '/ama-sessions/$id', params: { id } })

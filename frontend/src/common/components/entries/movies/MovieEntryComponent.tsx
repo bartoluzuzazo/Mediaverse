@@ -1,18 +1,19 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
 import { Fragment, FunctionComponent } from 'react'
-import EntryBanner from '../../../common/components/entries/entryBanner.tsx'
-import EntryRatingPicker from '../../../common/components/entryRatingPicker'
-import { MovieService } from '../../../services/movieService.ts'
-import EntryAuthorPreview from '../../../common/components/entries/entryAuthorPreview.tsx'
-import SectionHeader from '../../../common/components/entries/sectionHeader.tsx'
-import CommentSection from '../../../common/components/comments/CommentSection.tsx'
-import { AuthorizedView } from '../../../common/components/auth/AuthorizedView'
-import { LinkButton } from '../../../common/components/shared/LinkButton'
+import EntryBanner from '../entryBanner.tsx'
+import EntryRatingPicker from '../../entryRatingPicker'
+import { MovieService } from '../../../../services/movieService.ts'
+import EntryAuthorPreview from '../entryAuthorPreview.tsx'
+import SectionHeader from '../sectionHeader.tsx'
+import CommentSection from '../../comments/CommentSection.tsx'
+import { AuthorizedView } from '../../auth/AuthorizedView'
+import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
-import { Movie } from '../../../models/entry/movie/Movie.ts'
+import { Movie } from '../../../../models/entry/movie/Movie.ts'
 
-interface MovieEntryComponentProps {}
+interface MovieEntryComponentProps {
+  id: string
+}
 
 const movieQueryOptions = (id: string) => {
   return queryOptions({
@@ -24,8 +25,7 @@ const movieQueryOptions = (id: string) => {
   })
 }
 
-const MovieEntryComponent: FunctionComponent<MovieEntryComponentProps> = () => {
-  const id = Route.useParams().id
+export const MovieEntryComponent: FunctionComponent<MovieEntryComponentProps> = ({id}) => {
   const movieQuery = useSuspenseQuery(movieQueryOptions(id))
   const movie = movieQuery.data
   const info = [movie.entry.release.toString(), ...movie.cinematicGenres]
@@ -61,11 +61,3 @@ const MovieEntryComponent: FunctionComponent<MovieEntryComponentProps> = () => {
     </>
   )
 }
-
-export const Route = createFileRoute('/entries/movies/$id')({
-  loader: async ({ context: { queryClient }, params: { id } }) => {
-    return queryClient.ensureQueryData(movieQueryOptions(id))
-  },
-
-  component: MovieEntryComponent,
-})

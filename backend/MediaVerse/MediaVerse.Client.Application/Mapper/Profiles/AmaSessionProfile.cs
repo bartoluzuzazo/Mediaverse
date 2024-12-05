@@ -18,8 +18,8 @@ public class AmaSessionProfile : Profile
             .ForMember(s => s.AuthorId, opt => opt.MapFrom(s => s.Author.Id))
             .ForMember(s => s.Status, opt => opt.MapFrom(s =>
                 s.End < s.Start ? AmaStatus.Cancelled
-                : DateTime.Now < s.Start ? AmaStatus.Upcoming
-                : DateTime.Now < s.End ? AmaStatus.Active
+                : DateTime.UtcNow < s.Start ? AmaStatus.Upcoming
+                : DateTime.UtcNow < s.End ? AmaStatus.Active
                 : AmaStatus.Finished
             ));
     }

@@ -1,18 +1,19 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
 import { Fragment, FunctionComponent } from 'react'
-import EntryBanner from '../../../common/components/entries/entryBanner.tsx'
-import EntryRatingPicker from '../../../common/components/entryRatingPicker'
-import { Book } from '../../../models/entry/book'
-import { BookService } from '../../../services/bookService.ts'
-import EntryAuthorPreview from '../../../common/components/entries/entryAuthorPreview.tsx'
-import SectionHeader from '../../../common/components/entries/sectionHeader.tsx'
-import CommentSection from '../../../common/components/comments/CommentSection.tsx'
-import { AuthorizedView } from '../../../common/components/auth/AuthorizedView'
-import { LinkButton } from '../../../common/components/shared/LinkButton'
+import EntryBanner from '../entryBanner.tsx'
+import EntryRatingPicker from '../../entryRatingPicker'
+import { Book } from '../../../../models/entry/book'
+import { BookService } from '../../../../services/bookService.ts'
+import EntryAuthorPreview from '../entryAuthorPreview.tsx'
+import SectionHeader from '../sectionHeader.tsx'
+import CommentSection from '../../comments/CommentSection.tsx'
+import { AuthorizedView } from '../../auth/AuthorizedView'
+import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 
-interface BookEntryComponentProps {}
+interface BookEntryComponentProps {
+  id: string
+}
 
 const bookQueryOptions = (id: string) => {
   return queryOptions({
@@ -24,8 +25,7 @@ const bookQueryOptions = (id: string) => {
   })
 }
 
-const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
-  const id = Route.useParams().id
+export const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = ( {id} ) => {
   const bookQuery = useSuspenseQuery(bookQueryOptions(id))
   const book = bookQuery.data
   const info = [book.entry.release.toString(), book.isbn, ...book.bookGenres]
@@ -61,11 +61,3 @@ const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = () => {
     </>
   )
 }
-
-export const Route = createFileRoute('/entries/books/$id')({
-  loader: async ({ context: { queryClient }, params: { id } }) => {
-    return queryClient.ensureQueryData(bookQueryOptions(id))
-  },
-
-  component: BookEntryComponent,
-})

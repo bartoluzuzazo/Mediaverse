@@ -17,25 +17,27 @@ export const NavLinks: FunctionComponent = () => {
         </Link>
         <span className="text-mv-slate">Find users by username</span>
       </li>
-      <AuthorizedView>
-        <li className="flex flex-col">
-          <Link
-            to={'/users/$id'}
-            params={{ id: authUserData!.id }}
-            className="font-semibold text-black hover:text-mv-purple hover:underline"
-          >
-            Your profile
-          </Link>
-          <span className="text-mv-slate">View your profile</span>
-        </li>
-      </AuthorizedView>
+      {authUserData && (
+        <AuthorizedView>
+          <li className="flex flex-col">
+            <Link
+              to={'/users/$id'}
+              params={{ id: authUserData.id }}
+              className="font-semibold text-black hover:text-mv-purple hover:underline"
+            >
+              Your profile
+            </Link>
+            <span className="text-mv-slate">View your profile</span>
+          </li>
+        </AuthorizedView>
+      )}
       <AuthorizedView allowedRoles={'Administrator'}>
         <li className="flex flex-col">
           <Link
             to={'/authors/create'}
             className="font-semibold text-black hover:text-mv-purple hover:underline"
           >
-            Add author
+            Add Author
           </Link>
           <span className="text-mv-slate">
             Add information about a new artist
@@ -50,6 +52,17 @@ export const NavLinks: FunctionComponent = () => {
           </Link>
           <span className="text-mv-slate">
             Add information about a new book
+          </span>
+        </li>
+        <li className="flex flex-col">
+          <Link
+            to={'/entries/movies/create'}
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
+            Add Movie
+          </Link>
+          <span className="text-mv-slate">
+            Add information about a new movie
           </span>
         </li>
       </AuthorizedView>
