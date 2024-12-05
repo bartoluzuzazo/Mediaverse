@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediaVerse.Client.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AmaSessionsController(IMediator mediator) : BaseController
 {
   [HttpPost]

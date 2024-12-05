@@ -9,7 +9,7 @@ namespace MediaVerse.Client.Api.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class AuthorsController(IMediator mediator) : BaseController
 {

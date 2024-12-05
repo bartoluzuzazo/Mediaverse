@@ -9,7 +9,7 @@ namespace MediaVerse.Client.Api.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("")]
+[Route("api/")]
 public class RatingsController(IMediator mediator) : BaseController
 {
     [HttpGet("entries/{entryGuid:guid}/ratings/users-rating")]

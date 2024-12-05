@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MediaVerse.Client.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TestController(IMediator mediator) : ControllerBase
     {
