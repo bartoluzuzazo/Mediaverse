@@ -49,22 +49,18 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
     undefined
   )
 
-  const [, setUglyForceRerenderHack] = useState(true)
-
-  useEffect(() => {
-    setUglyForceRerenderHack((v) => !v)
+  const [tokenAxiosDefaults, authUserData] = useMemo(() => {
     if (!token) {
       axios.defaults.headers.common['Authorization'] = undefined
     }
     axios.defaults.headers.common['Authorization'] = token && `Bearer ${token}`
-  }, [token])
 
-  const [tokenAxiosDefaults, authUserData] = useMemo(() => {
-    const token = axios.defaults.headers.common['Authorization']
-    if (typeof token !== 'string') {
-      return [token, undefined]
+    const tokenFromAxios = axios.defaults.headers.common['Authorization']
+
+    if (typeof tokenFromAxios !== 'string') {
+      return [tokenFromAxios, undefined]
     }
-    const jwtData = jwtDecode<JwtPayload>(token)
+    const jwtData = jwtDecode<JwtPayload>(tokenFromAxios)
     const roles = Array.isArray(jwtData.role) ? jwtData.role : [jwtData.role]
     const authUserData = {
       email: jwtData.email,
@@ -72,8 +68,8 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
       username: jwtData.unique_name,
       roles,
     }
-    return [token, authUserData]
-  }, [axios.defaults.headers.common['Authorization'], token])
+    return [tokenFromAxios, authUserData]
+  }, [token])
 
   useEffect(() => {
     axios.interceptors.response.use(
