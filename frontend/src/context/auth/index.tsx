@@ -1,12 +1,6 @@
 import { ReactNode } from '@tanstack/react-router'
 import axios from 'axios'
-import {
-  createContext,
-  FunctionComponent,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, FunctionComponent, useEffect, useMemo } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 import { jwtDecode } from 'jwt-decode'
 import { Role } from '../../models/user'
