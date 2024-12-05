@@ -73,7 +73,7 @@ const AuthContextProvider: FunctionComponent<AuthContextProviderProps> = ({
       roles,
     }
     return [token, authUserData]
-  }, [axios.defaults.headers.common['Authorization']])
+  }, [axios.defaults.headers.common['Authorization'], token])
 
   useEffect(() => {
     axios.interceptors.response.use(
