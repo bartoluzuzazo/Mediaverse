@@ -44,7 +44,7 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
                     onClick={() => searchPanelContext.setSearchValue('')}
                     to="/entries/$id"
                     key={e.id}
-                    className="flex h-[300px] w-[200px] flex-col gap-2 p-3 font-bold text-black"
+                    className="flex min-h-[300px] w-[200px] flex-col gap-2 p-3 font-bold text-black"
                     params={{ id: e.id }}
                   >
                     <CustomImage
