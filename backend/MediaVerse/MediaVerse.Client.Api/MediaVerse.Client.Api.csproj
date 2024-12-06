@@ -32,4 +32,8 @@
       <ProjectReference Include="..\MediaVerse.Infrastructure\MediaVerse.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Context\" />
+    </ItemGroup>
+
 </Project>
