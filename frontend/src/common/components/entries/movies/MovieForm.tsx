@@ -10,8 +10,9 @@ import FormDateInput from '../../form/FormDateInput/FormDateInput.tsx'
 import CoverPicker from '../../form/CoverPicker/CoverPicker.tsx'
 import { Entry } from '../../../../models/entry/Entry.ts'
 import { WorkOn } from '../../../../models/entry/WorkOn.ts'
-import { MultipleInputForm } from '../MultipleInputForm.tsx'
+import { GenreInputForm } from '../GenreInputForm.tsx'
 import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
+import { GenresServices } from '../../../../services/genresServices.ts'
 
 export interface MovieFormData {
   entry: Entry
@@ -97,7 +98,7 @@ const MovieForm: FunctionComponent<Props> = ({ movie }) => {
         </div>
       </form>
       <div className="flex flex-row justify-evenly">
-        <MultipleInputForm label={'Genres'} collection={genres} setCollection={setGenres}/>
+        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchCinematicGenres}/>
         <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
       </div>
     </>

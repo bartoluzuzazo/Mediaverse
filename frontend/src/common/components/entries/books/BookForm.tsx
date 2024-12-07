@@ -8,10 +8,11 @@ import { BookService } from '../../../../services/bookService.ts'
 import FormTextArea from '../FormTextArea/FormTextArea.tsx'
 import FormDateInput from '../../form/FormDateInput/FormDateInput.tsx'
 import CoverPicker from '../../form/CoverPicker/CoverPicker.tsx'
-import { MultipleInputForm } from '../MultipleInputForm.tsx'
+import { GenreInputForm } from '../GenreInputForm.tsx'
 import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
 import { Entry } from '../../../../models/entry/Entry.ts'
 import { WorkOn } from '../../../../models/entry/WorkOn.ts'
+import { GenresServices } from '../../../../services/genresServices.ts'
 
 export interface BookFormData {
   entry: Entry
@@ -100,7 +101,7 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
         </div>
       </form>
       <div className="flex flex-row justify-evenly">
-        <MultipleInputForm label={'Genres'} collection={genres} setCollection={setGenres}/>
+        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchBookGenres}/>
         <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
       </div>
     </>

@@ -23,7 +23,8 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
 }) => {
   const form = useForm<WorkOn>()
   const handleAdd = (data: WorkOn) => {
-    setCollection((prev) => [...prev, data])
+    if (collection.some(wo => wo.id === data.id && wo.role === data.role)) return;
+    setCollection((prev) => [...prev, data]);
   }
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
