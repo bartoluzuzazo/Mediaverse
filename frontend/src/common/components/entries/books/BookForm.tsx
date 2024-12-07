@@ -33,7 +33,7 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
     }
 
     return book!.entry.authors.flatMap(g => g.authors.map(a => {
-      const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role}
+      const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role, details: a.details}
       return workOn
     }))
   }

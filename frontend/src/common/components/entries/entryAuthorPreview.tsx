@@ -26,6 +26,9 @@ const AuthorEntryPreview: FunctionComponent<Props> = ({ author }) => {
       <div className="flex flex-row justify-center font-bold">
         {author.name} {author.surname}
       </div>
+      <div className="flex flex-row justify-center">
+        {author.details}
+      </div>
     </div>
   )
 }

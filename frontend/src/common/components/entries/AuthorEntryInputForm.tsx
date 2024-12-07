@@ -37,7 +37,8 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
   }
 
   const displayFn = (wo: WorkOn) => {
-    return `${wo.name} - ${wo.role}`
+    let details = wo.details?.length! <= 0 ? 'none' : wo.details;
+    return `${wo.name} - ${wo.role} (${details})`
   }
 
   return (
@@ -89,6 +90,15 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
               register={form.register}
               errorValue={form.formState.errors.role}
               registerPath={'role'}
+            />
+            <FormField
+              label={'Details'}
+              register={form.register}
+              errorValue={form.formState.errors.details}
+              rules={{
+                required: false
+              }}
+              registerPath={'details'}
             />
             <button className="mb-2 flex h-[36px] w-[36px] items-center justify-center bg-mv-light-purple p-1 text-white">
               +

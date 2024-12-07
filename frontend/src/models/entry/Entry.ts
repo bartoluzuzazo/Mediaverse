@@ -32,6 +32,7 @@ export interface EntryAuthor {
   name: string
   surname: string
   profilePicture: string
+  details: string
 }
 
 export interface GetEntriesResponse {
