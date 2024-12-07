@@ -24,6 +24,7 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
   const form = useForm<WorkOn>()
   const handleAdd = (data: WorkOn) => {
     if (collection.some(wo => wo.id === data.id && wo.role === data.role)) return;
+    if (data.details?.length!<=0) data.details = undefined
     setCollection((prev) => [...prev, data]);
   }
 
@@ -37,7 +38,7 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
   }
 
   const displayFn = (wo: WorkOn) => {
-    let details = wo.details?.length! <= 0 ? 'none' : wo.details;
+    let details = wo.details === null || wo.details === undefined || wo.details?.length! <= 0 ? 'none' : wo.details;
     return `${wo.name} - ${wo.role} (${details})`
   }
 
