@@ -9,6 +9,6 @@ public class AuthorProfile : Profile
   public AuthorProfile()
   {
     CreateMap<Author, GetAuthorResponse>().ForMember(u => u.ProfilePicture,
-        opt => opt.MapFrom(src => Convert.ToBase64String(src.User.ProfilePicture.Picture)));
+        opt => opt.MapFrom(src => Convert.ToBase64String(src.ProfilePicture.Picture)));
   }
 }

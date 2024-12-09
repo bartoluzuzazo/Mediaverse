@@ -1,14 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
-import MarkdownEditor from '@uiw/react-markdown-editor'
+import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { ArticleForm } from '../../common/components/articles/articleForm'
+import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
 
 export const Route = createFileRoute('/articles/create')({
   component: () => <CreateArticle />,
 })
 const CreateArticle = () => {
   return (
-    <div>
-      <h1>Hello</h1>
-      <MarkdownEditor />
-    </div>
+    <AuthorizedView notAuthView={<Navigate to={'/'} />}>
+      <ArticleForm />
+    </AuthorizedView>
   )
 }

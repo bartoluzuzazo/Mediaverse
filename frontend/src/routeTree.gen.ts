@@ -18,6 +18,7 @@ import { Route as UsersIdImport } from './routes/users/$id'
 import { Route as EntriesIdImport } from './routes/entries/$id'
 import { Route as AuthorsIdImport } from './routes/authors/$id'
 import { Route as ArticlesCreateImport } from './routes/articles/create'
+import { Route as ArticlesIdImport } from './routes/articles/$id'
 import { Route as AmaSessionsIdImport } from './routes/ama-sessions/$id'
 import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
 import { Route as UsersEditIdImport } from './routes/users/edit/$id'
@@ -61,6 +62,11 @@ const AuthorsIdRoute = AuthorsIdImport.update({
 
 const ArticlesCreateRoute = ArticlesCreateImport.update({
   path: '/articles/create',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ArticlesIdRoute = ArticlesIdImport.update({
+  path: '/articles/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -120,6 +126,13 @@ declare module '@tanstack/react-router' {
       path: '/ama-sessions/$id'
       fullPath: '/ama-sessions/$id'
       preLoaderRoute: typeof AmaSessionsIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/articles/$id': {
+      id: '/articles/$id'
+      path: '/articles/$id'
+      fullPath: '/articles/$id'
+      preLoaderRoute: typeof ArticlesIdImport
       parentRoute: typeof rootRoute
     }
     '/articles/create': {
@@ -221,6 +234,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AmaSessionsIdRoute,
+  ArticlesIdRoute,
   ArticlesCreateRoute,
   AuthorsIdRoute,
   EntriesIdRoute,
@@ -246,6 +260,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/ama-sessions/$id",
+        "/articles/$id",
         "/articles/create",
         "/authors/$id",
         "/entries/$id",
@@ -266,6 +281,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/ama-sessions/$id": {
       "filePath": "ama-sessions/$id.tsx"
+    },
+    "/articles/$id": {
+      "filePath": "articles/$id.tsx"
     },
     "/articles/create": {
       "filePath": "articles/create.tsx"
