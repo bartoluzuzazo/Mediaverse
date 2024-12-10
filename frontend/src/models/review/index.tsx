@@ -13,4 +13,6 @@ export interface Review {
   content: string
   title: string
   grade: number
+  entryTitle: string
+  coverPhoto: string
 }

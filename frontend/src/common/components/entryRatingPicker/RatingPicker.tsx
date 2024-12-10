@@ -4,12 +4,13 @@ import { useState } from 'react'
 type Props = {
   onClick: (grade: number) => Promise<void> | void
   previousGrade?: number
+  max?: number
 }
-const RatingPicker = ({ onClick, previousGrade }: Props) => {
+const RatingPicker = ({ onClick, previousGrade, max = 10 }: Props) => {
   const [newRating, setNewRating] = useState<null | number>(null)
 
   const displayedRating = newRating || previousGrade
-  const availableGrades = [...Array(11).keys()].slice(1)
+  const availableGrades = [...Array(max + 1).keys()].slice(1)
 
   return (
     <div className="mb-4 mt-10 flex flex-col gap-4 text-xl font-bold md:flex-row md:gap-8">

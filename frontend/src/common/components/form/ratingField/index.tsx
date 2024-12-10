@@ -12,12 +12,14 @@ type Props<T extends FieldValues> = {
   control: UseFormReturn<T>['control']
   name: Path<T>
   errorValue?: FieldError
+  max?: number
 }
 
 export const RatingField = <T extends FieldValues>({
   control,
   name,
   errorValue,
+  max,
 }: Props<T>) => {
   return (
     <div>
@@ -26,7 +28,9 @@ export const RatingField = <T extends FieldValues>({
         control={control}
         rules={{ required: 'Grade is required' }}
         render={({ field: { value, onChange } }) => {
-          return <RatingPicker onClick={onChange} previousGrade={value} />
+          return (
+            <RatingPicker onClick={onChange} previousGrade={value} max={max} />
+          )
         }}
       />
       {errorValue && (

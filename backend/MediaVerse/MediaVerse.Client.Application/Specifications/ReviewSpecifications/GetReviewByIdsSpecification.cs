@@ -8,6 +8,6 @@ public class GetReviewByIdsSpecification : Specification<Review>
 {
     public GetReviewByIdsSpecification(Guid userId, Guid entryId)
     {
-        Query.Where(r => r.EntryId == entryId && r.UserId == userId).Include(r=>r.User).ThenInclude(u=>u.ProfilePicture);
+        Query.Where(r => r.EntryId == entryId && r.UserId == userId).Include(r=>r.User).ThenInclude(u=>u.ProfilePicture).Include(e=>e.Entry).ThenInclude(e=>e.CoverPhoto);
     }
 }

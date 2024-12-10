@@ -47,7 +47,7 @@ export const ReviewForm: FunctionComponent<Props> = ({ review, entryId }) => {
         register={register}
         errorValue={errors.title}
       />
-      <RatingField control={control} name="grade" />
+      <RatingField control={control} name="grade" max={5} />
       <MarkdownField control={control} name="content" />
       <SubmitButton isSubmitting={isSubmitting} />
     </form>

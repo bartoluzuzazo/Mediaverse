@@ -12,6 +12,8 @@ public class ReviewProfile : Profile
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
             .ForMember(dest => dest.ProfilePicture, opt =>
                 opt.MapFrom(src =>
-                    src.User.ProfilePicture != null ? Convert.ToBase64String(src.User.ProfilePicture.Picture) : null));
+                    src.User.ProfilePicture != null ? Convert.ToBase64String(src.User.ProfilePicture.Picture) : null))
+            .ForMember(dest=>dest.EntryTitle, opt=>opt.MapFrom(src=>src.Entry.Name))
+            .ForMember(dest=>dest.CoverPhoto, opt=>opt.MapFrom(src=>Convert.ToBase64String(src.Entry.CoverPhoto.Photo)));
     }
 }
