@@ -46,6 +46,7 @@ export const ArticleForm: FunctionComponent<Props> = ({ article }) => {
           label="Title"
           registerPath="title"
           register={register}
+          errorValue={errors.title}
         />
         <FormTextArea<ArticleFormData>
           label="Lede"

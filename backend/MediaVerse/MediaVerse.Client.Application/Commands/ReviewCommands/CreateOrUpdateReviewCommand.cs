@@ -10,12 +10,7 @@ using MediaVerse.Domain.Interfaces;
 
 namespace MediaVerse.Client.Application.Commands.ReviewCommands;
 
-public record CreateOrUpdateReviewCommand : IRequest<BaseResponse<GetReviewResponse>>
-{
-    public Guid EntryId { get; set; }
-
-    public CreateUpdateReviewDto Dto { get; set; }
-}
+public record CreateOrUpdateReviewCommand(Guid EntryId, CreateUpdateReviewDto Dto) : IRequest<BaseResponse<GetReviewResponse>>;
 
 public class CreateReviewCommandHandler(IUserService userService, IRepository<Entry> entryRepository, IRepository<Review> reviewRepository, IMapper mapper) : IRequestHandler<CreateOrUpdateReviewCommand, BaseResponse<GetReviewResponse>>
 {

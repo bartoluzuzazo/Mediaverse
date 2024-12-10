@@ -18,11 +18,13 @@ export const MarkdownField = <T extends FieldValues>({
       control={control}
       render={({ field: { value, onChange } }) => {
         return (
-          <MarkdownEditor
-            value={value}
-            onChange={onChange}
-            minHeight={minHeight}
-          />
+          <div data-color-mode="light">
+            <MarkdownEditor
+              value={value}
+              onChange={onChange}
+              minHeight={minHeight}
+            />
+          </div>
         )
       }}
     />

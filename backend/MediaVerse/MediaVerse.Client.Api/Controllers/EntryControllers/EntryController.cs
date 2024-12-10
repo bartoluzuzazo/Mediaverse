@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MediaVerse.Client.Application.Commands.ReviewCommands;
+using MediaVerse.Client.Application.DTOs.ReviewDtos;
 using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Client.Application.Queries.ReviewQueries;
 using Microsoft.AspNetCore.Authorization;
@@ -27,8 +28,9 @@ public class EntryController(IMediator mediator) : BaseController
 
     [HttpPut("{id:guid}/reviews/current-user")]
     [Authorize]
-    public async Task<IActionResult> PutReview(CreateOrUpdateReviewCommand command)
+    public async Task<IActionResult> PutReview(Guid id,CreateUpdateReviewDto dto)
     {
+        var command = new CreateOrUpdateReviewCommand(id, dto);
         var response = await mediator.Send(command);
         return ResolveCode(response.Exception, CreatedAtAction(nameof(GetReview), new {entryId= response.Data?.EntryId, userId=response.Data?.UserId}, response.Data));
     }

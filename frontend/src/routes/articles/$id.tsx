@@ -32,7 +32,10 @@ export const ArticleComponent: FunctionComponent = () => {
           </div>
         </div>
       </div>
-      <MarkdownPreview source={article.content} />
+      <MarkdownPreview
+        source={article.content}
+        wrapperElement={{ 'data-color-mode': 'light' }}
+      />
     </article>
   )
 }

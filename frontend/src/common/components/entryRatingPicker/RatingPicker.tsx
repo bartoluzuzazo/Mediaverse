@@ -2,7 +2,7 @@ import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import { useState } from 'react'
 
 type Props = {
-  onClick: (grade: number) => Promise<void>
+  onClick: (grade: number) => Promise<void> | void
   previousGrade?: number
 }
 const RatingPicker = ({ onClick, previousGrade }: Props) => {
