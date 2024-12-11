@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-import { Entry } from '../models/entry/Entry'
-import { Movie } from '../models/entry/movie/Movie.ts'
-import { MovieFormData } from '../common/components/entries/movies/MovieForm.tsx'
-import { GetEntryPageRequest } from '../models/entry/book'
+import { Entry } from '../../models/entry/Entry.ts'
+import { Movie } from '../../models/entry/movie/Movie.ts'
+import { MovieFormData } from '../../common/components/entries/movies/MovieForm.tsx'
+import { GetEntryPageRequest } from '../../models/entry/book'
 
 export class MovieService {
   public static async getMovie(id: string) {

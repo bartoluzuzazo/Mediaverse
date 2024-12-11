@@ -1,38 +1,37 @@
 import FormButton from '../../form/button'
 import { useNavigate } from '@tanstack/react-router'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Book } from '../../../../models/entry/book/Book.ts'
+import { Game } from '../../../../models/entry/game/Game.ts'
 import { FunctionComponent, useState } from 'react'
 import FormField from '../../form/FormField/FormField.tsx'
-import { BookService } from '../../../../services/EntryServices/bookService.ts'
+import { GameService } from '../../../../services/EntryServices/gameService.ts'
 import FormTextArea from '../FormTextArea/FormTextArea.tsx'
 import FormDateInput from '../../form/FormDateInput/FormDateInput.tsx'
 import CoverPicker from '../../form/CoverPicker/CoverPicker.tsx'
-import { GenreInputForm } from '../GenreInputForm.tsx'
-import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
 import { Entry } from '../../../../models/entry/Entry.ts'
 import { WorkOn } from '../../../../models/entry/WorkOn.ts'
+import { GenreInputForm } from '../GenreInputForm.tsx'
+import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
 import { GenresServices } from '../../../../services/EntryServices/genresServices.ts'
 
-export interface BookFormData {
+export interface GameFormData {
   entry: Entry
-  isbn: string,
   synopsis: string,
   genres: string[]
 }
 
 type Props = {
-  book?: Book
+  game?: Game
 }
 
-const BookForm: FunctionComponent<Props> = ({ book }) => {
+const GameForm: FunctionComponent<Props> = ({ game }) => {
 
   const getInitialWorkOns = () => {
-    if (book === undefined){
+    if (game === undefined){
       return []
     }
 
-    return book!.entry.authors.flatMap(g => g.authors.map(a => {
+    return game!.entry.authors.flatMap(g => g.authors.map(a => {
       const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role, details: a.details}
       return workOn
     }))
@@ -45,13 +44,12 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
     control,
     getValues,
     formState: { errors, isSubmitting },
-  } = useForm<BookFormData>({
-    defaultValues: book
+  } = useForm<GameFormData>({
+    defaultValues: game
       ? {
-        entry : book.entry,
-        isbn: book.isbn,
-        genres: book.bookGenres,
-        synopsis: book.synopsis
+        entry : game.entry,
+        genres: game.gameGenres,
+        synopsis: game.synopsis
       }
       : undefined,
   })
@@ -61,17 +59,17 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
   const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
   const [authors, setAuthors] = useState<WorkOn[]>(getInitialWorkOns())
 
-  const onSubmit: SubmitHandler<BookFormData> = async (data) => {
+  const onSubmit: SubmitHandler<GameFormData> = async (data) => {
     data.genres = genres
     data.entry.workOnRequests = authors;
-    console.log(data)
-    if (book == null) {
-      const response = await BookService.postBook(data)
+
+    if (game == null) {
+      const response = await GameService.postGame(data)
       const id = response.data.id
       await navigate({ to: `/entries/${id}` })
     } else {
-      await BookService.patchBook(data, book.entry.id)
-      await navigate({ to: `/entries/${book.entry.id}` })
+      await GameService.patchGame(data, game.entry.id)
+      await navigate({ to: `/entries/${game.entry.id}` })
     }
   }
 
@@ -83,9 +81,8 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
         className="flex flex-col p-4 md:flex-row"
       >
         <div>
-          <CoverPicker<BookFormData> control={control} name={'entry.photo'} watch={watch} previousImageSrc={book?.entry.photo} />
+          <CoverPicker<GameFormData> control={control} name={'entry.photo'} watch={watch} previousImageSrc={game?.entry.photo} />
           <FormField label={'Name'} register={register} errorValue={errors.entry?.name} registerPath={'entry.name'} />
-          <FormField label={'ISBN'} register={register} errorValue={errors.isbn} registerPath={'isbn'} />
           <FormDateInput label={'Release'} register={register} errorValue={errors.entry?.release} registerPath={'entry.release'} />
         </div>
         <div className="flex-1 md:ml-20">
@@ -101,11 +98,11 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
         </div>
       </form>
       <div className="flex flex-row justify-evenly">
-        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchBookGenres}/>
+        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchGameGenres}/>
         <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
       </div>
     </>
   )
 }
 
-export default BookForm
+export default GameForm

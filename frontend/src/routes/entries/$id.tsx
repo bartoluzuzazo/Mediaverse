@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
-import { EntryService } from '../../services/entryService.ts'
+import { EntryService } from '../../services/EntryServices/entryService.ts'
 import { BookEntryComponent } from '../../common/components/entries/books/BookEntryComponent.tsx'
 import { MovieEntryComponent } from '../../common/components/entries/movies/MovieEntryComponent.tsx'
+import { GameEntryComponent } from '../../common/components/entries/games/GameEntryComponent.tsx'
 
 const entryTypeQueryOptions = (id: string) => {
   return queryOptions({
@@ -24,6 +25,9 @@ const EntryComponent = () => {
       }
       case 'Movie': {
         return <MovieEntryComponent id={id}/>
+      }
+      case 'Game': {
+        return <GameEntryComponent id={id}/>
       }
     }
   }

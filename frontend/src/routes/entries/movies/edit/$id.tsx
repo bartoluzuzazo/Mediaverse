@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Movie } from '../../../../models/entry/movie/Movie.ts'
 import MovieForm from '../../../../common/components/entries/movies/MovieForm.tsx'
-import { MovieService } from '../../../../services/movieService.ts'
+import { MovieService } from '../../../../services/EntryServices/movieService.ts'
 
 export const Route = createFileRoute('/entries/movies/edit/$id')({
   loader: async ({ params }) => {

@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Movie } from '../../../../models/entry/movie/Movie.ts'
 import { FunctionComponent, useState } from 'react'
 import FormField from '../../form/FormField/FormField.tsx'
-import { MovieService } from '../../../../services/movieService.ts'
+import { MovieService } from '../../../../services/EntryServices/movieService.ts'
 import FormTextArea from '../FormTextArea/FormTextArea.tsx'
 import FormDateInput from '../../form/FormDateInput/FormDateInput.tsx'
 import CoverPicker from '../../form/CoverPicker/CoverPicker.tsx'
@@ -12,7 +12,7 @@ import { Entry } from '../../../../models/entry/Entry.ts'
 import { WorkOn } from '../../../../models/entry/WorkOn.ts'
 import { GenreInputForm } from '../GenreInputForm.tsx'
 import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
-import { GenresServices } from '../../../../services/genresServices.ts'
+import { GenresServices } from '../../../../services/EntryServices/genresServices.ts'
 
 export interface MovieFormData {
   entry: Entry

@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-import { Entry } from '../models/entry/Entry'
-import { Book, GetEntryPageRequest } from '../models/entry/book'
-import { BookFormData } from '../common/components/entries/books/BookForm.tsx'
+import { Entry } from '../../models/entry/Entry.ts'
+import { Book, GetEntryPageRequest } from '../../models/entry/book'
+import { BookFormData } from '../../common/components/entries/books/BookForm.tsx'
 
 export class BookService {
   public static async getBook(id: string) {

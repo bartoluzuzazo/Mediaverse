@@ -5,25 +5,33 @@ import EntryCarousel from '../common/components/entries/entryCarousel'
 interface DashboardProps {}
 
 const Dashboard: FunctionComponent<DashboardProps> = () => {
-  const [topBooks, newestBooks, topMovies, newestMovies] = Route.useLoaderData()
+  const [topBooks, newestBooks, topMovies, newestMovies, topGames, newestGames] = Route.useLoaderData()
 
   return (
     <div className="mt-10 flex flex-col gap-5">
       <EntryCarousel
         entries={topBooks?.data.entries || []}
-        title="Top Books This Month"
+        title="Top Books"
       />
       <EntryCarousel
         entries={newestBooks?.data.entries || []}
-        title="Newest Books This Month"
+        title="Newest Books"
       />
       <EntryCarousel
         entries={topMovies?.data.entries || []}
-        title="Top Movies This Month"
+        title="Top Movies"
       />
       <EntryCarousel
         entries={newestMovies?.data.entries || []}
-        title="Newest Movies This Month"
+        title="Newest Movies"
+      />
+      <EntryCarousel
+        entries={topGames?.data.entries || []}
+        title="Top Games"
+      />
+      <EntryCarousel
+        entries={newestGames?.data.entries || []}
+        title="Newest Games"
       />
     </div>
   )

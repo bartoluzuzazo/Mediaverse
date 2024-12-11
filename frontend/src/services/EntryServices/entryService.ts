@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GetEntriesResponse } from '../models/entry/Entry'
+import { GetEntriesResponse } from '../../models/entry/Entry.ts'
 
 export class EntryService {
   public static async getEntries(

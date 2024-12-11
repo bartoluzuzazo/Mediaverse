@@ -23,4 +23,12 @@ public class GenresController(IMediator mediator) : BaseController
         var response = await mediator.Send(request);
         return OkOrError(response);
     }
+    
+    [HttpGet("search/game")]
+    public async Task<IActionResult> SearchGameGenres(string query, int page, int size)
+    {
+        var request = new SearchGameGenresQuery(page, size, query);
+        var response = await mediator.Send(request);
+        return OkOrError(response);
+    }
 }

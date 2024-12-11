@@ -38,7 +38,7 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
   }
 
   const displayFn = (wo: WorkOn) => {
-    let details = wo.details === null || wo.details === undefined || wo.details?.length! <= 0 ? 'none' : wo.details;
+    let details = wo.details === null || wo.details === undefined || wo.details?.length! <= 0 ? 'no details' : wo.details;
     return `${wo.name} - ${wo.role} (${details})`
   }
 

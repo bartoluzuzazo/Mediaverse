@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { BookService } from '../services/bookService'
+import { BookService } from '../services/EntryServices/bookService.ts'
 import { EntryOrder } from '../models/entry/Entry'
 import { OrderDirection } from '../models/common'
 import { Oval } from 'react-loader-spinner'
-import { MovieService } from '../services/movieService.ts'
+import { MovieService } from '../services/EntryServices/movieService.ts'
+import { GameService } from '../services/EntryServices/gameService.ts'
 
 export const Route = createFileRoute('/')({
   pendingComponent: () => (
@@ -57,6 +58,27 @@ export const Route = createFileRoute('/')({
         queryKey: ['newest', 'movies'],
         queryFn: async () =>
           await MovieService.getMovies({
+            page: 1,
+            size: 10,
+            order: EntryOrder.Release,
+            direction: OrderDirection.Descending,
+          }),
+      }),
+
+      await queryClient.ensureQueryData({
+        queryKey: ['top', 'games'],
+        queryFn: async () =>
+          await GameService.getGames({
+            page: 1,
+            size: 10,
+            order: EntryOrder.Rating,
+            direction: OrderDirection.Descending,
+          }),
+      }),
+      await queryClient.ensureQueryData({
+        queryKey: ['newest', 'games'],
+        queryFn: async () =>
+          await GameService.getGames({
             page: 1,
             size: 10,
             order: EntryOrder.Release,
