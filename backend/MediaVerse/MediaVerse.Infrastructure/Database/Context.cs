@@ -1,6 +1,7 @@
 ﻿using MediaVerse.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+
 namespace MediaVerse.Infrastructure.Database;
 
 public partial class Context : DbContext
@@ -40,8 +41,6 @@ public partial class Context : DbContext
     public virtual DbSet<Comment> Comments { get; set; }
 
     public virtual DbSet<CoverPhoto> CoverPhotos { get; set; }
-
-    public virtual DbSet<Developer> Developers { get; set; }
 
     public virtual DbSet<Entry> Entries { get; set; }
 
@@ -236,6 +235,9 @@ public partial class Context : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Content).HasColumnName("content");
+            entity.Property(e => e.Lede)
+                .HasMaxLength(200)
+                .HasColumnName("lede");
             entity.Property(e => e.Timestamp)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("timestamp");
@@ -256,18 +258,19 @@ public partial class Context : DbContext
 
             entity.ToTable("author");
 
+            entity.HasIndex(e => e.SearchVector, "author_ts_idx").HasMethod("gin");
+
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
             entity.Property(e => e.Bio).HasColumnName("bio");
-            entity.HasIndex(e => e.SearchVector, "author_ts_idx").HasMethod("gin");
-            entity.Property(e => e.SearchVector)
-                .HasComputedColumnSql("to_tsvector('english'::regconfig, ((COALESCE(name, ''::text) || ' '::text) || (COALESCE(surname, ''::character varying))::text))", true)
-                .HasColumnName("search_vector");
             entity.Property(e => e.Name)
                 .HasMaxLength(150)
                 .HasColumnName("name");
             entity.Property(e => e.ProfilePictureId).HasColumnName("profile_picture_id");
+            entity.Property(e => e.SearchVector)
+                .HasComputedColumnSql("to_tsvector('english'::regconfig, (((COALESCE(name, ''::character varying))::text || ' '::text) || (COALESCE(surname, ''::character varying))::text))", true)
+                .HasColumnName("search_vector");
             entity.Property(e => e.Surname)
                 .HasMaxLength(150)
                 .HasColumnName("surname");
@@ -411,26 +414,13 @@ public partial class Context : DbContext
             entity.Property(e => e.Photo).HasColumnName("photo");
         });
 
-        modelBuilder.Entity<Developer>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("developer_pk");
-
-            entity.ToTable("developer");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-        });
-
         modelBuilder.Entity<Entry>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("entry_pk");
 
             entity.ToTable("entry");
 
+            entity.HasIndex(e => e.SearchVector, "entry_ts_idx").HasMethod("gin");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -441,7 +431,6 @@ public partial class Context : DbContext
                 .HasMaxLength(150)
                 .HasColumnName("name");
             entity.Property(e => e.Release).HasColumnName("release");
-            entity.HasIndex(e => e.SearchVector, "entry_ts_idx").HasMethod("gin");
             entity.Property(e => e.SearchVector)
                 .HasComputedColumnSql("to_tsvector('english'::regconfig, ((COALESCE(description, ''::text) || ' '::text) || (COALESCE(name, ''::character varying))::text))", true)
                 .HasColumnName("search_vector");
@@ -464,6 +453,12 @@ public partial class Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
+            entity.Property(e => e.EpisodeNumber)
+                .HasDefaultValue(1)
+                .HasColumnName("episode_number");
+            entity.Property(e => e.SeasonNumber)
+                .HasDefaultValue(1)
+                .HasColumnName("season_number");
             entity.Property(e => e.SeriesId).HasColumnName("series_id");
             entity.Property(e => e.Synopsis).HasColumnName("synopsis");
 
@@ -514,25 +509,6 @@ public partial class Context : DbContext
                 .HasForeignKey<Game>(d => d.Id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("game_entry");
-
-            entity.HasMany(d => d.Developers).WithMany(p => p.Games)
-                .UsingEntity<Dictionary<string, object>>(
-                    "GameDeveloper",
-                    r => r.HasOne<Developer>().WithMany()
-                        .HasForeignKey("DeveloperId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("game_developer_developer"),
-                    l => l.HasOne<Game>().WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("game_developer_game"),
-                    j =>
-                    {
-                        j.HasKey("GameId", "DeveloperId").HasName("game_developer_pk");
-                        j.ToTable("game_developer");
-                        j.IndexerProperty<Guid>("GameId").HasColumnName("game_id");
-                        j.IndexerProperty<Guid>("DeveloperId").HasColumnName("developer_id");
-                    });
 
             entity.HasMany(d => d.GameGenres).WithMany(p => p.Games)
                 .UsingEntity<Dictionary<string, object>>(
@@ -738,6 +714,7 @@ public partial class Context : DbContext
             entity.Property(e => e.Content)
                 .HasMaxLength(2000)
                 .HasColumnName("content");
+            entity.Property(e => e.Grade).HasColumnName("grade");
             entity.Property(e => e.Title)
                 .HasMaxLength(200)
                 .HasColumnName("title");

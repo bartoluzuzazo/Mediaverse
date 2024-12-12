@@ -53,9 +53,7 @@ public class RegisterUserCommandHandler(IRepository<User> userRepository, IRepos
             Username = request.Username,
             Email = request.Email,
             PasswordHash = hashedPassword,
-            ProfilePictureId =
-                new Guid(
-                    "dbc2478f-ee4f-492e-afdd-7584a81e2baa"), //temporary picture placeholder, TODO: add profile picture field
+            ProfilePictureId = null,
             Roles = new List<Role> { userRole }
         };
 

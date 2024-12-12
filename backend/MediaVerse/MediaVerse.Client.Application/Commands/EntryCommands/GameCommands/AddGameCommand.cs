@@ -6,7 +6,7 @@ using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
-namespace MediaVerse.Client.Application.Commands.EntryCommands;
+namespace MediaVerse.Client.Application.Commands.EntryCommands.GameCommands;
 
 public record AddGameCommand(AddEntryCommand Entry, string Synopsis, List<string>? Genres) : IRequest<BaseResponse<Guid>>;
 

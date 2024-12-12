@@ -3,7 +3,7 @@ using MediaVerse.Client.Application.Extensions.Specification;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.ValueObjects.Enums;
 
-namespace MediaVerse.Client.Application.Specifications.EntrySpecifications;
+namespace MediaVerse.Client.Application.Specifications.EntrySpecifications.GameSpecifications;
 
 public class GetGamePageSpecification : Specification<Entry>
 {

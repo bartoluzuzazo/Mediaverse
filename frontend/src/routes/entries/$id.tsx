@@ -4,6 +4,7 @@ import { EntryService } from '../../services/EntryServices/entryService.ts'
 import { BookEntryComponent } from '../../common/components/entries/books/BookEntryComponent.tsx'
 import { MovieEntryComponent } from '../../common/components/entries/movies/MovieEntryComponent.tsx'
 import { GameEntryComponent } from '../../common/components/entries/games/GameEntryComponent.tsx'
+import { SeriesEntryComponent } from '../../common/components/entries/series/SeriesEntryComponent.tsx'
 
 const entryTypeQueryOptions = (id: string) => {
   return queryOptions({
@@ -28,6 +29,9 @@ const EntryComponent = () => {
       }
       case 'Game': {
         return <GameEntryComponent id={id}/>
+      }
+      case 'Series': {
+        return <SeriesEntryComponent id={id}/>
       }
     }
   }

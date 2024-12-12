@@ -1,12 +1,12 @@
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.GameDTOs;
-using MediaVerse.Client.Application.Specifications.EntrySpecifications;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.GameSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
 
-namespace MediaVerse.Client.Application.Queries.EntryQueries;
+namespace MediaVerse.Client.Application.Queries.EntryQueries.GameQueries;
 
 public record GetGameQuery(Guid Id) : IRequest<BaseResponse<GetGameResponse>>;
 

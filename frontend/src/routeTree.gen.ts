@@ -21,9 +21,11 @@ import { Route as AmaSessionsIdImport } from './routes/ama-sessions/$id'
 import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index'
 import { Route as UsersEditIdImport } from './routes/users/edit/$id'
 import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
+import { Route as EntriesSeriesCreateIndexImport } from './routes/entries/series/create/index'
 import { Route as EntriesMoviesCreateIndexImport } from './routes/entries/movies/create/index'
 import { Route as EntriesGamesCreateIndexImport } from './routes/entries/games/create/index'
 import { Route as EntriesBooksCreateIndexImport } from './routes/entries/books/create/index'
+import { Route as EntriesSeriesEditIdImport } from './routes/entries/series/edit/$id'
 import { Route as EntriesMoviesEditIdImport } from './routes/entries/movies/edit/$id'
 import { Route as EntriesGamesEditIdImport } from './routes/entries/games/edit/$id'
 import { Route as EntriesBooksEditIdImport } from './routes/entries/books/edit/$id'
@@ -80,6 +82,11 @@ const AuthorsEditIdRoute = AuthorsEditIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EntriesSeriesCreateIndexRoute = EntriesSeriesCreateIndexImport.update({
+  path: '/entries/series/create/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const EntriesMoviesCreateIndexRoute = EntriesMoviesCreateIndexImport.update({
   path: '/entries/movies/create/',
   getParentRoute: () => rootRoute,
@@ -92,6 +99,11 @@ const EntriesGamesCreateIndexRoute = EntriesGamesCreateIndexImport.update({
 
 const EntriesBooksCreateIndexRoute = EntriesBooksCreateIndexImport.update({
   path: '/entries/books/create/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EntriesSeriesEditIdRoute = EntriesSeriesEditIdImport.update({
+  path: '/entries/series/edit/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -205,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EntriesMoviesEditIdImport
       parentRoute: typeof rootRoute
     }
+    '/entries/series/edit/$id': {
+      id: '/entries/series/edit/$id'
+      path: '/entries/series/edit/$id'
+      fullPath: '/entries/series/edit/$id'
+      preLoaderRoute: typeof EntriesSeriesEditIdImport
+      parentRoute: typeof rootRoute
+    }
     '/entries/books/create/': {
       id: '/entries/books/create/'
       path: '/entries/books/create'
@@ -226,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EntriesMoviesCreateIndexImport
       parentRoute: typeof rootRoute
     }
+    '/entries/series/create/': {
+      id: '/entries/series/create/'
+      path: '/entries/series/create'
+      fullPath: '/entries/series/create'
+      preLoaderRoute: typeof EntriesSeriesCreateIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -245,9 +271,11 @@ export const routeTree = rootRoute.addChildren({
   EntriesBooksEditIdRoute,
   EntriesGamesEditIdRoute,
   EntriesMoviesEditIdRoute,
+  EntriesSeriesEditIdRoute,
   EntriesBooksCreateIndexRoute,
   EntriesGamesCreateIndexRoute,
   EntriesMoviesCreateIndexRoute,
+  EntriesSeriesCreateIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -271,9 +299,11 @@ export const routeTree = rootRoute.addChildren({
         "/entries/books/edit/$id",
         "/entries/games/edit/$id",
         "/entries/movies/edit/$id",
+        "/entries/series/edit/$id",
         "/entries/books/create/",
         "/entries/games/create/",
-        "/entries/movies/create/"
+        "/entries/movies/create/",
+        "/entries/series/create/"
       ]
     },
     "/": {
@@ -315,6 +345,9 @@ export const routeTree = rootRoute.addChildren({
     "/entries/movies/edit/$id": {
       "filePath": "entries/movies/edit/$id.tsx"
     },
+    "/entries/series/edit/$id": {
+      "filePath": "entries/series/edit/$id.tsx"
+    },
     "/entries/books/create/": {
       "filePath": "entries/books/create/index.tsx"
     },
@@ -323,6 +356,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/entries/movies/create/": {
       "filePath": "entries/movies/create/index.tsx"
+    },
+    "/entries/series/create/": {
+      "filePath": "entries/series/create/index.tsx"
     }
   }
 }

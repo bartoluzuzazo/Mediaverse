@@ -16,6 +16,8 @@ public partial class Author
 
     public Guid ProfilePictureId { get; set; }
 
+    public NpgsqlTsVector? SearchVector { get; set; }
+
     public virtual ICollection<AmaSession> AmaSessions { get; set; } = new List<AmaSession>();
 
     public virtual ProfilePicture ProfilePicture { get; set; } = null!;
@@ -23,7 +25,4 @@ public partial class Author
     public virtual User? User { get; set; }
 
     public virtual ICollection<WorkOn> WorkOns { get; set; } = new List<WorkOn>();
-    
-    public NpgsqlTsVector? SearchVector { get; set; }
-
 }

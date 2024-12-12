@@ -1,13 +1,13 @@
 using AutoMapper;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
-using MediaVerse.Client.Application.Specifications.EntrySpecifications;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.BookSpecifications;
 using MediaVerse.Client.Application.Specifications.GenresSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
 
-namespace MediaVerse.Client.Application.Commands.EntryCommands;
+namespace MediaVerse.Client.Application.Commands.EntryCommands.BookCommands;
 
 public record UpdateBookCommand(Guid Id, PatchBookRequest Dto) : IRequest<BaseResponse<Guid>>;
 

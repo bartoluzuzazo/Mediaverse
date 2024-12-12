@@ -12,5 +12,7 @@ public partial class Article
 
     public DateTime Timestamp { get; set; }
 
+    public string Lede { get; set; } = null!;
+
     public virtual User User { get; set; } = null!;
 }

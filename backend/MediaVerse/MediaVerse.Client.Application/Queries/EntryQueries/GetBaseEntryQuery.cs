@@ -39,6 +39,7 @@ public abstract class GetBaseEntryQueryHandler(IRepository<Entry> entryRepositor
         {
             Id = entry.Id,
             Name = entry.Name,
+            Type = entry.Type,
             Description = entry.Description,
             Release = entry.Release,
             Photo = Convert.ToBase64String(entry.CoverPhoto.Photo),

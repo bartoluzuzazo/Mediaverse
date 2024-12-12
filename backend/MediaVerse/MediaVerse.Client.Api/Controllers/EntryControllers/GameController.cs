@@ -1,8 +1,11 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
+using MediaVerse.Client.Application.Commands.EntryCommands.GameCommands;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.GameDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
+using MediaVerse.Client.Application.Queries.EntryQueries.GameQueries;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.GameSpecifications;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -11,6 +11,7 @@ import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
 import { RoleStatusList } from '../../common/components/users/RoleStatusList'
 import { LinkButton } from '../../common/components/shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
+import defaultImgUrl from '/person-icon.png'
 
 interface Props {
 }
@@ -18,7 +19,8 @@ interface Props {
 const UserComponent: FunctionComponent<Props> = () => {
   const user = Route.useLoaderData<User>()
   const { authUserData } = useAuthContext()!
-  const imgSrc = 'data:image/*;base64,' + user.profilePicture
+  const imgSrc = user.profilePicture ? 'data:image/*;base64,' + user.profilePicture : defaultImgUrl
+
   return (
     <div>
       <div className='-mx-[calc(50vw-50%)] h-20 bg-violet-800 md:h-32'></div>
