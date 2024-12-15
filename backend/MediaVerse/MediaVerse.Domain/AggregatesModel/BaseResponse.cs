@@ -2,6 +2,7 @@
 
 public class BaseResponse<T>
 {
+    public BaseResponse() {}
     public BaseResponse(T data)
     {
         Data = data;

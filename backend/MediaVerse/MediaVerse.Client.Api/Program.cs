@@ -16,105 +16,111 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-const string defaultpolicy = "default";
-var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+public class Program
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    public static void Main(string[] args)
     {
-        Title = "MediaVerse_API",
-        Version = "v1"
-    });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description =
-            "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+        const string defaultpolicy = "default";
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
         {
-            new OpenApiSecurityScheme
+            c.SwaggerDoc("v1", new OpenApiInfo
             {
-                Reference = new OpenApiReference
+                Title = "MediaVerse_API",
+                Version = "v1"
+            });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description =
+                    "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
                 }
-            },
-            new string[] { }
+            });
+        });
+        builder.Services.AddControllers(options =>
+        {
+            options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+            options.Filters.Add(new ValidateModelAttribute());
+        });
+        builder.Services.AddDbContext<Context>(options =>
+            options.UseNpgsql(builder.Configuration["DefaultConnection"]));
+        builder.Services.RegisterMediatR(typeof(TestQuery).Assembly);
+        builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
+        builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<IUserAccessor, HttpUserAccessor>();
+        builder.Services.AddScoped<IUserService, HttpUserService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
+
+        builder.AddLogging();
+
+
+        builder.Services.AddCors(o =>
+        {
+            o.AddPolicy(name: defaultpolicy, policy =>
+            {
+                policy.WithOrigins(builder.Configuration["CORS_HTTP"], builder.Configuration["CORS_HTTPS"])
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
+        builder.Services.AddAuthentication().AddJwtBearer(o =>
+        {
+            o.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["JWT_ISSUER"],
+                ValidAudience = builder.Configuration["JWT_AUDIENCE"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]!))
+            };
+        });
+
+        builder.Services.AddAuthorization(o => o.AddPolicy("Admin", p => p.RequireRole("Administrator")));
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
-    });
-});
-builder.Services.AddControllers(options =>
-{
-    options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
-    options.Filters.Add(new ValidateModelAttribute());
-});
-builder.Services.AddDbContext<Context>(options =>
-    options.UseNpgsql(builder.Configuration["DefaultConnection"]));
-builder.Services.RegisterMediatR(typeof(TestQuery).Assembly);
-builder.Services.AddAutoMapper(typeof(TestQuery).Assembly);
-builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IUserAccessor, HttpUserAccessor>();
-builder.Services.AddScoped<IUserService, HttpUserService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
 
-builder.AddLogging();
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseHttpsRedirection();
+            app.UseReactServing();
+        }
 
-
-builder.Services.AddCors(o =>
-{
-    o.AddPolicy(name: defaultpolicy, policy =>
-    {
-        policy.WithOrigins(builder.Configuration["CORS_HTTP"], builder.Configuration["CORS_HTTPS"])
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
-
-builder.Services.AddAuthentication().AddJwtBearer(o =>
-{
-    o.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JWT_ISSUER"],
-        ValidAudience = builder.Configuration["JWT_AUDIENCE"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]!))
-    };
-});
-
-builder.Services.AddAuthorization(o => o.AddPolicy("Admin", p => p.RequireRole("Administrator")));
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        app.UseCors(defaultpolicy);
+        app.MapControllers();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.ExecuteDbMigrations();
+        app.UseStaticFiles();
+        app.Run();
+    }
 }
-
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-    app.UseReactServing();
-}
-
-app.UseCors(defaultpolicy);
-app.MapControllers();
-app.UseAuthentication();
-app.UseAuthorization();
-app.ExecuteDbMigrations();
-app.UseStaticFiles();
-app.Run();
-
