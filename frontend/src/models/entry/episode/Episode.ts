@@ -1,5 +1,5 @@
-import { Entry } from '../../Entry.ts'
-import { WorkOn } from '../../WorkOn.ts'
+import { Entry } from '../Entry.ts'
+import { WorkOn } from '../WorkOn.ts'
 
 export interface Episode {
   entry: Entry,

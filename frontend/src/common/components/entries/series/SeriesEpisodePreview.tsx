@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { EpisodePreview } from '../../../../models/entry/series/episode/Episode.ts'
+import { EpisodePreview } from '../../../../models/entry/episode/Episode.ts'
 
 interface Props {
   episode: EpisodePreview

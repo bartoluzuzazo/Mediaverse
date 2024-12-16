@@ -5,6 +5,7 @@ import { OrderDirection } from '../models/common'
 import { Oval } from 'react-loader-spinner'
 import { MovieService } from '../services/EntryServices/movieService.ts'
 import { GameService } from '../services/EntryServices/gameService.ts'
+import { SeriesService } from '../services/EntryServices/seriesService.ts'
 
 export const Route = createFileRoute('/')({
   pendingComponent: () => (
@@ -22,69 +23,39 @@ export const Route = createFileRoute('/')({
     </div>
   ),
   loader: async ({ context: { queryClient } }) => {
-    return [
-      await queryClient.ensureQueryData({
-        queryKey: ['top', 'books'],
-        queryFn: async () =>
-          await BookService.getBooks({
-            page: 1,
-            size: 10,
-            order: EntryOrder.Rating,
-            direction: OrderDirection.Descending,
-          }),
-      }),
-      await queryClient.ensureQueryData({
-        queryKey: ['newest', 'books'],
-        queryFn: async () =>
-          await BookService.getBooks({
-            page: 1,
-            size: 10,
-            order: EntryOrder.Release,
-            direction: OrderDirection.Descending,
-          }),
-      }),
-
-      await queryClient.ensureQueryData({
-        queryKey: ['top', 'movies'],
-        queryFn: async () =>
-          await MovieService.getMovies({
-            page: 1,
-            size: 10,
-            order: EntryOrder.Rating,
-            direction: OrderDirection.Descending,
-          }),
-      }),
-      await queryClient.ensureQueryData({
-        queryKey: ['newest', 'movies'],
-        queryFn: async () =>
-          await MovieService.getMovies({
-            page: 1,
-            size: 10,
-            order: EntryOrder.Release,
-            direction: OrderDirection.Descending,
-          }),
-      }),
-
-      await queryClient.ensureQueryData({
-        queryKey: ['top', 'games'],
-        queryFn: async () =>
-          await GameService.getGames({
-            page: 1,
-            size: 10,
-            order: EntryOrder.Rating,
-            direction: OrderDirection.Descending,
-          }),
-      }),
-      await queryClient.ensureQueryData({
-        queryKey: ['newest', 'games'],
-        queryFn: async () =>
-          await GameService.getGames({
-            page: 1,
-            size: 10,
-            order: EntryOrder.Release,
-            direction: OrderDirection.Descending,
-          }),
-      }),
+    const topParams = {
+      page: 1,
+      size: 10,
+      order: EntryOrder.Rating,
+      direction: OrderDirection.Descending,
+    }
+    const newestParams = {
+      page: 1,
+      size: 10,
+      order: EntryOrder.Release,
+      direction: OrderDirection.Descending,
+    }
+    const getPageFunctions = [
+      { function: BookService.getBooks, entryType: 'Books' },
+      { function: MovieService.getMovies, entryType: 'Movies' },
+      { function: GameService.getGames, entryType: 'Games' },
+      { function: SeriesService.getSeriesPage, entryType: 'Series' },
     ]
+    const data = []
+    for (const item of getPageFunctions) {
+      const top = await queryClient.ensureQueryData({
+        queryKey: ['top', item.entryType.toLowerCase()],
+        queryFn: async () =>
+          await item.function(topParams),
+      })
+      data.push({data: top, title: `Top ${item.entryType}`})
+      const newest = await queryClient.ensureQueryData({
+        queryKey: ['newest', item.entryType.toLowerCase()],
+        queryFn: async () =>
+          await item.function(newestParams),
+      })
+      data.push({data: newest, title: `Newest ${item.entryType}`})
+    }
+    return data
   },
 })

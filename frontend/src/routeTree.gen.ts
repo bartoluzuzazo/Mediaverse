@@ -24,10 +24,12 @@ import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
 import { Route as EntriesSeriesCreateIndexImport } from './routes/entries/series/create/index'
 import { Route as EntriesMoviesCreateIndexImport } from './routes/entries/movies/create/index'
 import { Route as EntriesGamesCreateIndexImport } from './routes/entries/games/create/index'
+import { Route as EntriesEpisodesCreateIndexImport } from './routes/entries/episodes/create/index'
 import { Route as EntriesBooksCreateIndexImport } from './routes/entries/books/create/index'
 import { Route as EntriesSeriesEditIdImport } from './routes/entries/series/edit/$id'
 import { Route as EntriesMoviesEditIdImport } from './routes/entries/movies/edit/$id'
 import { Route as EntriesGamesEditIdImport } from './routes/entries/games/edit/$id'
+import { Route as EntriesEpisodesEditIdImport } from './routes/entries/episodes/edit/$id'
 import { Route as EntriesBooksEditIdImport } from './routes/entries/books/edit/$id'
 
 // Create/Update Routes
@@ -97,6 +99,13 @@ const EntriesGamesCreateIndexRoute = EntriesGamesCreateIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EntriesEpisodesCreateIndexRoute = EntriesEpisodesCreateIndexImport.update(
+  {
+    path: '/entries/episodes/create/',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
+
 const EntriesBooksCreateIndexRoute = EntriesBooksCreateIndexImport.update({
   path: '/entries/books/create/',
   getParentRoute: () => rootRoute,
@@ -114,6 +123,11 @@ const EntriesMoviesEditIdRoute = EntriesMoviesEditIdImport.update({
 
 const EntriesGamesEditIdRoute = EntriesGamesEditIdImport.update({
   path: '/entries/games/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EntriesEpisodesEditIdRoute = EntriesEpisodesEditIdImport.update({
+  path: '/entries/episodes/edit/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -203,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EntriesBooksEditIdImport
       parentRoute: typeof rootRoute
     }
+    '/entries/episodes/edit/$id': {
+      id: '/entries/episodes/edit/$id'
+      path: '/entries/episodes/edit/$id'
+      fullPath: '/entries/episodes/edit/$id'
+      preLoaderRoute: typeof EntriesEpisodesEditIdImport
+      parentRoute: typeof rootRoute
+    }
     '/entries/games/edit/$id': {
       id: '/entries/games/edit/$id'
       path: '/entries/games/edit/$id'
@@ -229,6 +250,13 @@ declare module '@tanstack/react-router' {
       path: '/entries/books/create'
       fullPath: '/entries/books/create'
       preLoaderRoute: typeof EntriesBooksCreateIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/entries/episodes/create/': {
+      id: '/entries/episodes/create/'
+      path: '/entries/episodes/create'
+      fullPath: '/entries/episodes/create'
+      preLoaderRoute: typeof EntriesEpisodesCreateIndexImport
       parentRoute: typeof rootRoute
     }
     '/entries/games/create/': {
@@ -269,10 +297,12 @@ export const routeTree = rootRoute.addChildren({
   UsersEditIdRoute,
   AuthorsCreateIndexRoute,
   EntriesBooksEditIdRoute,
+  EntriesEpisodesEditIdRoute,
   EntriesGamesEditIdRoute,
   EntriesMoviesEditIdRoute,
   EntriesSeriesEditIdRoute,
   EntriesBooksCreateIndexRoute,
+  EntriesEpisodesCreateIndexRoute,
   EntriesGamesCreateIndexRoute,
   EntriesMoviesCreateIndexRoute,
   EntriesSeriesCreateIndexRoute,
@@ -297,10 +327,12 @@ export const routeTree = rootRoute.addChildren({
         "/users/edit/$id",
         "/authors/create/",
         "/entries/books/edit/$id",
+        "/entries/episodes/edit/$id",
         "/entries/games/edit/$id",
         "/entries/movies/edit/$id",
         "/entries/series/edit/$id",
         "/entries/books/create/",
+        "/entries/episodes/create/",
         "/entries/games/create/",
         "/entries/movies/create/",
         "/entries/series/create/"
@@ -339,6 +371,9 @@ export const routeTree = rootRoute.addChildren({
     "/entries/books/edit/$id": {
       "filePath": "entries/books/edit/$id.tsx"
     },
+    "/entries/episodes/edit/$id": {
+      "filePath": "entries/episodes/edit/$id.tsx"
+    },
     "/entries/games/edit/$id": {
       "filePath": "entries/games/edit/$id.tsx"
     },
@@ -350,6 +385,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/entries/books/create/": {
       "filePath": "entries/books/create/index.tsx"
+    },
+    "/entries/episodes/create/": {
+      "filePath": "entries/episodes/create/index.tsx"
     },
     "/entries/games/create/": {
       "filePath": "entries/games/create/index.tsx"
