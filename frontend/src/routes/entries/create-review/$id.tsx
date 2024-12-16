@@ -8,7 +8,7 @@ export const Route = createFileRoute('/entries/create-review/$id')({
 const CreateReviewComponent = () => {
   const entryId = Route.useParams().id
   return (
-    <AuthorizedView notAuthView={<Navigate to="/" />}>
+    <AuthorizedView notAuthView={<Navigate to="/" />} allowedRoles="Critic">
       <ReviewForm entryId={entryId} />
     </AuthorizedView>
   )

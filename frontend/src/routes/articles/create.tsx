@@ -7,7 +7,10 @@ export const Route = createFileRoute('/articles/create')({
 })
 const CreateArticle = () => {
   return (
-    <AuthorizedView notAuthView={<Navigate to={'/'} />}>
+    <AuthorizedView
+      notAuthView={<Navigate to={'/'} />}
+      allowedRoles="ContentCreator"
+    >
       <ArticleForm />
     </AuthorizedView>
   )

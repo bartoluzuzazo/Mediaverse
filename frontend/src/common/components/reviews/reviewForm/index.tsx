@@ -34,7 +34,7 @@ export const ReviewForm: FunctionComponent<Props> = ({ review, entryId }) => {
   const onSubmit: SubmitHandler<ReviewFormData> = async (data) => {
     await reviewService.putReview(entryId, data)
     await navigate({
-      to: '/reviews/$entryId/entries/$userId',
+      to: '/reviews/$userId/entries/$entryId',
       params: { entryId, userId: authUserData!.id },
     })
   }

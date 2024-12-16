@@ -24,6 +24,7 @@ export const ArticleForm: FunctionComponent<Props> = ({ article }) => {
           id: article.id,
           lede: article.lede,
           title: article.title,
+          content: article.content,
         }
       : undefined,
   })

@@ -5,7 +5,7 @@ import CustomImage from '../../../../common/components/customImage'
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
-export const Route = createFileRoute('/reviews/$entryId/entries/$userId')({
+export const Route = createFileRoute('/reviews/$userId/entries/$entryId')({
   loader: async ({ params }) => {
     const response = await reviewService.getReview(
       params.entryId,

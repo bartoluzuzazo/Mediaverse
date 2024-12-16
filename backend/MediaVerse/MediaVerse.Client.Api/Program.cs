@@ -99,7 +99,12 @@ public class Program
             };
         });
 
-        builder.Services.AddAuthorization(o => o.AddPolicy("Admin", p => p.RequireRole("Administrator")));
+        builder.Services.AddAuthorization(o =>
+        {
+            o.AddPolicy("Admin", p => p.RequireRole("Administrator"));
+            o.AddPolicy("Critic", p => p.RequireRole("Critic"));
+            o.AddPolicy("ContentCreator", p => p.RequireRole("ContentCreator"));
+        });
 
         var app = builder.Build();
 

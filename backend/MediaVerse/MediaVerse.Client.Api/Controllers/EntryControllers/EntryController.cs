@@ -27,7 +27,7 @@ public class EntryController(IMediator mediator) : BaseController
     }
 
     [HttpPut("{id:guid}/reviews/current-user")]
-    [Authorize]
+    [Authorize("Critic")]
     public async Task<IActionResult> PutReview(Guid id,CreateUpdateReviewDto dto)
     {
         var command = new CreateOrUpdateReviewCommand(id, dto);

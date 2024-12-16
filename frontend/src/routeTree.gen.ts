@@ -24,11 +24,13 @@ import { Route as AuthorsCreateIndexImport } from './routes/authors/create/index
 import { Route as UsersEditIdImport } from './routes/users/edit/$id'
 import { Route as EntriesCreateReviewIdImport } from './routes/entries/create-review/$id'
 import { Route as AuthorsEditIdImport } from './routes/authors/edit/$id'
+import { Route as ArticlesEditIdImport } from './routes/articles/edit/$id'
 import { Route as EntriesMoviesCreateIndexImport } from './routes/entries/movies/create/index'
 import { Route as EntriesBooksCreateIndexImport } from './routes/entries/books/create/index'
-import { Route as ReviewsEntryIdEntriesUserIdImport } from './routes/reviews/$entryId/entries/$userId'
+import { Route as ReviewsUserIdEntriesEntryIdImport } from './routes/reviews/$userId/entries/$entryId'
 import { Route as EntriesMoviesEditIdImport } from './routes/entries/movies/edit/$id'
 import { Route as EntriesBooksEditIdImport } from './routes/entries/books/edit/$id'
+import { Route as ReviewsUserIdEntriesEditEntryIdImport } from './routes/reviews/$userId/entries/edit/$entryId'
 
 // Create/Update Routes
 
@@ -97,6 +99,11 @@ const AuthorsEditIdRoute = AuthorsEditIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ArticlesEditIdRoute = ArticlesEditIdImport.update({
+  path: '/articles/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const EntriesMoviesCreateIndexRoute = EntriesMoviesCreateIndexImport.update({
   path: '/entries/movies/create/',
   getParentRoute: () => rootRoute,
@@ -107,9 +114,9 @@ const EntriesBooksCreateIndexRoute = EntriesBooksCreateIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ReviewsEntryIdEntriesUserIdRoute =
-  ReviewsEntryIdEntriesUserIdImport.update({
-    path: '/reviews/$entryId/entries/$userId',
+const ReviewsUserIdEntriesEntryIdRoute =
+  ReviewsUserIdEntriesEntryIdImport.update({
+    path: '/reviews/$userId/entries/$entryId',
     getParentRoute: () => rootRoute,
   } as any)
 
@@ -122,6 +129,12 @@ const EntriesBooksEditIdRoute = EntriesBooksEditIdImport.update({
   path: '/entries/books/edit/$id',
   getParentRoute: () => rootRoute,
 } as any)
+
+const ReviewsUserIdEntriesEditEntryIdRoute =
+  ReviewsUserIdEntriesEditEntryIdImport.update({
+    path: '/reviews/$userId/entries/edit/$entryId',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -190,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchIndexImport
       parentRoute: typeof rootRoute
     }
+    '/articles/edit/$id': {
+      id: '/articles/edit/$id'
+      path: '/articles/edit/$id'
+      fullPath: '/articles/edit/$id'
+      preLoaderRoute: typeof ArticlesEditIdImport
+      parentRoute: typeof rootRoute
+    }
     '/authors/edit/$id': {
       id: '/authors/edit/$id'
       path: '/authors/edit/$id'
@@ -232,11 +252,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EntriesMoviesEditIdImport
       parentRoute: typeof rootRoute
     }
-    '/reviews/$entryId/entries/$userId': {
-      id: '/reviews/$entryId/entries/$userId'
-      path: '/reviews/$entryId/entries/$userId'
-      fullPath: '/reviews/$entryId/entries/$userId'
-      preLoaderRoute: typeof ReviewsEntryIdEntriesUserIdImport
+    '/reviews/$userId/entries/$entryId': {
+      id: '/reviews/$userId/entries/$entryId'
+      path: '/reviews/$userId/entries/$entryId'
+      fullPath: '/reviews/$userId/entries/$entryId'
+      preLoaderRoute: typeof ReviewsUserIdEntriesEntryIdImport
       parentRoute: typeof rootRoute
     }
     '/entries/books/create/': {
@@ -251,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/entries/movies/create'
       fullPath: '/entries/movies/create'
       preLoaderRoute: typeof EntriesMoviesCreateIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/reviews/$userId/entries/edit/$entryId': {
+      id: '/reviews/$userId/entries/edit/$entryId'
+      path: '/reviews/$userId/entries/edit/$entryId'
+      fullPath: '/reviews/$userId/entries/edit/$entryId'
+      preLoaderRoute: typeof ReviewsUserIdEntriesEditEntryIdImport
       parentRoute: typeof rootRoute
     }
   }
@@ -268,15 +295,17 @@ export const routeTree = rootRoute.addChildren({
   UsersIdRoute,
   UsersSearchRoute,
   SearchIndexRoute,
+  ArticlesEditIdRoute,
   AuthorsEditIdRoute,
   EntriesCreateReviewIdRoute,
   UsersEditIdRoute,
   AuthorsCreateIndexRoute,
   EntriesBooksEditIdRoute,
   EntriesMoviesEditIdRoute,
-  ReviewsEntryIdEntriesUserIdRoute,
+  ReviewsUserIdEntriesEntryIdRoute,
   EntriesBooksCreateIndexRoute,
   EntriesMoviesCreateIndexRoute,
+  ReviewsUserIdEntriesEditEntryIdRoute,
 })
 
 /* prettier-ignore-end */
@@ -296,15 +325,17 @@ export const routeTree = rootRoute.addChildren({
         "/users/$id",
         "/users/search",
         "/search/",
+        "/articles/edit/$id",
         "/authors/edit/$id",
         "/entries/create-review/$id",
         "/users/edit/$id",
         "/authors/create/",
         "/entries/books/edit/$id",
         "/entries/movies/edit/$id",
-        "/reviews/$entryId/entries/$userId",
+        "/reviews/$userId/entries/$entryId",
         "/entries/books/create/",
-        "/entries/movies/create/"
+        "/entries/movies/create/",
+        "/reviews/$userId/entries/edit/$entryId"
       ]
     },
     "/": {
@@ -334,6 +365,9 @@ export const routeTree = rootRoute.addChildren({
     "/search/": {
       "filePath": "search/index.tsx"
     },
+    "/articles/edit/$id": {
+      "filePath": "articles/edit/$id.tsx"
+    },
     "/authors/edit/$id": {
       "filePath": "authors/edit/$id.tsx"
     },
@@ -352,14 +386,17 @@ export const routeTree = rootRoute.addChildren({
     "/entries/movies/edit/$id": {
       "filePath": "entries/movies/edit/$id.tsx"
     },
-    "/reviews/$entryId/entries/$userId": {
-      "filePath": "reviews/$entryId/entries/$userId.tsx"
+    "/reviews/$userId/entries/$entryId": {
+      "filePath": "reviews/$userId/entries/$entryId.tsx"
     },
     "/entries/books/create/": {
       "filePath": "entries/books/create/index.tsx"
     },
     "/entries/movies/create/": {
       "filePath": "entries/movies/create/index.tsx"
+    },
+    "/reviews/$userId/entries/edit/$entryId": {
+      "filePath": "reviews/$userId/entries/edit/$entryId.tsx"
     }
   }
 }
