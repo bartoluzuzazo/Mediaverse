@@ -7,6 +7,6 @@ public class GetGameByIdSpecification : Specification<Game>
 {
     public GetGameByIdSpecification(Guid id)
     {
-        Query.Where(b => b.Id == id).Include(b => b.GameGenres);
+        Query.Where(g => g.Id == id).Include(g => g.GameGenres);
     }
 }

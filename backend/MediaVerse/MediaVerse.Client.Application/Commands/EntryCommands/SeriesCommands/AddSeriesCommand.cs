@@ -8,10 +8,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands.SeriesCommands;
 
-public record AddSeriesCommand(AddEntryCommand Entry, string Synopsis, List<string>? Genres) : IRequest<BaseResponse<Guid>>;
+public record AddSeriesCommand(AddEntryCommand Entry, List<string>? Genres) : IRequest<BaseResponse<Guid>>;
 
 public class AddSeriesCommandHandler(
-    IRepository<Series> SeriesRepository,
+    IRepository<Series> seriesRepository,
     IRepository<CinematicGenre> cinematicGenreRepository,
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> photoRepository,
@@ -25,7 +25,7 @@ public class AddSeriesCommandHandler(
     {
         var entryResponse = await base.Handle(request.Entry, cancellationToken);
 
-        var Series = new Series()
+        var series = new Series()
         {
             Id = entryResponse.Data.EntryId,
             CinematicGenres = new List<CinematicGenre>()
@@ -40,11 +40,11 @@ public class AddSeriesCommandHandler(
                 .Select(genre => new CinematicGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
             await cinematicGenreRepository.AddRangeAsync(newGenres, cancellationToken);
             dbGenres.AddRange(newGenres);
-            Series.CinematicGenres = dbGenres;
+            series.CinematicGenres = dbGenres;
         }
 
-        await SeriesRepository.AddAsync(Series, cancellationToken);
+        await seriesRepository.AddAsync(series, cancellationToken);
 
-        return new BaseResponse<Guid>(Series.Id);
+        return new BaseResponse<Guid>(series.Id);
     }
 }

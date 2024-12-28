@@ -1,6 +1,6 @@
 using MediatR;
+using MediaVerse.Client.Application.DTOs.EntryDTOs.EpisodeDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.SeriesDTOs;
-using MediaVerse.Client.Application.DTOs.EntryDTOs.SeriesDTOs.EpisodeDTOs;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications.SeriesSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;

@@ -40,14 +40,14 @@ export const GenreInputForm: FunctionComponent<Props> = ({ label, collection, se
             })}
             className="flex md:flex-row pt-2"
       >
-        <div className="mb-2 flex flex-row items-end">
+        <div className="mb-2 flex flex-row">
           <GenrePicker
             query={query} setQuery={setQuery}
             searchFunction={searchFunction}
             onClick={async (u) => handleFill(u)}
-            queryKey="SEARCH_BOOK_GENRE"
+            queryKey={searchFunction.name.toUpperCase()}
           />
-          <button className="h-[36px] w-[36px] text-white bg-mv-light-purple flex items-center justify-center mb-2 p-1"
+          <button className="h-[36px] w-[36px] text-white bg-mv-light-purple flex items-center justify-center mb-2 p-5"
                   onClick={handleAdd}>
             +
           </button>

@@ -1,4 +1,4 @@
-using MediaVerse.Client.Application.DTOs.EntryDTOs.SeriesDTOs.EpisodeDTOs;
+using MediaVerse.Client.Application.DTOs.EntryDTOs.EpisodeDTOs;
 
 namespace MediaVerse.Client.Application.DTOs.EntryDTOs.SeriesDTOs;
 

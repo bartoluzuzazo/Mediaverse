@@ -1,22 +1,17 @@
-import { FunctionComponent } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { FunctionComponent, MouseEventHandler } from 'react'
 import { EpisodePreview } from '../../../../models/entry/episode/Episode.ts'
 
 interface Props {
   episode: EpisodePreview
-  url? : string
+  onClick: MouseEventHandler<HTMLDivElement>
 }
 
-const SeriesEpisodePreview: FunctionComponent<Props> = ({ episode, url }) => {
-  const navigate = useNavigate()
-  const handleLink = async () => {
-    await navigate({ to: url ? url : `/entries/${episode.id}` })
-  }
+const SeriesEpisodePreview: FunctionComponent<Props> = ({ episode, onClick }) => {
   return (
     <>
       <div
         className="flex cursor-pointer flex-row justify-between"
-        onClick={handleLink}
+        onClick={onClick}
       >
         <div className="flex flex-col p-2">
           <h2 className="p-2">{`Episode ${episode.episodeNumber}`}</h2>

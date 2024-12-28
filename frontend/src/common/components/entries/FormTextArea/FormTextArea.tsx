@@ -9,7 +9,7 @@ interface Props <T extends FieldValues>{
   rows?: number
 }
 
-const FormTextArea = <T extends FieldValues> ({label, registerPath, register, errorValue, rows=20} : Props<T>) => {
+const FormTextArea = <T extends FieldValues> ({label, registerPath, register, errorValue, rows=18} : Props<T>) => {
   return (
     <div className="mb-2 block">
       <label>

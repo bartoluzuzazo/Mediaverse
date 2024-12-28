@@ -4,7 +4,9 @@ import { WorkOn } from '../WorkOn.ts'
 export interface Episode {
   entry: Entry,
   synopsis: string,
-  seriesId: string
+  seriesId?: string,
+  seasonNumber: number,
+  episodeNumber: number,
   workOns: WorkOn[]
 }
 

@@ -18,6 +18,10 @@ export class EpisodeService {
     return await axios.post('/episode', episode)
   }
 
+  public static async postEpisodes(id: string, episodes: EpisodeFormData[]) {
+    return await axios.post(`/episode/${id}`, episodes)
+  }
+
   public static async patchEpisode(episode: EpisodeFormData, id: string) {
     return await axios.patch(`/episode/${id}`, episode)
   }

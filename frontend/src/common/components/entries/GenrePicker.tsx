@@ -41,7 +41,7 @@ export const GenrePicker: FunctionComponent<Props> = ({ onClick, searchFunction,
         }}
         rightElement={<FaSearch />}
       />
-      <div className='flex flex-wrap gap-6 mt-10 overflow-y-auto'>
+      <div className='flex flex-wrap gap-4 mt-1 overflow-y-auto'>
         {genres?.pages.flatMap(p => p.contents).map(g => (
           <GenreLinkWrapper key={g} genre={g} onClick={onClick}>
             <GenreTile genre={g} />

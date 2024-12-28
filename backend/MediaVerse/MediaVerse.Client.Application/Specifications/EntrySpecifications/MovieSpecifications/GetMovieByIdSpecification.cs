@@ -7,6 +7,6 @@ public class GetMovieByIdSpecification : Specification<Movie>
 {
     public GetMovieByIdSpecification(Guid id)
     {
-        Query.Where(b => b.Id == id).Include(b => b.CinematicGenres);
+        Query.Where(m => m.Id == id).Include(m => m.CinematicGenres);
     }
 }
