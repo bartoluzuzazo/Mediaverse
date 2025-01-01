@@ -34,5 +34,12 @@ public class ArticlesController(IMediator mediator) : BaseController
         var response = await mediator.Send(command);
         return OkOrError(response);
     }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchArticles([FromQuery] SearchArticlesQuery query)
+    {
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+    }
     
 }
