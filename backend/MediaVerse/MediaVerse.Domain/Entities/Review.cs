@@ -10,6 +10,8 @@ public partial class Review
 
     public string Title { get; set; } = null!;
 
+    public int Grade { get; set; }
+
     public virtual Entry Entry { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
