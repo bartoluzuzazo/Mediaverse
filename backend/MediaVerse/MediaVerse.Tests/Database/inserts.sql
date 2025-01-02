@@ -21,10 +21,8 @@ VALUES ((SELECT uuid_in('08c71152-c552-42e7-b094-f510ff44e9cb')), 'user', 'user@
         'AQAAAAIAAYagAAAAEFcLklIh16tE1VkAsBVmTnZjmItN+JNiGenKPkmg6AFfyQEhU7ns26B3Oym3pHhacA==', -- hasło: admin
         uuid_in('dbc2478f-ee4f-492e-afdd-7584a81e2baa'));
 
-
-
-
-
+INSERT INTO "role_user"
+VALUES ((SELECT uuid_in('aa2da3d4-6710-4714-9bc8-054023063118')), (SELECT uuid_in('af7c1fe6-d669-414e-b066-e9733f0de7a8')));
 
 -- inserting an entry
 INSERT INTO cover_photo

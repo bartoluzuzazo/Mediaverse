@@ -7,15 +7,8 @@ public class EntryTests : MediaVerseTestBase
     {
     }
 
-    public override async Task InitializeAsync()
-    {
-        await base.InitializeAsync();
-    }
-
-    
-
     [Fact]
-    public async Task Test1()
+    public async Task GetEntries_Should_ReturnSuccess()
     {
         // Arrange
         var client = Factory.CreateClient();
