@@ -1,5 +1,11 @@
-import { Article, ArticleFormData } from '../models/article'
+import {
+  Article,
+  ArticleFormData,
+  ArticlePreview,
+  SearchArticleParams,
+} from '../models/article'
 import axios from 'axios'
+import { Page } from '../models/common'
 
 export class articleService {
   public static async postArticle(article: ArticleFormData) {
@@ -11,5 +17,9 @@ export class articleService {
   }
   public static async getArticle(id: string) {
     return await axios.get<Article>(`/articles/${id}`)
+  }
+
+  public static async searchArticles(params: SearchArticleParams) {
+    return await axios.get<Page<ArticlePreview>>(`/articles/search`, { params })
   }
 }

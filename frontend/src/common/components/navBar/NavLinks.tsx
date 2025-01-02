@@ -17,6 +17,15 @@ export const NavLinks: FunctionComponent = () => {
         </Link>
         <span className="text-mv-slate">Find users by username</span>
       </li>
+      <li className="flex flex-col">
+        <Link
+          to={'/articles/search'}
+          className="font-semibold text-black hover:text-mv-purple hover:underline"
+        >
+          Search articles
+        </Link>
+        <span className="text-mv-slate">Find articles by title and lede</span>
+      </li>
       {authUserData && (
         <AuthorizedView>
           <li className="flex flex-col">

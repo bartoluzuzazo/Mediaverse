@@ -17,11 +17,11 @@ export const ArticleComponent: FunctionComponent = () => {
   const imgSrc =
     article.authorPicture && 'data:image/*;base64,' + article.authorPicture
   return (
-    <article>
+    <article className="mt-6">
       <h1>{article.title}</h1>
       <div className="flex justify-between">
         <p className="text-lg italic text-slate-800">{article.lede}</p>
-        <div>
+        <div className="min-w-fit">
           <img
             src={imgSrc || defaultImgUrl}
             className="aspect-square h-24 rounded-full border-[1px] border-slate-200 bg-slate-300"
