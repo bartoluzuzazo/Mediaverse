@@ -83,20 +83,16 @@ const SeriesForm: FunctionComponent<Props> = ({ series }) => {
       data.entry.workOnRequests = authors;
       setEpisodes([...episodes, data]);
     }
-    else{
-    }
     setIsOpen(false)
   }
 
   const onSubmit: SubmitHandler<SeriesFormData> = async (data) => {
     data.genres = genres
     data.entry.workOnRequests = authors;
-    console.log(data)
     if (series == null) {
       const response = await SeriesService.postSeries(data);
       const id = response.data.id;
-      const epResponse = await EpisodeService.postEpisodes(id, episodes);
-      console.log(epResponse.data)
+      await EpisodeService.postEpisodes(id, episodes);
       await navigate({ to: `/entries/${id}` })
     } else {
       await SeriesService.patchSeries(data, series.entry.id);

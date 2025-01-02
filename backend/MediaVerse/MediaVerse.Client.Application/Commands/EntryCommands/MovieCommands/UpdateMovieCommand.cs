@@ -13,7 +13,7 @@ public record UpdateMovieCommand(Guid Id, PatchMovieRequest Dto) : IRequest<Base
 
 public class UpdateMovieCommandHandler(
     IRepository<Movie> movieRepository,
-    IRepository<CinematicGenre> movieGenreRepository,
+    IRepository<CinematicGenre> cinematicGenreRepository,
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> coverPhotoRepository,
     IRepository<AuthorRole> roleRepository,
@@ -36,11 +36,11 @@ public class UpdateMovieCommandHandler(
         if (request.Dto.Genres is not null)
         {
             var genreSpec = new GetCinematicGenresByNameSpecification(request.Dto.Genres);
-            var dbGenres = await movieGenreRepository.ListAsync(genreSpec, cancellationToken);
+            var dbGenres = await cinematicGenreRepository.ListAsync(genreSpec, cancellationToken);
             var dbGenreNames = dbGenres.Select(g => g.Name).ToList();
             var newGenres = request.Dto.Genres.Where(genre => !dbGenreNames.Contains(genre))
                 .Select(genre => new CinematicGenre() { Id = Guid.NewGuid(), Name = genre }).ToList();
-            await movieGenreRepository.AddRangeAsync(newGenres, cancellationToken);
+            await cinematicGenreRepository.AddRangeAsync(newGenres, cancellationToken);
             dbGenres.AddRange(newGenres);
             movie.CinematicGenres = dbGenres;
         }

@@ -7,6 +7,6 @@ public class GetGameGenresByNameSpecification : Specification<GameGenre>
 {
     public GetGameGenresByNameSpecification(List<string> names)
     {
-        Query.Where(bg => names.Contains(bg.Name));
+        Query.Where(gg => names.Contains(gg.Name));
     }
 }

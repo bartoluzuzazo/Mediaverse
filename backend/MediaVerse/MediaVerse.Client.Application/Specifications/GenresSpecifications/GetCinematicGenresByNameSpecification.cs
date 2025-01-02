@@ -7,6 +7,6 @@ public class GetCinematicGenresByNameSpecification : Specification<CinematicGenr
 {
     public GetCinematicGenresByNameSpecification(List<string> names)
     {
-        Query.Where(bg => names.Contains(bg.Name));
+        Query.Where(cg => names.Contains(cg.Name));
     }
 }
