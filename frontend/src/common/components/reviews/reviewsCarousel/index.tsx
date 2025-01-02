@@ -7,6 +7,7 @@ import CustomImage from '../../customImage'
 import SectionHeader from '../../entries/sectionHeader.tsx'
 import { RatingDisplay } from '../ratingDisplay'
 import { YourReviewLink } from './yourReviewLink.tsx'
+import { AuthorizedView } from '../../auth/AuthorizedView'
 
 type Props = {
   entryId: string
@@ -20,19 +21,28 @@ export const ReviewsCarousel: FunctionComponent<Props> = ({ entryId }) => {
     },
   })
 
-  if (!reviewSummary || reviewSummary.reviews.length === 0) {
+  if (!reviewSummary) {
     return null
+  }
+  if (reviewSummary.reviews.length === 0) {
+    return (
+      <AuthorizedView allowedRoles="Critic">
+        <YourReviewLink reviews={reviewSummary.reviews} entryId={entryId} />
+      </AuthorizedView>
+    )
   }
   const reviews = reviewSummary.reviews
 
   return (
-    <div>
+    <div className="space-y-2">
       <SectionHeader title="Reviews" />
       <p className="mt-2 text-xl font-semibold">
         {' '}
         Average rating: {reviewSummary.gradeAvg}
       </p>
-      <YourReviewLink reviews={reviews} entryId={entryId} />
+      <AuthorizedView allowedRoles="Critic">
+        <YourReviewLink reviews={reviews} entryId={entryId} />
+      </AuthorizedView>
 
       <CustomCarousel>
         {reviews.map((review) => {
@@ -51,7 +61,7 @@ export const ReviewsCarousel: FunctionComponent<Props> = ({ entryId }) => {
                 {review.username}
               </div>
               <RatingDisplay rating={review.grade} />
-              <div className="italic">{review.title}</div>
+              <div className="italic text-slate-500">{review.title}</div>
             </Link>
           )
         })}

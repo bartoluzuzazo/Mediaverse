@@ -27,12 +27,14 @@ export const YourReviewLink: FunctionComponent<Props> = ({
     )
   }
   return (
-    <LinkButton
-      icon={<AiFillStar />}
-      to="/entries/create-review/$id"
-      params={{ id: entryId }}
-    >
-      Add review
-    </LinkButton>
+    <div className="my-3">
+      <LinkButton
+        icon={<AiFillStar />}
+        to="/entries/create-review/$id"
+        params={{ id: entryId }}
+      >
+        Add review
+      </LinkButton>
+    </div>
   )
 }
