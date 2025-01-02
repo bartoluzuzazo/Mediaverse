@@ -1,9 +1,10 @@
 import axios from 'axios'
 
-import { Entry } from '../../models/entry/Entry.ts'
+import { Entry, EntrySearch } from '../../models/entry/Entry.ts'
 import { Song } from '../../models/entry/song/Song.ts'
 import { SongFormData } from '../../common/components/entries/songs/SongForm.tsx'
 import { GetEntryPageRequest } from '../../models/entry/book'
+import { Page, PaginateRequest } from '../../models/common'
 
 export class SongService {
   public static async getSong(id: string) {
@@ -20,6 +21,10 @@ export class SongService {
 
   public static async patchSong(song: SongFormData, id: string) {
     return await axios.patch(`/song/${id}`, song)
+  }
+
+  public static async search(query: string, params: PaginateRequest) {
+    return await axios.get<Page<EntrySearch>>(`/song/search`, { params: { ...params, query } })
   }
 }
 

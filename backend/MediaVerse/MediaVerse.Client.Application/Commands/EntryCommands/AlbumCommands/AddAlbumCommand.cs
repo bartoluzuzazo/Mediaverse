@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.SongSpecifications;
 using MediaVerse.Client.Application.Specifications.GenresSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
@@ -8,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands.AlbumCommands;
 
-public record AddAlbumCommand(AddEntryCommand Entry, List<string>? Genres) : IRequest<BaseResponse<Guid>>;
+public record AddAlbumCommand(AddEntryCommand Entry, List<string>? Genres, List<Guid> SongIds) : IRequest<BaseResponse<Guid>>;
 
 public class AddAlbumCommandHandler(
     IRepository<Album> albumRepository,
@@ -17,6 +18,7 @@ public class AddAlbumCommandHandler(
     IRepository<CoverPhoto> photoRepository,
     IRepository<WorkOn> workOnRepository,
     IRepository<AuthorRole> roleRepository,
+    IRepository<Song> songRepository,
     IMapper mapper)
     : AddEntryCommandHandler(entryRepository, photoRepository, workOnRepository, roleRepository, mapper),
         IRequestHandler<AddAlbumCommand, BaseResponse<Guid>>
@@ -27,7 +29,7 @@ public class AddAlbumCommandHandler(
 
         var album = new Album()
         {
-            Id = entryResponse.Data.EntryId,
+            Id = entryResponse.Data!.EntryId,
             MusicGenres = new List<MusicGenre>()
         };
 
@@ -41,6 +43,13 @@ public class AddAlbumCommandHandler(
             await musicGenreRepository.AddRangeAsync(newGenres, cancellationToken);
             dbGenres.AddRange(newGenres);
             album.MusicGenres = dbGenres;
+        }
+        
+        if (!request.SongIds.IsNullOrEmpty())
+        {
+            var spec = new GetSongsByIdsSpecification(request.SongIds);
+            var songs = await songRepository.ListAsync(spec, cancellationToken);
+            album.Songs = songs;
         }
 
         await albumRepository.AddAsync(album, cancellationToken);

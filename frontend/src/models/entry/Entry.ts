@@ -15,6 +15,12 @@ export interface Entry {
   workOnRequests: WorkOn[]
 }
 
+export interface EntrySearch {
+  id: string
+  name: string
+  photo: string
+}
+
 export enum EntryOrder {
   Rating,
   Name,

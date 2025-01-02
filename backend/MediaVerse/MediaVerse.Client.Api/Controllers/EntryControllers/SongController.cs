@@ -47,4 +47,12 @@ public class SongController(IMediator mediator) : BaseController
         var response = await mediator.Send(request);
         return ResolveCode(response.Exception, Ok(response.Data));
     }
+    
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchSongs(string query, int page, int size)
+    {
+        var request = new SearchSongsQuery(page, size, query);
+        var response = await mediator.Send(request);
+        return OkOrError(response);
+    }
 }
