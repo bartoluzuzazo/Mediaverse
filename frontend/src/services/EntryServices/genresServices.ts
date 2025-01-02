@@ -12,5 +12,8 @@ export class GenresServices {
   public static async searchGameGenres(query: string, params: PaginateRequest) {
     return await axios.get<Page<string>>(`/genres/search/game`, { params: { ...params, query } })
   }
+  public static async searchMusicGenres(query: string, params: PaginateRequest) {
+    return await axios.get<Page<string>>(`/genres/search/music`, { params: { ...params, query } })
+  }
 }
 

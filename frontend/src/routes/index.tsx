@@ -6,6 +6,8 @@ import { Oval } from 'react-loader-spinner'
 import { MovieService } from '../services/EntryServices/movieService.ts'
 import { GameService } from '../services/EntryServices/gameService.ts'
 import { SeriesService } from '../services/EntryServices/seriesService.ts'
+import { SongService } from '../services/EntryServices/songService.ts'
+import { AlbumService } from '../services/EntryServices/albumService.ts'
 
 export const Route = createFileRoute('/')({
   pendingComponent: () => (
@@ -40,6 +42,8 @@ export const Route = createFileRoute('/')({
       { function: MovieService.getMovies, entryType: 'Movies' },
       { function: GameService.getGames, entryType: 'Games' },
       { function: SeriesService.getSeriesPage, entryType: 'Series' },
+      { function: SongService.getSongs, entryType: 'Songs' },
+      { function: AlbumService.getAlbums, entryType: 'Albums' },
     ]
     const data = []
     for (const item of getPageFunctions) {
