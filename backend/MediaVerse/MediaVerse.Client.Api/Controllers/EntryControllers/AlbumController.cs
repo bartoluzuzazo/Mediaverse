@@ -47,4 +47,12 @@ public class AlbumController(IMediator mediator) : BaseController
         var response = await mediator.Send(request);
         return ResolveCode(response.Exception, Ok(response.Data));
     }
+    
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchAlbums(string query, int page, int size)
+    {
+        var request = new SearchAlbumsQuery(page, size, query);
+        var response = await mediator.Send(request);
+        return OkOrError(response);
+    }
 }

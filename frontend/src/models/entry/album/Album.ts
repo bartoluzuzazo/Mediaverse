@@ -8,3 +8,7 @@ export interface Album {
   workOns: WorkOn[],
   songs: Song[]
 }
+
+export interface AlbumFormPreview {
+
+}

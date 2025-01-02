@@ -13,11 +13,14 @@ import { WorkOn } from '../../../../models/entry/WorkOn.ts'
 import { GenreInputForm } from '../GenreInputForm.tsx'
 import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
 import { GenresServices } from '../../../../services/EntryServices/genresServices.ts'
+import { EntryFormPreview, SearchEntryForm } from '../albums/SearchEntryForm.tsx'
+import { AlbumService } from '../../../../services/EntryServices/albumService.ts'
 
 export interface SongFormData {
-  entry: Entry
+  entry: Entry,
   lyrics: string,
-  genres: string[]
+  genres: string[],
+  albumIds: string[]
 }
 
 type Props = {
@@ -49,7 +52,8 @@ const SongForm: FunctionComponent<Props> = ({ song }) => {
       ? {
         entry : song.entry,
         genres: song.musicGenres,
-        lyrics: song.lyrics
+        lyrics: song.lyrics,
+        albumIds: song.albums.map(a => a.entry.id)
       }
       : undefined,
   })
@@ -58,11 +62,15 @@ const SongForm: FunctionComponent<Props> = ({ song }) => {
 
   const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
   const [authors, setAuthors] = useState<WorkOn[]>(getInitialWorkOns())
+  const [albums, setAlbums] = useState<EntryFormPreview[]>(song ? song.albums.map(a => {
+    let preview : EntryFormPreview = {id: a.entry.id, name: a.entry.name}
+    return preview
+  }) : [])
 
   const onSubmit: SubmitHandler<SongFormData> = async (data) => {
     data.genres = genres
     data.entry.workOnRequests = authors;
-
+    data.albumIds = albums.map(a => a.id);
     if (song == null) {
       const response = await SongService.postSong(data)
       const id = response.data.id
@@ -100,6 +108,7 @@ const SongForm: FunctionComponent<Props> = ({ song }) => {
       <div className="flex flex-row justify-evenly">
         <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchMusicGenres}/>
         <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
+        <SearchEntryForm label={'Albums'} collection={albums} setCollection={setAlbums} searchFunction={AlbumService.search} queryKey={"SEARCH_SONGS"}/>
       </div>
     </>
   )

@@ -5,6 +5,8 @@ import { BookEntryComponent } from '../../common/components/entries/books/BookEn
 import { MovieEntryComponent } from '../../common/components/entries/movies/MovieEntryComponent.tsx'
 import { GameEntryComponent } from '../../common/components/entries/games/GameEntryComponent.tsx'
 import { SeriesEntryComponent } from '../../common/components/entries/series/SeriesEntryComponent.tsx'
+import { SongEntryComponent } from '../../common/components/entries/songs/SongEntryComponent.tsx'
+import { AlbumEntryComponent } from '../../common/components/entries/albums/AlbumEntryComponent.tsx'
 
 const entryTypeQueryOptions = (id: string) => {
   return queryOptions({
@@ -32,6 +34,12 @@ const EntryComponent = () => {
       }
       case 'Series': {
         return <SeriesEntryComponent id={id}/>
+      }
+      case 'Song': {
+        return <SongEntryComponent id={id}/>
+      }
+      case 'Album': {
+        return <AlbumEntryComponent id={id}/>
       }
     }
   }

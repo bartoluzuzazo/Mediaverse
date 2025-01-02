@@ -13,7 +13,8 @@ import { WorkOn } from '../../../../models/entry/WorkOn.ts'
 import { GenreInputForm } from '../GenreInputForm.tsx'
 import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
 import { GenresServices } from '../../../../services/EntryServices/genresServices.ts'
-import { SearchSongForm, SongFormPreview } from './SearchSongForm.tsx'
+import { SearchEntryForm, EntryFormPreview } from './SearchEntryForm.tsx'
+import { SongService } from '../../../../services/EntryServices/songService.ts'
 
 export interface AlbumFormData {
   entry: Entry
@@ -59,8 +60,8 @@ const AlbumForm: FunctionComponent<Props> = ({ album }) => {
 
   const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
   const [authors, setAuthors] = useState<WorkOn[]>(getInitialWorkOns())
-  const [songs, setSongs] = useState<SongFormPreview[]>(album ? album.songs.map(s => {
-    let preview : SongFormPreview = {id: s.entry.id, name: s.entry.name}
+  const [songs, setSongs] = useState<EntryFormPreview[]>(album ? album.songs.map(s => {
+    let preview : EntryFormPreview = {id: s.entry.id, name: s.entry.name}
     return preview
   }) : [])
 
@@ -68,7 +69,6 @@ const AlbumForm: FunctionComponent<Props> = ({ album }) => {
     data.genres = genres;
     data.entry.workOnRequests = authors;
     data.songIds = songs.map(s => s.id);
-    console.log(data)
     if (album == null) {
       const response = await AlbumService.postAlbum(data)
       const id = response.data.id
@@ -105,7 +105,7 @@ const AlbumForm: FunctionComponent<Props> = ({ album }) => {
       <div className="flex flex-row justify-evenly">
         <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchMusicGenres}/>
         <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
-        <SearchSongForm label={'Songs'} collection={songs} setCollection={setSongs}/>
+        <SearchEntryForm label={'Songs'} collection={songs} setCollection={setSongs} searchFunction={SongService.search} queryKey={"SEARCH_SONGS"}/>
       </div>
     </>
   )

@@ -10,16 +10,16 @@ import FormInput from '../form/input'
 import CustomImage from '../customImage'
 
 type Props = {
-  onClick?: (entry: EntrySearch) => void | Promise<void>
-  searchFunction : (query: string, params: PaginateRequest) => Promise<AxiosResponse<Page<EntrySearch>>>
-  queryKey: string
+  onClick?: (entry: EntrySearch) => void | Promise<void>;
+  searchFunction : (query: string, params: PaginateRequest) => Promise<AxiosResponse<Page<EntrySearch>>>;
+  queryKey: string;
 }
 
 export const EntrySearchBar: FunctionComponent<Props> = ({ onClick, searchFunction, queryKey }) => {
   const [query, setQuery] = useState<string>('')
   const [debouncedQuery] = useDebounceValue(query, 300)
 
-  const { data: entrys, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const { data: entries, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: [queryKey, { query: debouncedQuery }],
     queryFn: async ({ pageParam }) => {
       return (await searchFunction(debouncedQuery, { page: pageParam, size: 2 })).data
@@ -29,7 +29,7 @@ export const EntrySearchBar: FunctionComponent<Props> = ({ onClick, searchFuncti
     enabled: !!debouncedQuery,
   })
 
-  const isDone = entrys?.pages.some(p => !p.hasNext)
+  const isDone = entries?.pages.some(p => !p.hasNext)
 
   return (
     <div className='w-full max-w-[800px] mx-auto'>
@@ -43,12 +43,12 @@ export const EntrySearchBar: FunctionComponent<Props> = ({ onClick, searchFuncti
         rightElement={<FaSearch />}
       />
       <div className='flex flex-wrap gap-6 mt-10 overflow-y-auto'>
-        {entrys?.pages.flatMap(p => p.contents).map(u => (
+        {entries?.pages.flatMap(p => p.contents).map(u => (
           <UserLinkWrapper key={u.id} entry={u} onClick={onClick}>
             <UserTile entry={u} />
           </UserLinkWrapper>),
         )}
-        {!isDone && query && entrys && <button type='button'
+        {!isDone && query && entries && <button type='button'
                                               disabled={isFetchingNextPage}
                                               onClick={() => fetchNextPage()}
                                               className={` w-[125px] aspect-square  rounded-full text-white self-start ${isFetchingNextPage ? 'bg-violet-400' : 'bg-violet-900 hover:bg-violet-800'}`}>

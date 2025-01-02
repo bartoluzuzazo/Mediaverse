@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.AlbumSpecifications;
 using MediaVerse.Client.Application.Specifications.GenresSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
@@ -8,10 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands.SongCommands;
 
-public record AddSongCommand(AddEntryCommand Entry, string? Lyrics, List<string>? Genres) : IRequest<BaseResponse<Guid>>;
+public record AddSongCommand(AddEntryCommand Entry, string? Lyrics, List<string>? Genres, List<Guid> AlbumIds) : IRequest<BaseResponse<Guid>>;
 
 public class AddSongCommandHandler(
     IRepository<Song> songRepository,
+    IRepository<Album> albumRepository,
     IRepository<MusicGenre> musicGenreRepository,
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> photoRepository,
@@ -44,6 +46,13 @@ public class AddSongCommandHandler(
             song.MusicGenres = dbGenres;
         }
 
+        if (!request.AlbumIds.IsNullOrEmpty())
+        {
+            var spec = new GetAlbumsByIdsSpecification(request.AlbumIds);
+            var albums = await albumRepository.ListAsync(spec, cancellationToken);
+            song.Albums = albums;
+        }
+        
         await songRepository.AddAsync(song, cancellationToken);
 
         return new BaseResponse<Guid>(song.Id);
