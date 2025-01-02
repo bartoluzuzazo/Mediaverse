@@ -1,6 +1,6 @@
 namespace MediaVerse.Client.Application.DTOs.AuthorDTOs;
 
-public class GetAuthorWorkOnResponse
+public class EntryPreview
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

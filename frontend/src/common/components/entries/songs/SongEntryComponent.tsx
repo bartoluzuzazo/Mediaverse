@@ -10,6 +10,7 @@ import { AuthorizedView } from '../../auth/AuthorizedView'
 import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Song } from '../../../../models/entry/song/Song.ts'
+import AuthorEntryPreview from '../../authors/Entry/AuthorEntryPreview.tsx'
 
 interface SongEntryComponentProps {
   id: string
@@ -42,6 +43,8 @@ export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
         <EntryRatingPicker entryId={song.entry.id} />
       </AuthorizedView>
       <SectionHeader title={'Description'} />
+      <SectionHeader title={'Albums'} />
+      {song.albums?.map(album => <AuthorEntryPreview entry={album}/>)}
       <div className="p-4">{song.entry.description}</div>
       {song.entry.authors.map((group) => (
         <Fragment key={group.role}>

@@ -34,7 +34,7 @@ public class GetAuthorQueryHandler(IRepository<Author> authorRepository)
                     {
                         var score = wo.Entry.Ratings.IsNullOrEmpty() ? 0m : wo.Entry.Ratings.Average(r => Convert.ToDecimal(r.Grade));
                         
-                        return new GetAuthorWorkOnResponse
+                        return new EntryPreview
                         {
                             Id = wo.EntryId,
                             Name = wo.Entry.Name,

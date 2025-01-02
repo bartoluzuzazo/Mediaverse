@@ -1,10 +1,10 @@
 import { FunctionComponent } from 'react'
-import { AuthorEntry } from '../../../../models/author/Author.ts'
+import { EntryPreview } from '../../../../models/author/Author.ts'
 import EntryType from '../../entries/entryType.tsx'
 import { useNavigate } from '@tanstack/react-router'
 
 interface Props {
-  entry: AuthorEntry
+  entry: EntryPreview
 }
 
 const AuthorEntryPreview: FunctionComponent<Props> = ({ entry }) => {
