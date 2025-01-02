@@ -2,8 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { reviewService } from '../../../../services/reviewService.ts'
 import { FunctionComponent } from 'react'
 import CustomImage from '../../../../common/components/customImage'
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import MarkdownPreview from '@uiw/react-markdown-preview'
+import { RatingDisplay } from '../../../../common/components/reviews/ratingDisplay'
 
 export const Route = createFileRoute('/reviews/$userId/entries/$entryId')({
   loader: async ({ params }) => {
@@ -19,7 +19,7 @@ export const Route = createFileRoute('/reviews/$userId/entries/$entryId')({
 const ReviewComponent: FunctionComponent = () => {
   const review = Route.useLoaderData()
   return (
-    <article className="flex p-2">
+    <article className="mt-6 flex p-2">
       <div className="flex-1">
         <div>
           <h1>{review.title}</h1>
@@ -51,24 +51,5 @@ const ReviewComponent: FunctionComponent = () => {
         <RatingDisplay rating={review.grade} />
       </div>
     </article>
-  )
-}
-
-interface RatingDisplayProps {
-  rating: number
-}
-
-const RatingDisplay = ({ rating }: RatingDisplayProps) => {
-  const availableGrades = [...Array(6).keys()].slice(1)
-  return (
-    <div className="mx-auto flex max-w-fit text-2xl text-black min-[360px]:text-3xl">
-      {availableGrades.map((num) => {
-        return (
-          <div key={num}>
-            {num <= rating ? <AiFillStar /> : <AiOutlineStar />}
-          </div>
-        )
-      })}
-    </div>
   )
 }
