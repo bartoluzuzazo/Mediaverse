@@ -24,7 +24,7 @@ public class AddEpisodeCommandHandler(
 
         var episode = new Episode()
         {
-            Id = entryResponse.Data.EntryId,
+            Id = entryResponse.Data!.EntryId,
             Synopsis = request.Synopsis,
             SeriesId = request.SeriesId,
             SeasonNumber = request.SeasonNumber,
