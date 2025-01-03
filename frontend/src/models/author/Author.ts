@@ -16,9 +16,10 @@ interface AuthorWorkOnGroup {
 export interface EntryPreview {
   id: string
   name: string
-  releaseDate: Date
+  releaseDate: string
   avgRating: number
   description: string
   type: string
   coverPhoto: string
+  orderNumber?: number
 }

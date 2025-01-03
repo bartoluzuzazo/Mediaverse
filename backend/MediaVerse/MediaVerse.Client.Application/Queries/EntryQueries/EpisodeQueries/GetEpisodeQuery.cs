@@ -1,10 +1,12 @@
 using MediatR;
+using MediaVerse.Client.Application.DTOs.AuthorDTOs;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.EpisodeDTOs;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications.EpisodeSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Queries.EntryQueries.EpisodeQueries;
 
@@ -22,8 +24,21 @@ public class GetEpisodeQueryHandler(IRepository<Episode> episodeRepository, IRep
         var spec = new GetEpisodeByIdSpecification(request.Id);
         var episode = await episodeRepository.FirstOrDefaultAsync(spec, cancellationToken);
         if (episode is null) return new BaseResponse<GetEpisodeResponse>(new NotFoundException());
-
-        var responseBook = new GetEpisodeResponse(episode.SeriesId, episode.Series.IdNavigation.Name, episode.Synopsis, episode.SeasonNumber, episode.EpisodeNumber, response.Data!);
+        
+        var score = episode.Series.IdNavigation.Ratings.IsNullOrEmpty() ? 0m : episode.Series.IdNavigation.Ratings.Average(r => Convert.ToDecimal(r.Grade));
+        
+        var seriesPreview = new EntryPreview
+        {
+            Id = episode.Series.Id,
+            Name = episode.Series.IdNavigation.Name,
+            CoverPhoto = episode.Series.IdNavigation.CoverPhoto.Photo,
+            AvgRating = score,
+            Description = episode.Series.IdNavigation.Description,
+            Type = episode.Series.IdNavigation.Type!,
+            ReleaseDate = episode.Series.IdNavigation.Release
+        };
+        
+        var responseBook = new GetEpisodeResponse(seriesPreview, episode.Synopsis, episode.SeasonNumber, episode.EpisodeNumber, response.Data!);
         return new BaseResponse<GetEpisodeResponse>(responseBook);
     }
 }

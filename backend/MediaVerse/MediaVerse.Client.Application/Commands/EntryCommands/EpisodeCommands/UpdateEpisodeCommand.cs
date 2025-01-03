@@ -32,7 +32,8 @@ public class UpdateEpisodeCommandHandler(
         episode.Synopsis = request.Dto.Synopsis ?? episode.Synopsis;
         episode.EpisodeNumber = request.Dto.EpisodeNumber ?? episode.EpisodeNumber;
         episode.SeasonNumber = request.Dto.SeasonNumber ?? episode.SeasonNumber;
-
+        episode.SeriesId = request.Dto.SeriesId ?? episode.SeriesId;
+        
         await episodeRepository.SaveChangesAsync(cancellationToken);
         return new BaseResponse<Guid>(episode.Id);
     }

@@ -6,7 +6,7 @@ interface Props {
   author: EntryAuthor
 }
 
-const AuthorEntryPreview: FunctionComponent<Props> = ({ author }) => {
+const AuthorPreview: FunctionComponent<Props> = ({ author }) => {
   const imgSrc = 'data:image/*;base64,' + author.profilePicture
   const navigate = useNavigate()
   const handleLink = async () => {
@@ -33,4 +33,4 @@ const AuthorEntryPreview: FunctionComponent<Props> = ({ author }) => {
   )
 }
 
-export default AuthorEntryPreview
+export default AuthorPreview

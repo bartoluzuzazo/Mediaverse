@@ -1,6 +1,7 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
 using MediaVerse.Client.Application.Commands.EntryCommands.SeriesCommands;
+using MediaVerse.Client.Application.DTOs.EntryDTOs.SeriesDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
 using MediaVerse.Client.Application.Queries.EntryQueries.SeriesQueries;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications.SeriesSpecifications;
@@ -22,14 +23,14 @@ public class SeriesController(IMediator mediator) : BaseController
         return CreatedOrError(response, nameof(GetSeries));
     }
     
-    /*[HttpPatch("{id:guid}")]
+    [HttpPatch("{id:guid}")]
     [Authorize(Policy = "Admin")]
     public async Task<IActionResult> PatchSeries(Guid id, PatchSeriesRequest request)
     {
         var command = new UpdateSeriesCommand(id, request);
         var response = await mediator.Send(command);
         return ResolveCode(response.Exception, Ok(nameof(GetSeries)));
-    }*/
+    }
     
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetSeries(Guid id)
@@ -46,5 +47,13 @@ public class SeriesController(IMediator mediator) : BaseController
         var request = new GetEntryPageQuery(spec);
         var response = await mediator.Send(request);
         return ResolveCode(response.Exception, Ok(response.Data));
+    }
+    
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchSeries(string query, int page, int size)
+    {
+        var request = new SearchSeriesQuery(page, size, query);
+        var response = await mediator.Send(request);
+        return OkOrError(response);
     }
 }

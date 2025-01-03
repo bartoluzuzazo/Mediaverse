@@ -20,6 +20,7 @@ interface Props {
   setCollection: Dispatch<SetStateAction<EntryFormPreview[]>>;
   searchFunction: (query: string, params: PaginateRequest) => Promise<AxiosResponse<Page<EntrySearch>>>;
   queryKey: string;
+  singular?: boolean
 }
 
 export const SearchEntryForm: FunctionComponent<Props> = ({
@@ -27,11 +28,17 @@ export const SearchEntryForm: FunctionComponent<Props> = ({
                                                             collection,
                                                             setCollection,
                                                             searchFunction,
+                                                            singular = false
                                                           }) => {
   const form = useForm<EntryFormPreview>()
   const handleAdd = (data: EntryFormPreview) => {
     if (collection.some(wo => wo.id === data.id)) return
-    setCollection((prev) => [...prev, data])
+    if(!singular){
+      setCollection((prev) => [...prev, data])
+    }
+    else {
+      setCollection(()=>[data]);
+    }
   }
 
   const [isOpen, setIsOpen] = useState<boolean>(false)

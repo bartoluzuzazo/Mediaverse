@@ -22,15 +22,6 @@ public class EpisodeController(IMediator mediator) : BaseController
         return CreatedOrError(response, nameof(GetEpisode));
     }
     
-    [HttpPost("{id:guid}")]
-    [Authorize(Policy = "Admin")]
-    public async Task<IActionResult> AddEpisodes(Guid id, List<AddEpisodeCommand> request)
-    {
-        var command = new AddEpisodesCommand(id, request);
-        var response = await mediator.Send(command);
-        return CreatedOrError(response, nameof(GetEpisode));
-    }
-    
     [HttpPatch("{id:guid}")]
     [Authorize(Policy = "Admin")]
     public async Task<IActionResult> PatchEpisode(Guid id, PatchEpisodeRequest request)
@@ -55,5 +46,13 @@ public class EpisodeController(IMediator mediator) : BaseController
         var request = new GetEntryPageQuery(spec);
         var response = await mediator.Send(request);
         return ResolveCode(response.Exception, Ok(response.Data));
+    }
+    
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchEpisodes(string query, int page, int size)
+    {
+        var request = new SearchEpisodesQuery(page, size, query);
+        var response = await mediator.Send(request);
+        return OkOrError(response);
     }
 }

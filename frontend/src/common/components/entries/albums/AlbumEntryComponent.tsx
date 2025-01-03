@@ -3,14 +3,14 @@ import { Fragment, FunctionComponent } from 'react'
 import EntryBanner from '../entryBanner.tsx'
 import EntryRatingPicker from '../../entryRatingPicker'
 import { AlbumService } from '../../../../services/EntryServices/albumService.ts'
-import EntryAuthorPreview from '../entryAuthorPreview.tsx'
+import EntryAuthorPreview from '../AuthorPreview.tsx'
 import SectionHeader from '../sectionHeader.tsx'
 import CommentSection from '../../comments/CommentSection.tsx'
 import { AuthorizedView } from '../../auth/AuthorizedView'
 import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Album } from '../../../../models/entry/album/Album.ts'
-import AuthorEntryPreview from '../EntryPreview/AuthorEntryPreview.tsx'
+import EntryPreviewTile from '../EntryPreview/EntryPreviewTile.tsx'
 
 interface AlbumEntryComponentProps {
   id: string
@@ -45,7 +45,7 @@ export const AlbumEntryComponent: FunctionComponent<AlbumEntryComponentProps> = 
       <SectionHeader title={'Description'} />
       <div className="p-4">{album.entry.description}</div>
       <SectionHeader title={'Songs'} />
-      {album.songs?.map(song => <AuthorEntryPreview entry={song}/>)}
+      {album.songs?.map(song => <EntryPreviewTile entry={song}/>)}
       {album.entry.authors.map((group) => (
         <Fragment key={group.role}>
           <SectionHeader title={group.role} />

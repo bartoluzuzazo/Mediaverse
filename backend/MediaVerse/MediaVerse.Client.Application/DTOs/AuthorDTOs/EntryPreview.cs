@@ -9,4 +9,5 @@ public class EntryPreview
     public string Description { get; set; }
     public string Type { get; set; }
     public byte[] CoverPhoto { get; set; }
+    public int? OrderNumber { get; set; }
 }

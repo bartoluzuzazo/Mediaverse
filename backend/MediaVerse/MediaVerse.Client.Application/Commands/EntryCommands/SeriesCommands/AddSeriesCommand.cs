@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.EpisodeSpecifications;
 using MediaVerse.Client.Application.Specifications.GenresSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
@@ -8,10 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands.SeriesCommands;
 
-public record AddSeriesCommand(AddEntryCommand Entry, List<string>? Genres) : IRequest<BaseResponse<Guid>>;
+public record AddSeriesCommand(AddEntryCommand Entry, List<string>? Genres, List<Guid>? EpisodeIds) : IRequest<BaseResponse<Guid>>;
 
 public class AddSeriesCommandHandler(
     IRepository<Series> seriesRepository,
+    IRepository<Episode> episodeRepository,
     IRepository<CinematicGenre> cinematicGenreRepository,
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> photoRepository,
@@ -41,6 +43,13 @@ public class AddSeriesCommandHandler(
             await cinematicGenreRepository.AddRangeAsync(newGenres, cancellationToken);
             dbGenres.AddRange(newGenres);
             series.CinematicGenres = dbGenres;
+        }
+        
+        if (!request.EpisodeIds.IsNullOrEmpty())
+        {
+            var spec = new GetEpisodesByIdsSpecification(request.EpisodeIds!);
+            var episodes = await episodeRepository.ListAsync(spec, cancellationToken);
+            series!.Episodes = episodes;
         }
 
         await seriesRepository.AddAsync(series, cancellationToken);

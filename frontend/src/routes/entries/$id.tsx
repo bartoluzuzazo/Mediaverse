@@ -7,6 +7,7 @@ import { GameEntryComponent } from '../../common/components/entries/games/GameEn
 import { SeriesEntryComponent } from '../../common/components/entries/series/SeriesEntryComponent.tsx'
 import { SongEntryComponent } from '../../common/components/entries/songs/SongEntryComponent.tsx'
 import { AlbumEntryComponent } from '../../common/components/entries/albums/AlbumEntryComponent.tsx'
+import { EpisodeEntryComponent } from '../../common/components/entries/episodes/EpisodeEntryComponent.tsx'
 
 const entryTypeQueryOptions = (id: string) => {
   return queryOptions({
@@ -34,6 +35,9 @@ const EntryComponent = () => {
       }
       case 'Series': {
         return <SeriesEntryComponent id={id}/>
+      }
+      case 'Episode': {
+        return <EpisodeEntryComponent id={id}/>
       }
       case 'Song': {
         return <SongEntryComponent id={id}/>

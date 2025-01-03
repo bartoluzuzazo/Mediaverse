@@ -1,13 +1,14 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, MouseEventHandler } from 'react'
 import { EntryPreview } from '../../../../models/author/Author.ts'
 import EntryType from '../entryType.tsx'
 import { useNavigate } from '@tanstack/react-router'
 
 interface Props {
   entry: EntryPreview
+  onClick?: MouseEventHandler<HTMLDivElement>
 }
 
-const AuthorEntryPreview: FunctionComponent<Props> = ({ entry }) => {
+const EntryPreviewTile: FunctionComponent<Props> = ({ entry, onClick }) => {
   const imgSrc = 'data:image/*;base64,' + entry.coverPhoto
   const maxDescLen = 400
   const navigate = useNavigate()
@@ -17,7 +18,7 @@ const AuthorEntryPreview: FunctionComponent<Props> = ({ entry }) => {
   return (
     <div
       className="flex cursor-pointer flex-row justify-between"
-      onClick={handleLink}
+      onClick={onClick? onClick : handleLink}
     >
       <img
         src={imgSrc}
@@ -25,7 +26,10 @@ const AuthorEntryPreview: FunctionComponent<Props> = ({ entry }) => {
         alt="cover photo"
       />
       <div className="flex flex-col p-2 font-bold">
-        <h2 className="p-2">{entry.name}</h2>
+        <div className="flex flex-row">
+          {entry.orderNumber ? <h2 className="p-2">{entry.orderNumber}.</h2> : <></>}
+          <h2 className="p-2">{entry.name}</h2>
+        </div>
         <EntryType type={entry.type} />
         <div className="flex flex-row">
           <h2 className="p-2">{entry.releaseDate.toString()}</h2>
@@ -41,4 +45,4 @@ const AuthorEntryPreview: FunctionComponent<Props> = ({ entry }) => {
   )
 }
 
-export default AuthorEntryPreview
+export default EntryPreviewTile

@@ -1,6 +1,6 @@
 import { Entry } from '../Entry.ts'
 import { WorkOn } from '../WorkOn.ts'
-import { EpisodePreview } from '../episode/Episode.ts'
+import { EntryPreview } from '../../author/Author.ts'
 
 export interface Series {
   entry: Entry,
@@ -11,5 +11,5 @@ export interface Series {
 
 export interface SeriesSeason {
   seasonNumber: number,
-  episodes: EpisodePreview[]
+  episodes: EntryPreview[]
 }

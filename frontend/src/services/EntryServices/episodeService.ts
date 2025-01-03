@@ -1,9 +1,10 @@
 import axios from 'axios'
 
-import { Entry } from '../../models/entry/Entry.ts'
+import { Entry, EntrySearch } from '../../models/entry/Entry.ts'
 import { Episode } from '../../models/entry/episode/Episode.ts'
 import { GetEntryPageRequest } from '../../models/entry/book'
 import { EpisodeFormData } from '../../common/components/entries/episodes/EpisodeForm.tsx'
+import { Page, PaginateRequest } from '../../models/common'
 
 export class EpisodeService {
   public static async getEpisode(id: string) {
@@ -24,6 +25,10 @@ export class EpisodeService {
 
   public static async patchEpisode(episode: EpisodeFormData, id: string) {
     return await axios.patch(`/episode/${id}`, episode)
+  }
+
+  public static async search(query: string, params: PaginateRequest) {
+    return await axios.get<Page<EntrySearch>>(`/episode/search`, { params: { ...params, query } })
   }
 }
 

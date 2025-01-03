@@ -1,20 +1,12 @@
 import { Entry } from '../Entry.ts'
 import { WorkOn } from '../WorkOn.ts'
+import { EntryPreview } from '../../author/Author.ts'
 
 export interface Episode {
   entry: Entry,
   synopsis: string,
-  seriesId?: string,
   seasonNumber: number,
   episodeNumber: number,
-  workOns: WorkOn[]
-}
-
-export interface EpisodePreview {
-  id: string,
-  name: string,
-  episodeNumber: number,
-  release: string,
-  ratingAvg: number,
-  synopsis: string
+  workOns: WorkOn[],
+  series: EntryPreview
 }

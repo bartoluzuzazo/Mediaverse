@@ -3,14 +3,14 @@ import { Fragment, FunctionComponent } from 'react'
 import EntryBanner from '../entryBanner.tsx'
 import EntryRatingPicker from '../../entryRatingPicker'
 import { SeriesService } from '../../../../services/EntryServices/seriesService.ts'
-import EntryAuthorPreview from '../entryAuthorPreview.tsx'
+import EntryAuthorPreview from '../AuthorPreview.tsx'
 import SectionHeader from '../sectionHeader.tsx'
 import CommentSection from '../../comments/CommentSection.tsx'
 import { AuthorizedView } from '../../auth/AuthorizedView'
 import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Series } from '../../../../models/entry/series/Series.ts'
-import SeriesEpisodePreview from './SeriesEpisodePreview.tsx'
+import EntryPreviewTile from '../EntryPreview/EntryPreviewTile.tsx'
 
 interface SeriesEntryComponentProps {
   id: string
@@ -64,14 +64,13 @@ export const SeriesEntryComponent: FunctionComponent<SeriesEntryComponentProps> 
               <SectionHeader title={`Season ${season.seasonNumber}`} />
               {season.episodes.map((ep) => (
                 <div className="p-2" key={ep.id}>
-                  <SeriesEpisodePreview episode={ep} />
+                  <EntryPreviewTile entry={ep}/>
                 </div>
               ))}
             </div>
           </div>
         </Fragment>
       ))}
-      <div className="p-4">eps</div>
       <CommentSection entryId={id} />
     </>
   )
