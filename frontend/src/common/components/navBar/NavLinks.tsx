@@ -39,9 +39,6 @@ export const NavLinks: FunctionComponent = () => {
           >
             Add Author
           </Link>
-          <span className="text-mv-slate">
-            Add information about a new artist
-          </span>
         </li>
         <li className="flex flex-col">
           <Link
@@ -50,9 +47,6 @@ export const NavLinks: FunctionComponent = () => {
           >
             Add Book
           </Link>
-          <span className="text-mv-slate">
-            Add information about a new book
-          </span>
         </li>
         <li className="flex flex-col">
           <Link
@@ -61,9 +55,6 @@ export const NavLinks: FunctionComponent = () => {
           >
             Add Movie
           </Link>
-          <span className="text-mv-slate">
-            Add information about a new movie
-          </span>
         </li>
         <li className="flex flex-col">
           <Link
@@ -72,9 +63,6 @@ export const NavLinks: FunctionComponent = () => {
           >
             Add Game
           </Link>
-          <span className="text-mv-slate">
-            Add information about a new game
-          </span>
         </li>
         <li className="flex flex-col">
           <Link
@@ -83,9 +71,6 @@ export const NavLinks: FunctionComponent = () => {
           >
             Add Song
           </Link>
-          <span className="text-mv-slate">
-            Add information about a new song
-          </span>
         </li>
         <li className="flex flex-col">
           <Link
@@ -94,9 +79,38 @@ export const NavLinks: FunctionComponent = () => {
           >
             Add Album
           </Link>
-          <span className="text-mv-slate">
-            Add information about a new album
-          </span>
+        </li>
+        <li className="flex flex-col">
+          <Link
+            to={'/entries/songs/create'}
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
+            Add Song
+          </Link>
+        </li>
+        <li className="flex flex-col">
+          <Link
+            to={'/entries/series/create'}
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
+            Add Series
+          </Link>
+        </li>
+        <li className="flex flex-col">
+          <Link
+            to={'/entries/songs/create'}
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
+            Add Song
+          </Link>
+        </li>
+        <li className="flex flex-col">
+          <Link
+            to={'/entries/episodes/create'}
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
+            Add Episode
+          </Link>
         </li>
       </AuthorizedView>
     </ul>
