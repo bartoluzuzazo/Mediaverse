@@ -10,7 +10,7 @@ import { AuthorizedView } from '../../auth/AuthorizedView'
 import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Album } from '../../../../models/entry/album/Album.ts'
-import AuthorEntryPreview from '../../authors/Entry/AuthorEntryPreview.tsx'
+import AuthorEntryPreview from '../EntryPreview/AuthorEntryPreview.tsx'
 
 interface AlbumEntryComponentProps {
   id: string

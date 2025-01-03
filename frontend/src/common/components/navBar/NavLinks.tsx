@@ -65,6 +65,39 @@ export const NavLinks: FunctionComponent = () => {
             Add information about a new movie
           </span>
         </li>
+        <li className="flex flex-col">
+          <Link
+            to={'/entries/games/create'}
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
+            Add Game
+          </Link>
+          <span className="text-mv-slate">
+            Add information about a new game
+          </span>
+        </li>
+        <li className="flex flex-col">
+          <Link
+            to={'/entries/songs/create'}
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
+            Add Song
+          </Link>
+          <span className="text-mv-slate">
+            Add information about a new song
+          </span>
+        </li>
+        <li className="flex flex-col">
+          <Link
+            to={'/entries/albums/create'}
+            className="font-semibold text-black hover:text-mv-purple hover:underline"
+          >
+            Add Album
+          </Link>
+          <span className="text-mv-slate">
+            Add information about a new album
+          </span>
+        </li>
       </AuthorizedView>
     </ul>
   )

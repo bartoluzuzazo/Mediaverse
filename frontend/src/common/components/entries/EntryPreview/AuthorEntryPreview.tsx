@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react'
 import { EntryPreview } from '../../../../models/author/Author.ts'
-import EntryType from '../../entries/entryType.tsx'
+import EntryType from '../entryType.tsx'
 import { useNavigate } from '@tanstack/react-router'
 
 interface Props {

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { authorService } from '../../services/authorService.ts'
 import { Author } from '../../models/author/Author.ts'
-import AuthorEntryPreview from '../../common/components/authors/Entry/AuthorEntryPreview.tsx'
+import AuthorEntryPreview from '../../common/components/entries/EntryPreview/AuthorEntryPreview.tsx'
 import SectionHeader from '../../common/components/entries/sectionHeader.tsx'
 import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
 import { LinkedUser } from '../../common/components/authors/LinkedAuthor'

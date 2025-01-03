@@ -53,7 +53,7 @@ const SongForm: FunctionComponent<Props> = ({ song }) => {
         entry : song.entry,
         genres: song.musicGenres,
         lyrics: song.lyrics,
-        albumIds: song.albums.map(a => a.entry.id)
+        albumIds: song.albums.map(a => a.id)
       }
       : undefined,
   })
@@ -63,7 +63,7 @@ const SongForm: FunctionComponent<Props> = ({ song }) => {
   const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
   const [authors, setAuthors] = useState<WorkOn[]>(getInitialWorkOns())
   const [albums, setAlbums] = useState<EntryFormPreview[]>(song ? song.albums.map(a => {
-    let preview : EntryFormPreview = {id: a.entry.id, name: a.entry.name}
+    let preview : EntryFormPreview = {id: a.id, name: a.name}
     return preview
   }) : [])
 

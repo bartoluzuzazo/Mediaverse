@@ -10,7 +10,7 @@ import { AuthorizedView } from '../../auth/AuthorizedView'
 import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Song } from '../../../../models/entry/song/Song.ts'
-import AuthorEntryPreview from '../../authors/Entry/AuthorEntryPreview.tsx'
+import AuthorEntryPreview from '../EntryPreview/AuthorEntryPreview.tsx'
 
 interface SongEntryComponentProps {
   id: string
@@ -36,16 +36,16 @@ export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
       <EntryBanner entry={song.entry} info={info} type={'Song'} />
       <AuthorizedView allowedRoles="Administrator">
         <div className='max-w-32 mt-4 -mb-2'>
-          <LinkButton to={'/entries/songs/edit/$id'} params={{id: song.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
+          <LinkButton to={'/entries/songs/edit/$id'} params={{ id: song.entry.id }} icon={<FaPen />}>Edit</LinkButton>
         </div>
       </AuthorizedView>
       <AuthorizedView>
         <EntryRatingPicker entryId={song.entry.id} />
       </AuthorizedView>
       <SectionHeader title={'Description'} />
-      <SectionHeader title={'Albums'} />
-      {song.albums?.map(album => <AuthorEntryPreview entry={album}/>)}
       <div className="p-4">{song.entry.description}</div>
+      <SectionHeader title={'Albums'} />
+      {song.albums?.map(album => <AuthorEntryPreview entry={album} />)}
       {song.entry.authors.map((group) => (
         <Fragment key={group.role}>
           <SectionHeader title={group.role} />
@@ -59,7 +59,7 @@ export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
         </Fragment>
       ))}
       <SectionHeader title={'Lyrics'} />
-      <div className="p-4">{song.lyrics}</div>
+      <div className="p-4 whitespace-pre-wrap">{song.lyrics}</div>
       <CommentSection entryId={id} />
     </>
   )

@@ -5,4 +5,5 @@ public class PatchSongRequest
     public PatchEntryRequest Entry { get; set; }
     public string? Lyrics { get; set; }
     public List<string>? Genres { get; set; }
+    public List<Guid>? AlbumIds { get; set; }
 }

@@ -1,11 +1,13 @@
 using AutoMapper;
 using MediatR;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.SongDTOs;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.AlbumSpecifications;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications.SongSpecifications;
 using MediaVerse.Client.Application.Specifications.GenresSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Commands.EntryCommands.SongCommands;
 
@@ -13,6 +15,7 @@ public record UpdateSongCommand(Guid Id, PatchSongRequest Dto) : IRequest<BaseRe
 
 public class UpdateSongCommandHandler(
     IRepository<Song> songRepository,
+    IRepository<Album> albumRepository,
     IRepository<MusicGenre> musicGenreRepository,
     IRepository<Entry> entryRepository,
     IRepository<CoverPhoto> coverPhotoRepository,
@@ -45,6 +48,13 @@ public class UpdateSongCommandHandler(
             song.MusicGenres = dbGenres;
         }
 
+        if (request.Dto.AlbumIds is not null)
+        {
+            var spec = new GetAlbumsByIdsSpecification(request.Dto.AlbumIds!);
+            var albums = await albumRepository.ListAsync(spec, cancellationToken);
+            song.Albums = albums;
+        }
+        
         await songRepository.SaveChangesAsync(cancellationToken);
         return new BaseResponse<Guid>(song.Id);
     }

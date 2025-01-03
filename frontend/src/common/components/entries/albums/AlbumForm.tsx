@@ -51,7 +51,7 @@ const AlbumForm: FunctionComponent<Props> = ({ album }) => {
       ? {
         entry : album.entry,
         genres: album.musicGenres,
-        songIds: album.songs.map(s => s.entry.id)
+        songIds: album.songs.map(s => s.id)
       }
       : undefined,
   })
@@ -61,7 +61,7 @@ const AlbumForm: FunctionComponent<Props> = ({ album }) => {
   const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
   const [authors, setAuthors] = useState<WorkOn[]>(getInitialWorkOns())
   const [songs, setSongs] = useState<EntryFormPreview[]>(album ? album.songs.map(s => {
-    let preview : EntryFormPreview = {id: s.entry.id, name: s.entry.name}
+    let preview : EntryFormPreview = {id: s.id, name: s.name}
     return preview
   }) : [])
 
@@ -92,18 +92,21 @@ const AlbumForm: FunctionComponent<Props> = ({ album }) => {
           <FormDateInput label={'Release'} register={register} errorValue={errors.entry?.release} registerPath={'entry.release'} />
         </div>
         <div className="flex-1 md:ml-20">
-          <FormTextArea label={'Description'} register={register} errorValue={errors.entry?.description} registerPath={'entry.description'} />
-        </div>
-        <div className="flex-1 md:ml-20">
-          <div className="flex flex-row-reverse">
-            <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
-              {isSubmitting ? 'Submitting...' : 'Submit'}
-            </FormButton>
+          <FormTextArea label={'Description'} register={register} errorValue={errors.entry?.description}
+                        registerPath={'entry.description'} rows={10}/>
+          <div className="flex-1 md:ml-20">
+            <div className="flex flex-row-reverse">
+              <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
+                {isSubmitting ? 'Submitting...' : 'Submit'}
+              </FormButton>
+            </div>
           </div>
         </div>
+
       </form>
       <div className="flex flex-row justify-evenly">
-        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchMusicGenres}/>
+        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres}
+                        searchFunction={GenresServices.searchMusicGenres} />
         <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
         <SearchEntryForm label={'Songs'} collection={songs} setCollection={setSongs} searchFunction={SongService.search} queryKey={"SEARCH_SONGS"}/>
       </div>

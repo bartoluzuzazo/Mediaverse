@@ -61,7 +61,7 @@ export const SearchEntryForm: FunctionComponent<Props> = ({
           className="m-1 grid aspect-square w-10 place-content-center self-center rounded-full bg-violet-900 text-white">
           <FaMagnifyingGlass className="text-xl" />
         </div>
-        <span className="text-lg font-semibold">Search Author</span>
+        <span className="text-lg font-semibold">Search Entries</span>
       </button>
       {isOpen && (
         <Modal onOutsideClick={() => setIsOpen(false)}>
