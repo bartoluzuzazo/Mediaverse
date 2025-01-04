@@ -48,6 +48,13 @@ export const ArticleForm: FunctionComponent<Props> = ({ article }) => {
           registerPath="title"
           register={register}
           errorValue={errors.title}
+          rules={{
+            required: 'Title is required',
+            maxLength: {
+              value: 200,
+              message: 'Maximum length is 200 characters',
+            },
+          }}
         />
         <FormTextArea<ArticleFormData>
           label="Lede"
@@ -55,6 +62,13 @@ export const ArticleForm: FunctionComponent<Props> = ({ article }) => {
           register={register}
           errorValue={errors.lede}
           rows={3}
+          rules={{
+            required: 'Lede is required',
+            maxLength: {
+              value: 200,
+              message: 'Maximum length is 200 characters',
+            },
+          }}
         />
         <MarkdownField control={control} name="content" />
         <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">

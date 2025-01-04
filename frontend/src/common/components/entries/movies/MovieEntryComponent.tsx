@@ -10,6 +10,7 @@ import { AuthorizedView } from '../../auth/AuthorizedView'
 import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Movie } from '../../../../models/entry/movie/Movie.ts'
+import { ReviewsCarousel } from '../../reviews/reviewsCarousel'
 
 interface MovieEntryComponentProps {
   id: string
@@ -25,7 +26,9 @@ const movieQueryOptions = (id: string) => {
   })
 }
 
-export const MovieEntryComponent: FunctionComponent<MovieEntryComponentProps> = ({id}) => {
+export const MovieEntryComponent: FunctionComponent<
+  MovieEntryComponentProps
+> = ({ id }) => {
   const movieQuery = useSuspenseQuery(movieQueryOptions(id))
   const movie = movieQuery.data
   const info = [movie.entry.release.toString(), ...movie.cinematicGenres]
@@ -34,8 +37,14 @@ export const MovieEntryComponent: FunctionComponent<MovieEntryComponentProps> = 
     <>
       <EntryBanner entry={movie.entry} info={info} type={'Movie'} />
       <AuthorizedView allowedRoles="Administrator">
-        <div className='max-w-32 mt-4 -mb-2'>
-          <LinkButton to={'/entries/movies/edit/$id'} params={{id: movie.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
+        <div className="-mb-2 mt-4 max-w-32">
+          <LinkButton
+            to={'/entries/movies/edit/$id'}
+            params={{ id: movie.entry.id }}
+            icon={<FaPen />}
+          >
+            Edit
+          </LinkButton>
         </div>
       </AuthorizedView>
       <AuthorizedView>
@@ -57,6 +66,7 @@ export const MovieEntryComponent: FunctionComponent<MovieEntryComponentProps> = 
       ))}
       <SectionHeader title={'Synopsis'} />
       <div className="p-4">{movie.synopsis}</div>
+      <ReviewsCarousel entryId={id} />
       <CommentSection entryId={id} />
     </>
   )

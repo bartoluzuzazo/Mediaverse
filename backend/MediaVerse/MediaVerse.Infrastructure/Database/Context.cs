@@ -1,7 +1,6 @@
 ﻿using MediaVerse.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-
 namespace MediaVerse.Infrastructure.Database;
 
 public partial class Context : DbContext
@@ -231,6 +230,8 @@ public partial class Context : DbContext
 
             entity.ToTable("article");
 
+            entity.HasIndex(e => e.SearchVector, "article_ts_idx").HasMethod("gin");
+
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
@@ -238,6 +239,9 @@ public partial class Context : DbContext
             entity.Property(e => e.Lede)
                 .HasMaxLength(200)
                 .HasColumnName("lede");
+            entity.Property(e => e.SearchVector)
+                .HasComputedColumnSql("to_tsvector('english'::regconfig, (((COALESCE(title, ''::character varying))::text || ' '::text) || (COALESCE(lede, ''::character varying))::text))", true)
+                .HasColumnName("search_vector");
             entity.Property(e => e.Timestamp)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("timestamp");

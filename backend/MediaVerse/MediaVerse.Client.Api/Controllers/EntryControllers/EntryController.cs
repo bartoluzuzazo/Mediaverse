@@ -42,5 +42,13 @@ public class EntryController(IMediator mediator) : BaseController
         var response = await mediator.Send(query);
         return OkOrError(response);
     }
+
+    [HttpGet("{entryId:guid}/reviews")]
+    public async Task<IActionResult> GetReviews(Guid entryId)
+    {
+        var query = new GetReviewsQuery(entryId);
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+    }
     
 }

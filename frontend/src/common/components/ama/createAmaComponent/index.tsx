@@ -60,6 +60,13 @@ export const AmaSessionForm: FunctionComponent<AmaSessionFormProps> = ({
         register={register}
         registerPath={'title'}
         errorValue={errors.title}
+        rules={{
+          required: 'Title is required',
+          maxLength: {
+            value: 100,
+            message: 'Maximum length is 100 characters',
+          },
+        }}
       />
       <FormTextArea
         rows={10}
@@ -67,6 +74,13 @@ export const AmaSessionForm: FunctionComponent<AmaSessionFormProps> = ({
         registerPath={'description'}
         register={register}
         errorValue={errors.description}
+        rules={{
+          required: 'Title is required',
+          maxLength: {
+            value: 1000,
+            message: 'Maximum length is 1000 characters',
+          },
+        }}
       />
       <FormField
         type="datetime-local"

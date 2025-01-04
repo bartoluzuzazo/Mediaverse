@@ -17,6 +17,7 @@ import { Route as UsersSearchImport } from './routes/users/search'
 import { Route as UsersIdImport } from './routes/users/$id'
 import { Route as EntriesIdImport } from './routes/entries/$id'
 import { Route as AuthorsIdImport } from './routes/authors/$id'
+import { Route as ArticlesSearchImport } from './routes/articles/search'
 import { Route as ArticlesCreateImport } from './routes/articles/create'
 import { Route as ArticlesIdImport } from './routes/articles/$id'
 import { Route as AmaSessionsIdImport } from './routes/ama-sessions/$id'
@@ -71,6 +72,11 @@ const EntriesIdRoute = EntriesIdImport.update({
 
 const AuthorsIdRoute = AuthorsIdImport.update({
   path: '/authors/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ArticlesSearchRoute = ArticlesSearchImport.update({
+  path: '/articles/search',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -228,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/articles/create'
       fullPath: '/articles/create'
       preLoaderRoute: typeof ArticlesCreateImport
+      parentRoute: typeof rootRoute
+    }
+    '/articles/search': {
+      id: '/articles/search'
+      path: '/articles/search'
+      fullPath: '/articles/search'
+      preLoaderRoute: typeof ArticlesSearchImport
       parentRoute: typeof rootRoute
     }
     '/authors/$id': {
@@ -422,6 +435,7 @@ export const routeTree = rootRoute.addChildren({
   AmaSessionsIdRoute,
   ArticlesIdRoute,
   ArticlesCreateRoute,
+  ArticlesSearchRoute,
   AuthorsIdRoute,
   EntriesIdRoute,
   UsersIdRoute,
@@ -462,6 +476,7 @@ export const routeTree = rootRoute.addChildren({
         "/ama-sessions/$id",
         "/articles/$id",
         "/articles/create",
+        "/articles/search",
         "/authors/$id",
         "/entries/$id",
         "/users/$id",
@@ -501,6 +516,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/articles/create": {
       "filePath": "articles/create.tsx"
+    },
+    "/articles/search": {
+      "filePath": "articles/search.tsx"
     },
     "/authors/$id": {
       "filePath": "authors/$id.tsx"
