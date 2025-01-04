@@ -7,6 +7,7 @@ import {
 } from 'react-hook-form'
 import { useAuthContext } from '../../../../context/auth/useAuthContext.ts'
 import { useEffect, useState } from 'react'
+import { IoIosWarning } from 'react-icons/io'
 
 export const TextForm = <T extends FieldValues>({
   onSubmit,
@@ -22,7 +23,7 @@ export const TextForm = <T extends FieldValues>({
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     reset,
   } = useForm<T>({
     defaultValues,
@@ -59,6 +60,12 @@ export const TextForm = <T extends FieldValues>({
         rows={10}
         className="block w-full rounded-md border-2 border-black p-1"
       />
+      {errors[name] && (
+        <div className="flex flex-row text-red-700">
+          <IoIosWarning />
+          <div>Length must be between 1 and {maxLength}</div>
+        </div>
+      )}
       <button
         className={`mt-2 text-white ${isSubmitting ? 'bg-violet-400' : 'bg-violet-700'}`}
         disabled={isSubmitting}

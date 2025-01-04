@@ -3,13 +3,14 @@ import { Fragment, FunctionComponent } from 'react'
 import EntryBanner from '../entryBanner.tsx'
 import EntryRatingPicker from '../../entryRatingPicker'
 import { Book } from '../../../../models/entry/book'
-import { BookService } from '../../../../services/bookService.ts'
-import EntryAuthorPreview from '../entryAuthorPreview.tsx'
+import { BookService } from '../../../../services/EntryServices/bookService.ts'
+import EntryAuthorPreview from '../AuthorPreview.tsx'
 import SectionHeader from '../sectionHeader.tsx'
 import CommentSection from '../../comments/CommentSection.tsx'
 import { AuthorizedView } from '../../auth/AuthorizedView'
 import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
+import { ReviewsCarousel } from '../../reviews/reviewsCarousel'
 
 interface BookEntryComponentProps {
   id: string
@@ -25,7 +26,9 @@ const bookQueryOptions = (id: string) => {
   })
 }
 
-export const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = ( {id} ) => {
+export const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = ({
+  id,
+}) => {
   const bookQuery = useSuspenseQuery(bookQueryOptions(id))
   const book = bookQuery.data
   const info = [book.entry.release.toString(), book.isbn, ...book.bookGenres]
@@ -34,8 +37,14 @@ export const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = ( 
     <>
       <EntryBanner entry={book.entry} info={info} type={'Book'} />
       <AuthorizedView allowedRoles="Administrator">
-        <div className='max-w-32 mt-4 -mb-2'>
-          <LinkButton to={'/entries/books/edit/$id'} params={{id: book.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
+        <div className="-mb-2 mt-4 max-w-32">
+          <LinkButton
+            to={'/entries/books/edit/$id'}
+            params={{ id: book.entry.id }}
+            icon={<FaPen />}
+          >
+            Edit
+          </LinkButton>
         </div>
       </AuthorizedView>
       <AuthorizedView>
@@ -57,6 +66,7 @@ export const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = ( 
       ))}
       <SectionHeader title={'Synopsis'} />
       <div className="p-4">{book.synopsis}</div>
+      <ReviewsCarousel entryId={id} />
       <CommentSection entryId={id} />
     </>
   )

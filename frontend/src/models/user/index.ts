@@ -16,4 +16,9 @@ export interface UpdatePasswordFormData {
   repeatPassword: string
 }
 
-export type Role = "Administrator" | "User" | "Author" | "ContentCreator" // other roles to be added at a later date
+export type Role =
+  | 'Administrator'
+  | 'User'
+  | 'Author'
+  | 'ContentCreator'
+  | 'Critic' // other roles to be added at a later date

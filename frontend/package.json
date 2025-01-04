@@ -13,6 +13,8 @@
     "@tanstack/react-query": "^5.51.11",
     "@tanstack/react-query-devtools": "^5.51.11",
     "@tanstack/react-router": "^1.45.2",
+    "@uiw/react-markdown-editor": "^6.1.2",
+    "@uiw/react-markdown-preview": "^5.1.3",
     "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "framer-motion": "^11.3.24",

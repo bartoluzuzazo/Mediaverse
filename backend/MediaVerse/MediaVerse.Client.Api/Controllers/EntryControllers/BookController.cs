@@ -1,8 +1,11 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
+using MediaVerse.Client.Application.Commands.EntryCommands.BookCommands;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.BookDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
+using MediaVerse.Client.Application.Queries.EntryQueries.BookQueries;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.BookSpecifications;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

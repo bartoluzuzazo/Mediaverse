@@ -4,14 +4,15 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Movie } from '../../../../models/entry/movie/Movie.ts'
 import { FunctionComponent, useState } from 'react'
 import FormField from '../../form/FormField/FormField.tsx'
-import { MovieService } from '../../../../services/movieService.ts'
+import { MovieService } from '../../../../services/EntryServices/movieService.ts'
 import FormTextArea from '../FormTextArea/FormTextArea.tsx'
 import FormDateInput from '../../form/FormDateInput/FormDateInput.tsx'
 import CoverPicker from '../../form/CoverPicker/CoverPicker.tsx'
 import { Entry } from '../../../../models/entry/Entry.ts'
 import { WorkOn } from '../../../../models/entry/WorkOn.ts'
-import { MultipleInputForm } from '../MultipleInputForm.tsx'
+import { GenreInputForm } from '../GenreInputForm.tsx'
 import { AuthorEntryInputForm } from '../AuthorEntryInputForm.tsx'
+import { GenresServices } from '../../../../services/EntryServices/genresServices.ts'
 
 export interface MovieFormData {
   entry: Entry
@@ -31,7 +32,7 @@ const MovieForm: FunctionComponent<Props> = ({ movie }) => {
     }
 
     return movie!.entry.authors.flatMap(g => g.authors.map(a => {
-      const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role}
+      const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role, details: a.details}
       return workOn
     }))
   }
@@ -97,7 +98,7 @@ const MovieForm: FunctionComponent<Props> = ({ movie }) => {
         </div>
       </form>
       <div className="flex flex-row justify-evenly">
-        <MultipleInputForm label={'Genres'} collection={genres} setCollection={setGenres}/>
+        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchCinematicGenres}/>
         <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
       </div>
     </>

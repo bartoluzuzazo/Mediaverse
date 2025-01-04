@@ -68,12 +68,26 @@ const AuthorForm = ({ author }: Props) => {
             register={register}
             errorValue={errors.name}
             registerPath={'name'}
+            rules={{
+              required: 'Name is required',
+              maxLength: {
+                value: 150,
+                message: 'Maximum length is 150 characters',
+              },
+            }}
           />
           <FormField
             label={'Surname'}
             register={register}
             errorValue={errors.surname}
             registerPath={'surname'}
+            rules={{
+              required: 'Surname is required',
+              maxLength: {
+                value: 150,
+                message: 'Maximum length is 150 characters',
+              },
+            }}
           />
         </div>
 

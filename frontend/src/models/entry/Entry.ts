@@ -15,6 +15,12 @@ export interface Entry {
   workOnRequests: WorkOn[]
 }
 
+export interface EntrySearch {
+  id: string
+  name: string
+  photo: string
+}
+
 export enum EntryOrder {
   Rating,
   Name,
@@ -32,6 +38,7 @@ export interface EntryAuthor {
   name: string
   surname: string
   profilePicture: string
+  details: string
 }
 
 export interface GetEntriesResponse {

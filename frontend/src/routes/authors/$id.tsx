@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { authorService } from '../../services/authorService.ts'
 import { Author } from '../../models/author/Author.ts'
-import AuthorEntryPreview from '../../common/components/authors/Entry/AuthorEntryPreview.tsx'
+import EntryPreviewTile from '../../common/components/entries/EntryPreview/EntryPreviewTile.tsx'
 import SectionHeader from '../../common/components/entries/sectionHeader.tsx'
 import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
 import { LinkedUser } from '../../common/components/authors/LinkedAuthor'
@@ -60,7 +60,7 @@ export const Route = createFileRoute('/authors/$id')({
             <SectionHeader title={group.role} />
             {group.entries.map((e) => (
               <div className="p-2" key={e.id}>
-                <AuthorEntryPreview entry={e} />
+                <EntryPreviewTile entry={e} />
               </div>
             ))}
           </Fragment>

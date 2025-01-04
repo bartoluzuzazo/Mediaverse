@@ -4,6 +4,6 @@ namespace MediaVerse.Client.Application.DTOs.EntryDTOs;
 
 public class GetEntryAuthorGroupResponse
 {
-    public string Role { get; set; }
     public List<GetEntryAuthorResponse> Authors { get; set; }
+    public string Role { get; set; }
 }

@@ -22,6 +22,5 @@ public class SearchAuthorsQueryHandler(IMapper mapper,IRepository<Author> author
         
         var page = new Page<GetAuthorResponse>(response, request.Page, authorCount,request.Size);
         return new BaseResponse<Page<GetAuthorResponse>>(page);
-        
     }
 }
