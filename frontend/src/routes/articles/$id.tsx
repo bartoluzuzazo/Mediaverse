@@ -3,6 +3,10 @@ import { FunctionComponent } from 'react'
 import { articleService } from '../../services/articleService.ts'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import defaultImgUrl from '/person-icon.png'
+import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
+import { LinkButton } from '../../common/components/shared/LinkButton'
+import { FaPen } from 'react-icons/fa'
+import { useAuthContext } from '../../context/auth/useAuthContext.ts'
 
 export const Route = createFileRoute('/articles/$id')({
   loader: async ({ params }) => {
@@ -20,7 +24,25 @@ export const ArticleComponent: FunctionComponent = () => {
     <article className="mt-6">
       <h1>{article.title}</h1>
       <div className="flex justify-between">
-        <p className="text-lg italic text-slate-800">{article.lede}</p>
+        <div>
+          <p className="text-lg italic text-slate-800">{article.lede}</p>
+          <div>
+            <AuthorizedView
+              allowedRoles="ContentCreator"
+              requiredUserId={article.userId}
+            >
+              <div className="my-2 max-w-fit">
+                <LinkButton
+                  icon={<FaPen />}
+                  to="/articles/edit/$id"
+                  params={{ id: article.id }}
+                >
+                  Edit article
+                </LinkButton>
+              </div>
+            </AuthorizedView>
+          </div>
+        </div>
         <div className="min-w-fit">
           <img
             src={imgSrc || defaultImgUrl}
