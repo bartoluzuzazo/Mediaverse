@@ -7,7 +7,7 @@ import {
   useContext,
   useState,
 } from 'react'
-import { EntryService } from '../../services/entryService'
+import { EntryService } from '../../services/EntryServices/entryService.ts'
 import { useDebounceValue } from 'usehooks-ts'
 import { GetEntriesResponse } from '../../models/entry/Entry'
 

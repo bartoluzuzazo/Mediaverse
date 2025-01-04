@@ -11,6 +11,7 @@ import { DropdownButton, DropDownChoice } from '../shared/DropdownChoice'
 import { FaArrowDown, FaArrowUp, FaClock, FaMedal } from 'react-icons/fa'
 import { RiNumbersFill } from 'react-icons/ri'
 import { Oval } from 'react-loader-spinner'
+import SectionHeader from '../entries/sectionHeader.tsx'
 
 
 type CommentSortProps = {
@@ -96,6 +97,9 @@ const CommentSection = ({ entryId }: CommentSectionProps) => {
 
   return (
     <div>
+      <div className="pb-5">
+        <SectionHeader title={'Comments'} />
+      </div>
       <CommentForm entryId={entryId} parentQueryKeys={[queryKey]} />
       <CommentSort setCommentParams={setCommentParams} />
       {data &&

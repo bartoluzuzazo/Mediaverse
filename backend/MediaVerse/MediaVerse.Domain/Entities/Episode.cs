@@ -8,6 +8,10 @@ public partial class Episode
 
     public string Synopsis { get; set; } = null!;
 
+    public int SeasonNumber { get; set; }
+
+    public int EpisodeNumber { get; set; }
+
     public virtual Entry IdNavigation { get; set; } = null!;
 
     public virtual Series Series { get; set; } = null!;

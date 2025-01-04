@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { BookService } from '../../../../services/bookService.ts'
+import { BookService } from '../../../../services/EntryServices/bookService.ts'
 import { Book } from '../../../../models/entry/book/Book.ts'
 import BookForm from '../../../../common/components/entries/books/BookForm.tsx'
 

@@ -21,7 +21,7 @@ const FormTextArea = <T extends FieldValues>({
   registerPath,
   register,
   errorValue,
-  rows = 20,
+  rows = 14,
   rules = { required: `${label} is required` },
 }: Props<T>) => {
   return (

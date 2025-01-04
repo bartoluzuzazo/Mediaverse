@@ -10,15 +10,16 @@ export interface Author {
 
 interface AuthorWorkOnGroup {
   role: string
-  entries: AuthorEntry[]
+  entries: EntryPreview[]
 }
 
-export interface AuthorEntry {
+export interface EntryPreview {
   id: string
   name: string
-  releaseDate: Date
+  releaseDate: string
   avgRating: number
   description: string
   type: string
   coverPhoto: string
+  orderNumber?: number
 }

@@ -41,8 +41,6 @@ public partial class Context : DbContext
 
     public virtual DbSet<CoverPhoto> CoverPhotos { get; set; }
 
-    public virtual DbSet<Developer> Developers { get; set; }
-
     public virtual DbSet<Entry> Entries { get; set; }
 
     public virtual DbSet<Episode> Episodes { get; set; }
@@ -420,20 +418,6 @@ public partial class Context : DbContext
             entity.Property(e => e.Photo).HasColumnName("photo");
         });
 
-        modelBuilder.Entity<Developer>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("developer_pk");
-
-            entity.ToTable("developer");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-        });
-
         modelBuilder.Entity<Entry>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("entry_pk");
@@ -473,6 +457,12 @@ public partial class Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
+            entity.Property(e => e.EpisodeNumber)
+                .HasDefaultValue(1)
+                .HasColumnName("episode_number");
+            entity.Property(e => e.SeasonNumber)
+                .HasDefaultValue(1)
+                .HasColumnName("season_number");
             entity.Property(e => e.SeriesId).HasColumnName("series_id");
             entity.Property(e => e.Synopsis).HasColumnName("synopsis");
 
@@ -523,25 +513,6 @@ public partial class Context : DbContext
                 .HasForeignKey<Game>(d => d.Id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("game_entry");
-
-            entity.HasMany(d => d.Developers).WithMany(p => p.Games)
-                .UsingEntity<Dictionary<string, object>>(
-                    "GameDeveloper",
-                    r => r.HasOne<Developer>().WithMany()
-                        .HasForeignKey("DeveloperId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("game_developer_developer"),
-                    l => l.HasOne<Game>().WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("game_developer_game"),
-                    j =>
-                    {
-                        j.HasKey("GameId", "DeveloperId").HasName("game_developer_pk");
-                        j.ToTable("game_developer");
-                        j.IndexerProperty<Guid>("GameId").HasColumnName("game_id");
-                        j.IndexerProperty<Guid>("DeveloperId").HasColumnName("developer_id");
-                    });
 
             entity.HasMany(d => d.GameGenres).WithMany(p => p.Games)
                 .UsingEntity<Dictionary<string, object>>(

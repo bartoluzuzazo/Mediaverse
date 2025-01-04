@@ -7,6 +7,8 @@ public class GetEntryAuthorResponse
     public string Name { get; set; }
 
     public string Surname { get; set; }
+    
+    public string? Details { get; set; }
 
     public byte[] ProfilePicture { get; set; }
 }

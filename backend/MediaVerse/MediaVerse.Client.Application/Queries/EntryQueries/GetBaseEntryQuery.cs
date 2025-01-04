@@ -30,6 +30,7 @@ public abstract class GetBaseEntryQueryHandler(IRepository<Entry> entryRepositor
                     Id = wo.Author.Id,
                     Name = wo.Author.Name,
                     Surname = wo.Author.Surname,
+                    Details = wo.Details,
                     ProfilePicture = wo.Author.ProfilePicture.Picture
                 }).ToList()
             }).ToList();
@@ -38,6 +39,7 @@ public abstract class GetBaseEntryQueryHandler(IRepository<Entry> entryRepositor
         {
             Id = entry.Id,
             Name = entry.Name,
+            Type = entry.Type,
             Description = entry.Description,
             Release = entry.Release,
             Photo = Convert.ToBase64String(entry.CoverPhoto.Photo),

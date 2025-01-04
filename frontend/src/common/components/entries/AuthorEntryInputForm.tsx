@@ -23,7 +23,9 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
 }) => {
   const form = useForm<WorkOn>()
   const handleAdd = (data: WorkOn) => {
-    setCollection((prev) => [...prev, data])
+    if (collection.some(wo => wo.id === data.id && wo.role === data.role)) return;
+    if (data.details?.length!<=0) data.details = undefined
+    setCollection((prev) => [...prev, data]);
   }
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -36,7 +38,8 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
   }
 
   const displayFn = (wo: WorkOn) => {
-    return `${wo.name} - ${wo.role}`
+    let details = wo.details === null || wo.details === undefined || wo.details?.length! <= 0 ? 'no details' : wo.details;
+    return `${wo.name} - ${wo.role} (${details})`
   }
 
   return (
@@ -88,6 +91,15 @@ export const AuthorEntryInputForm: FunctionComponent<Props> = ({
               register={form.register}
               errorValue={form.formState.errors.role}
               registerPath={'role'}
+            />
+            <FormField
+              label={'Details'}
+              register={form.register}
+              errorValue={form.formState.errors.details}
+              rules={{
+                required: false
+              }}
+              registerPath={'details'}
             />
             <button className="mb-2 flex h-[36px] w-[36px] items-center justify-center bg-mv-light-purple p-1 text-white">
               +

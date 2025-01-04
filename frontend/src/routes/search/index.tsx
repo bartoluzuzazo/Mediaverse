@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { FunctionComponent } from 'react'
-import { EntryService } from '../../services/entryService'
+import { EntryService } from '../../services/EntryServices/entryService.ts'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Oval } from 'react-loader-spinner'
 import React from 'react'

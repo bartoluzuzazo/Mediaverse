@@ -1,8 +1,11 @@
 using MediatR;
 using MediaVerse.Client.Application.Commands.EntryCommands;
+using MediaVerse.Client.Application.Commands.EntryCommands.MovieCommands;
 using MediaVerse.Client.Application.DTOs.EntryDTOs.MovieDTOs;
 using MediaVerse.Client.Application.Queries.EntryQueries;
+using MediaVerse.Client.Application.Queries.EntryQueries.MovieQueries;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
+using MediaVerse.Client.Application.Specifications.EntrySpecifications.MovieSpecifications;
 using MediaVerse.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

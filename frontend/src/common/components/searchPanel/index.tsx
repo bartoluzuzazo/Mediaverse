@@ -5,7 +5,7 @@ import CustomImage from '../customImage'
 import { AiFillStar } from 'react-icons/ai'
 import { Link, useRouterState } from '@tanstack/react-router'
 import { IoMdClose } from 'react-icons/io'
-import AuthorEntryPreview from '../entries/entryAuthorPreview'
+import AuthorPreview from '../entries/AuthorPreview.tsx'
 
 interface SearchPanelProps {}
 
@@ -84,7 +84,7 @@ const SearchPanel: FunctionComponent<SearchPanelProps> = () => {
                 </div>
               ) : (
                 searchPanelContext?.searchQuery?.data?.data.authors.map((e) => (
-                  <AuthorEntryPreview author={e} />
+                  <AuthorPreview author={e} />
                 ))
               )}
             </div>
