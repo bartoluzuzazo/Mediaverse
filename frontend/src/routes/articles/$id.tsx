@@ -6,7 +6,6 @@ import defaultImgUrl from '/person-icon.png'
 import { AuthorizedView } from '../../common/components/auth/AuthorizedView'
 import { LinkButton } from '../../common/components/shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
-import { useAuthContext } from '../../context/auth/useAuthContext.ts'
 
 export const Route = createFileRoute('/articles/$id')({
   loader: async ({ params }) => {
