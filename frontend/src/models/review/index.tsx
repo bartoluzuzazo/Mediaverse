@@ -16,3 +16,17 @@ export interface Review {
   entryTitle: string
   coverPhoto: string
 }
+
+export interface ReviewPreview {
+  userId: string
+  username: string
+  profilePicture: string
+  entryId: string
+  title: string
+  grade: number
+}
+
+export interface ReviewSummary {
+  gradeAvg: number
+  reviews: ReviewPreview[]
+}

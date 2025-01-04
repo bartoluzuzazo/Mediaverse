@@ -46,6 +46,13 @@ export const ReviewForm: FunctionComponent<Props> = ({ review, entryId }) => {
         label="Title"
         register={register}
         errorValue={errors.title}
+        rules={{
+          required: 'This field is required',
+          maxLength: {
+            value: 200,
+            message: 'Maximum length is 200 characters',
+          },
+        }}
       />
       <RatingField control={control} name="grade" max={5} />
       <MarkdownField control={control} name="content" />

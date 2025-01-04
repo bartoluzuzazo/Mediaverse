@@ -1,4 +1,6 @@
-﻿namespace MediaVerse.Domain.Entities;
+﻿using NpgsqlTypes;
+
+namespace MediaVerse.Domain.Entities;
 
 public partial class Article
 {
@@ -13,6 +15,8 @@ public partial class Article
     public DateTime Timestamp { get; set; }
 
     public string Lede { get; set; } = null!;
+
+    public NpgsqlTsVector? SearchVector { get; set; }
 
     public virtual User User { get; set; } = null!;
 }
