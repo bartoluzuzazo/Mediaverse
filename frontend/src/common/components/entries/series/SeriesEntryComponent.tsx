@@ -11,6 +11,7 @@ import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Series } from '../../../../models/entry/series/Series.ts'
 import EntryPreviewTile from '../EntryPreview/EntryPreviewTile.tsx'
+import { ReviewsCarousel } from '../../reviews/reviewsCarousel'
 
 interface SeriesEntryComponentProps {
   id: string
@@ -71,6 +72,7 @@ export const SeriesEntryComponent: FunctionComponent<SeriesEntryComponentProps> 
           </div>
         </Fragment>
       ))}
+      <ReviewsCarousel entryId={id} />
       <CommentSection entryId={id} />
     </>
   )

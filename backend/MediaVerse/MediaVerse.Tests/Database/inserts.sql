@@ -4,7 +4,7 @@ INSERT INTO role
 VALUES ((SELECT uuid_in('e345fcaf-a7a0-4663-bdc3-6b498f598693')), 'User');
 
 INSERT INTO role
-VALUES ((SELECT uuid_in('aa2da3d4-6710-4714-9bc8-054023063118')), 'Admin');
+VALUES ((SELECT uuid_in('aa2da3d4-6710-4714-9bc8-054023063118')), 'Administrator');
 
 
 INSERT INTO profile_picture

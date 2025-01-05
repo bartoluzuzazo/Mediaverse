@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using Ardalis.Specification;
 using MediaVerse.Client.Application.Commands.EntryCommands;
+using MediaVerse.Client.Application.Commands.EntryCommands.BookCommands;
 using MediaVerse.Client.Application.DTOs.WorkOnDTOs;
 using MediaVerse.Client.Application.Specifications.EntrySpecifications;
 using MediaVerse.Domain.Interfaces;
