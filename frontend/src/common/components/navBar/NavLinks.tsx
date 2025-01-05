@@ -40,7 +40,7 @@ export const NavLinks: FunctionComponent = () => {
           </li>
         </AuthorizedView>
       )}
-      <AuthorizedView allowedRoles="ContentCreator">
+      <AuthorizedView allowedRoles="Journalist">
         <li className="flex flex-col">
           <Link
             to={'/articles/create'}

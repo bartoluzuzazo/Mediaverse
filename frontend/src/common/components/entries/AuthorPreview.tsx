@@ -21,7 +21,7 @@ const AuthorPreview: FunctionComponent<Props> = ({ author }) => {
     >
       <img
         src={imgSrc}
-        className="aspect-square h-36 w-36 rounded-full border-4 border-white bg-slate-300 p-2"
+        className="aspect-square h-36 w-36 rounded-full border-4 border-white bg-slate-300 object-cover p-2"
         alt="cover photo"
       />
       <div className="flex flex-row justify-center font-bold">

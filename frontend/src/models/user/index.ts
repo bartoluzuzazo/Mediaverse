@@ -21,4 +21,5 @@ export type Role =
   | 'User'
   | 'Author'
   | 'ContentCreator'
-  | 'Critic' // other roles to be added at a later date
+  | 'Critic'
+  | 'Journalist'// other roles to be added at a later date
