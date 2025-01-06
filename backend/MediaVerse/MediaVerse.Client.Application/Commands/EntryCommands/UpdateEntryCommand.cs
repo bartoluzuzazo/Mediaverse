@@ -69,9 +69,10 @@ public class UpdateEntryCommandHandler(
             await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
         }
 
-        if (request.Dto.CoverPhoto is not null)
+        Console.WriteLine(request.Dto.Photo);
+        if (request.Dto.Photo is not null)
         {
-            var photoData = Convert.FromBase64String(request.Dto.CoverPhoto);
+            var photoData = Convert.FromBase64String(request.Dto.Photo);
 
             var coverPhoto = new CoverPhoto()
             {

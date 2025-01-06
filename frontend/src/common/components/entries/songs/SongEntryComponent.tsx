@@ -11,6 +11,7 @@ import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Song } from '../../../../models/entry/song/Song.ts'
 import EntryPreviewTile from '../EntryPreview/EntryPreviewTile.tsx'
+import { ReviewsCarousel } from '../../reviews/reviewsCarousel'
 
 interface SongEntryComponentProps {
   id: string
@@ -60,6 +61,7 @@ export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
       ))}
       <SectionHeader title={'Lyrics'} />
       <div className="p-4 whitespace-pre-wrap">{song.lyrics}</div>
+      <ReviewsCarousel entryId={id} />
       <CommentSection entryId={id} />
     </>
   )

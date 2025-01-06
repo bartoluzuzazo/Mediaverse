@@ -10,6 +10,7 @@ import { AuthorizedView } from '../../auth/AuthorizedView'
 import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Game } from '../../../../models/entry/game/Game.ts'
+import { ReviewsCarousel } from '../../reviews/reviewsCarousel'
 
 interface GameEntryComponentProps {
   id: string
@@ -57,6 +58,7 @@ export const GameEntryComponent: FunctionComponent<GameEntryComponentProps> = ({
       ))}
       <SectionHeader title={'Synopsis'} />
       <div className="p-4">{game.synopsis}</div>
+      <ReviewsCarousel entryId={id} />
       <CommentSection entryId={id} />
     </>
   )
