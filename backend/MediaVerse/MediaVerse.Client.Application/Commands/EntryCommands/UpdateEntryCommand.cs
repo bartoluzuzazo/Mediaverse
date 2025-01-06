@@ -69,12 +69,10 @@ public class UpdateEntryCommandHandler(
             await workOnRepository.AddRangeAsync(newWorkOns, cancellationToken);
         }
 
-        Console.WriteLine("-----------------st--------------------");
         Console.WriteLine(request.Dto.Photo);
         if (request.Dto.Photo is not null)
         {
             var photoData = Convert.FromBase64String(request.Dto.Photo);
-            Console.WriteLine("-----------------photo--------------------");
 
             var coverPhoto = new CoverPhoto()
             {
@@ -84,7 +82,6 @@ public class UpdateEntryCommandHandler(
             var newPicture = await coverPhotoRepository.AddAsync(coverPhoto, cancellationToken);
             entry.CoverPhoto = newPicture;
         }
-        Console.WriteLine("-----------------end--------------------");
 
         await entryRepository.SaveChangesAsync(cancellationToken);
         return new BaseResponse<Guid>(entry.Id);
