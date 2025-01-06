@@ -1,6 +1,5 @@
 using MediatR;
 using MediaVerse.Client.Application.DTOs.AuthorDTOs;
-using MediaVerse.Client.Application.Extensions.EntryExtensions;
 using MediaVerse.Client.Application.Specifications.AuthorSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;

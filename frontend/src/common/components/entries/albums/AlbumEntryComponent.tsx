@@ -11,6 +11,7 @@ import { LinkButton } from '../../shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { Album } from '../../../../models/entry/album/Album.ts'
 import EntryPreviewTile from '../EntryPreview/EntryPreviewTile.tsx'
+import { ReviewsCarousel } from '../../reviews/reviewsCarousel'
 
 interface AlbumEntryComponentProps {
   id: string
@@ -58,6 +59,7 @@ export const AlbumEntryComponent: FunctionComponent<AlbumEntryComponentProps> = 
           </div>
         </Fragment>
       ))}
+      <ReviewsCarousel entryId={id} />
       <CommentSection entryId={id} />
     </>
   )

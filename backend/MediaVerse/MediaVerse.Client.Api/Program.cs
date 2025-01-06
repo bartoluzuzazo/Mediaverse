@@ -104,6 +104,7 @@ public class Program
             o.AddPolicy("Admin", p => p.RequireRole("Administrator"));
             o.AddPolicy("Critic", p => p.RequireRole("Critic"));
             o.AddPolicy("ContentCreator", p => p.RequireRole("ContentCreator"));
+            o.AddPolicy("Journalist", p => p.RequireRole("Journalist"));
         });
 
         var app = builder.Build();
