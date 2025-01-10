@@ -8,6 +8,7 @@ import { GameService } from '../services/EntryServices/gameService.ts'
 import { SeriesService } from '../services/EntryServices/seriesService.ts'
 import { SongService } from '../services/EntryServices/songService.ts'
 import { AlbumService } from '../services/EntryServices/albumService.ts'
+import { articleService } from '../services/articleService.ts'
 import { EpisodeService } from '../services/EntryServices/episodeService.ts'
 
 export const Route = createFileRoute('/')({
@@ -51,17 +52,20 @@ export const Route = createFileRoute('/')({
     for (const item of getPageFunctions) {
       const top = await queryClient.ensureQueryData({
         queryKey: ['top', item.entryType.toLowerCase()],
-        queryFn: async () =>
-          await item.function(topParams),
+        queryFn: async () => await item.function(topParams),
       })
-      data.push({data: top, title: `Top ${item.entryType}`})
+      data.push({ data: top, title: `Top ${item.entryType}` })
       const newest = await queryClient.ensureQueryData({
         queryKey: ['newest', item.entryType.toLowerCase()],
-        queryFn: async () =>
-          await item.function(newestParams),
+        queryFn: async () => await item.function(newestParams),
       })
-      data.push({data: newest, title: `Newest ${item.entryType}`})
+      data.push({ data: newest, title: `Newest ${item.entryType}` })
     }
-    return data
+
+    const articles = await queryClient.ensureQueryData({
+      queryKey: ['newest', 'articles'],
+      queryFn: articleService.getArticles,
+    })
+    return { data, articles: articles.data }
   },
 })

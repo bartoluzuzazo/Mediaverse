@@ -11,6 +11,12 @@ namespace MediaVerse.Client.Api.Controllers;
 [Route("api/[controller]")]
 public class ArticlesController(IMediator mediator) : BaseController
 {
+    [HttpGet]
+    public async Task<IActionResult> GetArticles([FromQuery] GetArticlesQuery query)
+    {
+        return OkOrError(await mediator.Send(query));
+    }
+    
     [HttpPost]
     [Authorize("ContentCreator")]
     public async Task<IActionResult> AddArticle(CreateArticleCommand command)
