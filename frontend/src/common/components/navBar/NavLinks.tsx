@@ -51,7 +51,8 @@ export const NavLinks: FunctionComponent = () => {
           <span className="text-mv-slate">Write an article</span>
         </li>
       </AuthorizedView>
-      <AuthorizedView allowedRoles={'Administrator'}>
+
+      <AuthorizedView allowedRoles={'ContentCreator'}>
         <li className="flex flex-col">
           <Link
             to={'/authors/create'}

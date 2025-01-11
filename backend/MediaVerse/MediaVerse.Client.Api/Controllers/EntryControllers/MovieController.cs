@@ -17,7 +17,7 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class MovieController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> AddMovie(AddMovieCommand request)
     {
         var response = await mediator.Send(request);
@@ -25,7 +25,7 @@ public class MovieController(IMediator mediator) : BaseController
     }
     
     [HttpPatch("{id:guid}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> PatchMovie(Guid id, PatchMovieRequest request)
     {
         var command = new UpdateMovieCommand(id, request);

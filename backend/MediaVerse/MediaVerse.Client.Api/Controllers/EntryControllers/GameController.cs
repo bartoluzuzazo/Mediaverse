@@ -17,7 +17,7 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class GameController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> AddGame(AddGameCommand request)
     {
         var response = await mediator.Send(request);
@@ -25,7 +25,7 @@ public class GameController(IMediator mediator) : BaseController
     }
     
     [HttpPatch("{id:guid}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> PatchGame(Guid id, PatchGameRequest request)
     {
         var command = new UpdateGameCommand(id, request);

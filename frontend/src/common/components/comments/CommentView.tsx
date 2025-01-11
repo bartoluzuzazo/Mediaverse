@@ -6,6 +6,7 @@ import { useAuthContext } from '../../../context/auth/useAuthContext.ts'
 import defaultImgUrl from '/person-icon.png'
 import { AuthorizedView } from '../auth/AuthorizedView'
 import { DeleteCommentButton } from './DeleteCommentButton.tsx'
+import { Link } from '@tanstack/react-router'
 
 type Props = {
   comment: Comment
@@ -25,20 +26,22 @@ export const CommentView = ({
   return (
     <>
       <div className={`mb-4 mt-3 rounded-xl p-3 shadow-md ${comment.isDeleted ? 'opacity-75' : ''}`}>
-        <div className='flex gap-6'>
-          <div>
-            <img
-              src={imgSrc}
-              alt='users profile'
-              className='picture aspect-square w-16 rounded-full border-2 object-cover shadow-md md:w-24'
-            />
-            <div className='mb-3 text-center font-semibold'>
-              {comment.username}
+        <div className="flex gap-6">
+          <Link to={comment.userId ? `/users/${comment.userId}` : ""} className="text-black">
+            <div>
+              <img
+                src={imgSrc}
+                alt="users profile"
+                className="picture aspect-square w-16 rounded-full border-2 object-cover shadow-md md:w-24"
+              />
+              <div className="mb-3 text-center font-semibold">
+                {comment.username}
+              </div>
             </div>
-          </div>
-          <div className='flex-1'>{comment.content}</div>
+          </Link>
+          <div className="flex-1">{comment.content}</div>
         </div>
-        <div className='flex items-baseline justify-end'>
+        <div className="flex items-baseline justify-end">
           {isAuthenticated && !comment.isDeleted && (
             <>
               <button
@@ -48,7 +51,7 @@ export const CommentView = ({
                 Reply
               </button>
               <AuthorizedView requiredUserId={comment.userId}>
-                <DeleteCommentButton comment={comment} invalidationKey={parentQueryKey}/>
+                <DeleteCommentButton comment={comment} invalidationKey={parentQueryKey} />
               </AuthorizedView>
             </>
           )}

@@ -17,7 +17,7 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class BookController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> AddBook(AddBookCommand request)
     {
         var response = await mediator.Send(request);
@@ -25,7 +25,7 @@ public class BookController(IMediator mediator) : BaseController
     }
     
     [HttpPatch("{id:guid}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> PatchBook(Guid id, PatchBookRequest request)
     {
         var command = new UpdateBookCommand(id, request);

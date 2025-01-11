@@ -34,7 +34,7 @@ export const GameEntryComponent: FunctionComponent<GameEntryComponentProps> = ({
   return (
     <>
       <EntryBanner entry={game.entry} info={info} type={'Game'} />
-      <AuthorizedView allowedRoles="Administrator">
+      <AuthorizedView allowedRoles="ContentCreator">
         <div className='max-w-32 mt-4 -mb-2'>
           <LinkButton to={'/entries/games/edit/$id'} params={{id: game.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
         </div>

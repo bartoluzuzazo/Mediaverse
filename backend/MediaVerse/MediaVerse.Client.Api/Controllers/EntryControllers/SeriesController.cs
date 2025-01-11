@@ -16,7 +16,7 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class SeriesController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> AddSeries(AddSeriesCommand request)
     {
         var response = await mediator.Send(request);
@@ -24,7 +24,7 @@ public class SeriesController(IMediator mediator) : BaseController
     }
     
     [HttpPatch("{id:guid}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> PatchSeries(Guid id, PatchSeriesRequest request)
     {
         var command = new UpdateSeriesCommand(id, request);

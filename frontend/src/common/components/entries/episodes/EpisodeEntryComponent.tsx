@@ -19,7 +19,7 @@ interface EpisodeEntryComponentProps {
 
 const episodeQueryOptions = (id: string) => {
   return queryOptions({
-    queryKey: ['GET_EPISODES', id],
+    queryKey: ['GET_EPISODE', id],
     queryFn: async (): Promise<Episode> => {
       const res = await EpisodeService.getEpisode(id)
       return res.data
@@ -35,7 +35,7 @@ export const EpisodeEntryComponent: FunctionComponent<EpisodeEntryComponentProps
   return (
     <>
       <EntryBanner entry={episode.entry} info={info} type={'Episode'} />
-      <AuthorizedView allowedRoles="Administrator">
+      <AuthorizedView allowedRoles="ContentCreator">
         <div className='max-w-32 mt-4 -mb-2'>
           <LinkButton to={'/entries/episodes/edit/$id'} params={{id: episode.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
         </div>

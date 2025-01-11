@@ -35,7 +35,7 @@ export const SeriesEntryComponent: FunctionComponent<SeriesEntryComponentProps> 
   return (
     <>
       <EntryBanner entry={series.entry} info={info} type={'Series'} />
-      <AuthorizedView allowedRoles="Administrator">
+      <AuthorizedView allowedRoles="ContentCreator">
         <div className='max-w-32 mt-4 -mb-2'>
           <LinkButton to={'/entries/series/edit/$id'} params={{id: series.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
         </div>
