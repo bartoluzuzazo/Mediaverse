@@ -1,7 +1,11 @@
+import { EntryAuthor } from '../entry/Entry.ts'
+
 export interface User {
   id: string
   username: string
   profilePicture: string
+
+  author?: EntryAuthor
 }
 
 export interface UserFormData {

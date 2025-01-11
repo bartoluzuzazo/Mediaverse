@@ -12,6 +12,8 @@ import { RoleStatusList } from '../../common/components/users/RoleStatusList'
 import { LinkButton } from '../../common/components/shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import defaultImgUrl from '/person-icon.png'
+import AuthorPreview from '../../common/components/entries/AuthorPreview.tsx'
+import SectionHeader from '../../common/components/entries/sectionHeader.tsx'
 
 interface Props {
 }
@@ -44,6 +46,15 @@ const UserComponent: FunctionComponent<Props> = () => {
           <AuthorizedView allowedRoles='Administrator'>
             <RoleStatusList userId={user.id} />
           </AuthorizedView>
+          {
+            user.author &&
+            <div>
+              <h3 className="text-slate-500 text-xl p-4 font-bold">
+                User registered as:
+              </h3>
+              <AuthorPreview author={user.author} />
+            </div>
+          }
         </div>
       </div>
       <FriendCarousel userId={user.id} />
