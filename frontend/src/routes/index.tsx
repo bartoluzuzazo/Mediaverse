@@ -43,7 +43,7 @@ export const Route = createFileRoute('/')({
       { function: MovieService.getMovies, entryType: 'Movies' },
       { function: GameService.getGames, entryType: 'Games' },
       { function: SeriesService.getSeriesPage, entryType: 'Series' },
-      { function: EpisodeService.getEpisodes, entryType: 'Series' },
+      { function: EpisodeService.getEpisodes, entryType: 'Episodes' },
       { function: SongService.getSongs, entryType: 'Songs' },
       { function: AlbumService.getAlbums, entryType: 'Albums' },
     ]
