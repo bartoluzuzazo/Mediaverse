@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react'
 import { EntryAuthor } from '../../../models/entry/Entry.ts'
-import { useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Author } from '../../../models/author/Author.ts'
 
 interface Props {
@@ -9,15 +9,11 @@ interface Props {
 
 const AuthorPreview: FunctionComponent<Props> = ({ author }) => {
   const imgSrc = 'data:image/*;base64,' + author.profilePicture
-  const navigate = useNavigate()
-  const handleLink = async () => {
-    await navigate({ to: `/authors/${author.id}` })
-  }
 
   return (
-    <div
-      className="flex max-w-36 cursor-pointer flex-col justify-between"
-      onClick={handleLink}
+    <Link
+      className="flex max-w-36 cursor-pointer flex-col justify-between text-black"
+      to={`/authors/${author.id}`}
     >
       <img
         src={imgSrc}
@@ -30,7 +26,7 @@ const AuthorPreview: FunctionComponent<Props> = ({ author }) => {
       <div className="flex flex-row justify-center">
         {'details' in author ? author.details : ""}
       </div>
-    </div>
+    </Link>
   )
 }
 

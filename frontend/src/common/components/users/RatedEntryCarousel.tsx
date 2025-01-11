@@ -8,6 +8,7 @@ import { CustomCarousel } from '../shared/CustomCarousel'
 import { Link } from '@tanstack/react-router'
 import CustomImage from '../customImage'
 import { AiFillStar } from 'react-icons/ai'
+import EntryType from '../entries/entryType.tsx'
 
 type Props = {
   userId: string
@@ -46,7 +47,13 @@ export const RatedEntryCarousel: FunctionComponent<Props> = ({ userId }) => {
                   src={`data:image/webp;base64,${entry.photo}`}
                 />
               </Link>
-              <div className="flex items-center gap-0.5 font-semibold text-black">
+              <div className="flex items-center w-[85%] p-2 font-semibold text-black overflow-hidden overflow-ellipsis whitespace-nowrap">
+                {entry.name}
+              </div>
+              <div className="p-1 w-[90%] font-bold">
+                <EntryType type={entry.type}/>
+              </div>
+              <div className="flex items-center p-2 font-semibold text-black">
                 Rated: {entry.usersRating} <AiFillStar className="mt-0.5" />
               </div>
             </div>

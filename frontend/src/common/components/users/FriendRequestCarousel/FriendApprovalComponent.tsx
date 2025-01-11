@@ -52,7 +52,7 @@ export const FriendApprovalComponent: FunctionComponent<Props> = ({
     <div className="m-1 my-5 block w-[150px]">
       <Link to="/users/$id" params={{ id: friend.id }} key={friend.id}>
         <CustomImage
-          className="aspect-square h-full w-full rounded-full"
+          className="aspect-square h-full w-full rounded-full object-cover"
           src={`data:image/webp;base64,${friend.profilePicture}`}
         />
         <div className="text-center text-lg font-semibold text-violet-700">

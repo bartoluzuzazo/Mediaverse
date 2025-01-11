@@ -15,7 +15,7 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class AlbumController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> AddAlbum(AddAlbumCommand request)
     {
         var response = await mediator.Send(request);
@@ -23,7 +23,7 @@ public class AlbumController(IMediator mediator) : BaseController
     }
     
     [HttpPatch("{id:guid}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> PatchAlbum(Guid id, PatchAlbumRequest request)
     {
         var command = new UpdateAlbumCommand(id, request);

@@ -15,7 +15,7 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class EpisodeController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> AddEpisode(AddEpisodeCommand request)
     {
         var response = await mediator.Send(request);
@@ -23,7 +23,7 @@ public class EpisodeController(IMediator mediator) : BaseController
     }
     
     [HttpPatch("{id:guid}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> PatchEpisode(Guid id, PatchEpisodeRequest request)
     {
         var command = new UpdateEpisodeCommand(id, request);

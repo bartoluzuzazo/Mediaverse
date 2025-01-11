@@ -26,7 +26,7 @@ export const ToggledView: FunctionComponent<Props> = ({
             className={`text-lg transition-all ${!isOpen ? `-rotate-90` : ``}`}
           />
         </div>
-        <span className="text-xl font-semibold">{title}</span>
+        <span className="font-semibold">{title}</span>
       </button>
       {isOpen && (
         <div className="relative">

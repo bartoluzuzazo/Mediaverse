@@ -15,7 +15,7 @@ namespace MediaVerse.Client.Api.Controllers.EntryControllers;
 public class SongController(IMediator mediator) : BaseController
 {
     [HttpPost]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> AddSong(AddSongCommand request)
     {
         var response = await mediator.Send(request);
@@ -23,7 +23,7 @@ public class SongController(IMediator mediator) : BaseController
     }
     
     [HttpPatch("{id:guid}")]
-    [Authorize(Policy = "Admin")]
+    [Authorize("ContentCreator")]
     public async Task<IActionResult> PatchSong(Guid id, PatchSongRequest request)
     {
         var command = new UpdateSongCommand(id, request);

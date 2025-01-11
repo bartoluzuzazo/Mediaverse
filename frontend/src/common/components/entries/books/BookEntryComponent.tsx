@@ -36,7 +36,7 @@ export const BookEntryComponent: FunctionComponent<BookEntryComponentProps> = ({
   return (
     <>
       <EntryBanner entry={book.entry} info={info} type={'Book'} />
-      <AuthorizedView allowedRoles="Administrator">
+      <AuthorizedView allowedRoles="ContentCreator">
         <div className="-mb-2 mt-4 max-w-32">
           <LinkButton
             to={'/entries/books/edit/$id'}

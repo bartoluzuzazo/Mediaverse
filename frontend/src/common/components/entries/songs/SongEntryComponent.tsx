@@ -35,7 +35,7 @@ export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
   return (
     <>
       <EntryBanner entry={song.entry} info={info} type={'Song'} />
-      <AuthorizedView allowedRoles="Administrator">
+      <AuthorizedView allowedRoles="ContentCreator">
         <div className='max-w-32 mt-4 -mb-2'>
           <LinkButton to={'/entries/songs/edit/$id'} params={{ id: song.entry.id }} icon={<FaPen />}>Edit</LinkButton>
         </div>

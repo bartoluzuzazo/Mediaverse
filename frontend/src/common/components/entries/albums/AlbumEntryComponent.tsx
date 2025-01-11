@@ -35,7 +35,7 @@ export const AlbumEntryComponent: FunctionComponent<AlbumEntryComponentProps> = 
   return (
     <>
       <EntryBanner entry={album.entry} info={info} type={'Album'} />
-      <AuthorizedView allowedRoles="Administrator">
+      <AuthorizedView allowedRoles="ContentCreator">
         <div className='max-w-32 mt-4 -mb-2'>
           <LinkButton to={'/entries/albums/edit/$id'} params={{id: album.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
         </div>

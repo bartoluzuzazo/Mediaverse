@@ -11,8 +11,14 @@ namespace MediaVerse.Client.Api.Controllers;
 [Route("api/[controller]")]
 public class ArticlesController(IMediator mediator) : BaseController
 {
+    [HttpGet]
+    public async Task<IActionResult> GetArticles([FromQuery] GetArticlesQuery query)
+    {
+        return OkOrError(await mediator.Send(query));
+    }
+    
     [HttpPost]
-    [Authorize("ContentCreator")]
+    [Authorize("Journalist")]
     public async Task<IActionResult> AddArticle(CreateArticleCommand command)
     {
        var response = await mediator.Send(command);
@@ -26,7 +32,7 @@ public class ArticlesController(IMediator mediator) : BaseController
         var response = await mediator.Send(query);
         return OkOrError(response);
     }
-    [Authorize("ContentCreator")]
+    [Authorize("Journalist")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateArticle(Guid id, UpdateArticleDto dto)
     {
