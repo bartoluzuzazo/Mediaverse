@@ -52,7 +52,10 @@ const UserComponent: FunctionComponent<Props> = () => {
               <SectionHeader title={"Linked authors:"}/>
               <div className="flex flex-wrap">
                 {
-                  user.authors.map(author => <AuthorPreview author={author} />)
+                  user.authors.map(a => (
+                    <div className="p-2" key={a.id}>
+                      <AuthorPreview author={a} />
+                    </div>))
                 }
               </div>
             </div>
