@@ -13,7 +13,6 @@ import { LinkButton } from '../../common/components/shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import defaultImgUrl from '/person-icon.png'
 import AuthorPreview from '../../common/components/entries/AuthorPreview.tsx'
-import SectionHeader from '../../common/components/entries/sectionHeader.tsx'
 
 interface Props {
 }
