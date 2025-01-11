@@ -15,7 +15,7 @@ public class GetArticlesQueryHandler(IRepository<Article> articleRepository, IMa
 {
     public async Task<BaseResponse<IEnumerable<GetArticleResponse>>> Handle(GetArticlesQuery request, CancellationToken cancellationToken)
     {
-        var articles = await articleRepository.ListAsync(new GetNewestArticles(), cancellationToken);
+        var articles = await articleRepository.ListAsync(new GetNewestArticlesSpecification(), cancellationToken);
         
         return new BaseResponse<IEnumerable<GetArticleResponse>>(mapper.Map<IEnumerable<GetArticleResponse>>(articles));
     }
