@@ -20,7 +20,3 @@ export interface Page<T> {
   hasNext: boolean
   nextPage?: number
 }
-
-export interface ExistenceCheckResult {
-  exists: boolean
-}

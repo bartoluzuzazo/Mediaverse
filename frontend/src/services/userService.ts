@@ -1,10 +1,7 @@
 import axios from 'axios'
-import {
-  GetRatedEntryPageRequest,
-  RatedEntry,
-} from '../models/entry/ratedEntry'
+import { GetRatedEntryPageRequest, RatedEntry } from '../models/entry/ratedEntry'
 import { UpdatePasswordFormData, User, UserFormData } from '../models/user'
-import { ExistenceCheckResult, Page, PaginateRequest } from '../models/common'
+import { Page, PaginateRequest } from '../models/common'
 import { RoleStatus } from '../models/user/role'
 
 export class userService {
@@ -14,11 +11,6 @@ export class userService {
 
   public static async getUserByEmail(email: string) {
     return await axios.get(`/user/email/${email}`)
-  }
-  public static async userExistsByEmail(email: string) {
-    return await axios.get<ExistenceCheckResult>(`/user/existance`, {
-      params: { email },
-    })
   }
 
   public static async patchUser(user: UserFormData) {
@@ -31,7 +23,7 @@ export class userService {
 
   public static async getRatedEntries(
     userId: string,
-    params: GetRatedEntryPageRequest
+    params: GetRatedEntryPageRequest,
   ) {
     return await axios.get<Page<RatedEntry>>(`user/${userId}/rated-entries`, {
       params,
@@ -59,8 +51,6 @@ export class userService {
   }
 
   public static async search(query: string, params: PaginateRequest) {
-    return await axios.get<Page<User>>(`user/search`, {
-      params: { ...params, query },
-    })
+    return await axios.get<Page<User>>(`user/search`, { params: { ...params, query } })
   }
 }
