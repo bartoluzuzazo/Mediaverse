@@ -36,11 +36,12 @@ const EditUserComponent: FunctionComponent = () => {
       if (value === authUserData?.email) {
         return null
       }
-      const response = await userService.userExistsByEmail(value)
-      if (response.data.exists) {
+      try {
+        await userService.getUserByEmail(value)
         return 'Email already taken'
+      } catch (_error) {
+        return null
       }
-      return null
     },
     [authUserData?.email]
   )
