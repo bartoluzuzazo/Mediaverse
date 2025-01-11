@@ -9,7 +9,6 @@ import { LinkButton } from '../../common/components/shared/LinkButton'
 import { FaPen } from 'react-icons/fa'
 import { CreateAmaComponent } from '../../common/components/ama/createAmaComponent'
 import { Fragment } from 'react'
-import { ToggledView } from '../../common/components/shared/ToggledView'
 import { AuthorsAmasComponent } from '../../common/components/ama/authorsAmasComponent'
 
 export const Route = createFileRoute('/authors/$id')({
@@ -47,9 +46,7 @@ export const Route = createFileRoute('/authors/$id')({
               </LinkButton>
             </AuthorizedView>
             <AuthorizedView requiredUserId={author.userId}>
-              <ToggledView containerClass="min-w-fit" title="Manage">
-                <CreateAmaComponent authorId={author.id} />
-              </ToggledView>
+              <CreateAmaComponent authorId={author.id} />
             </AuthorizedView>
           </div>
 

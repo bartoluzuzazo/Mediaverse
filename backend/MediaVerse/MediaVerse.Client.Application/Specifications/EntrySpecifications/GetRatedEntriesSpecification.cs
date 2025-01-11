@@ -16,6 +16,7 @@ public class GetRatedEntriesSpecification : Specification<Entry, GetRatedEntryRe
         {
             Id = entry.Id,
             Name = entry.Name,
+            Type = entry.Type!,
             Photo = Convert.ToBase64String(entry.CoverPhoto.Photo),
             UsersRating = entry.Ratings.FirstOrDefault(r => r.UserId == userId)!.Grade
         });

@@ -18,7 +18,7 @@ public class ArticlesController(IMediator mediator) : BaseController
     }
     
     [HttpPost]
-    [Authorize("ContentCreator")]
+    [Authorize("Journalist")]
     public async Task<IActionResult> AddArticle(CreateArticleCommand command)
     {
        var response = await mediator.Send(command);
@@ -32,7 +32,7 @@ public class ArticlesController(IMediator mediator) : BaseController
         var response = await mediator.Send(query);
         return OkOrError(response);
     }
-    [Authorize("ContentCreator")]
+    [Authorize("Journalist")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateArticle(Guid id, UpdateArticleDto dto)
     {

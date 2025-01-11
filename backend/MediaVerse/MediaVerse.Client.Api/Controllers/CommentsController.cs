@@ -138,7 +138,7 @@ public class CommentsController(IMediator mediator) : BaseController
     }
     
     [Authorize]
-    [HttpDelete("/comments/{commentId:Guid}")]
+    [HttpDelete("comments/{commentId:Guid}")]
     public async Task<IActionResult> DeleteComment(Guid commentId)
     {
         var command = new DeleteCommentCommand(commentId);

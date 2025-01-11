@@ -15,7 +15,7 @@ public class GetArticleQueryHandler(IRepository<Article> articleRepository, IMap
 {
     public async Task<BaseResponse<GetArticleResponse>> Handle(GetArticleQuery request, CancellationToken cancellationToken)
     {
-        var spec = new GetArticleByIdWithAuthor(request.Id);
+        var spec = new GetArticleByIdWithAuthorSpecification(request.Id);
         var article = await articleRepository.FirstOrDefaultAsync(spec, cancellationToken);
         if (article is null)
         {

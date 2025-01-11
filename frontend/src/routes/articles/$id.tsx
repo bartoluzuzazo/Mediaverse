@@ -45,7 +45,7 @@ export const ArticleComponent: FunctionComponent = () => {
         <div className="min-w-fit">
           <img
             src={imgSrc || defaultImgUrl}
-            className="aspect-square h-24 rounded-full border-[1px] border-slate-200 bg-slate-300"
+            className="aspect-square h-24 rounded-full border-[1px] border-slate-200 bg-slate-300 object-cover"
             alt="cover photo"
           />
           <div className="flex flex-row justify-center font-bold">

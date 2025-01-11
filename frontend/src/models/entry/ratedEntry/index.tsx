@@ -5,6 +5,7 @@ export interface RatedEntry {
   name: string
   photo: string
   usersRating: number
+  type: string
 }
 
 export enum RatedEntryOrder {

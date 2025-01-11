@@ -36,7 +36,7 @@ export const MovieEntryComponent: FunctionComponent<
   return (
     <>
       <EntryBanner entry={movie.entry} info={info} type={'Movie'} />
-      <AuthorizedView allowedRoles="Administrator">
+      <AuthorizedView allowedRoles="ContentCreator">
         <div className="-mb-2 mt-4 max-w-32">
           <LinkButton
             to={'/entries/movies/edit/$id'}

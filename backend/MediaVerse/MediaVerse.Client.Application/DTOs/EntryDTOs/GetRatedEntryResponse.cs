@@ -11,5 +11,5 @@ public class GetRatedEntryResponse
     
     public int UsersRating { get; set; }
 
-
+    public string Type { get; set; }
 }
