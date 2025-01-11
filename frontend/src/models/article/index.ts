@@ -14,6 +14,7 @@ export interface Article {
   userId: string
   authorUsername: string
   authorPicture: string
+  timestamp: string
 }
 
 export interface ArticlePreview {
