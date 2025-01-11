@@ -45,6 +45,14 @@ public class UserController(IMediator mediator) : BaseController
         return ResolveCode(response.Exception, Ok(response.Data));
     }
 
+    [HttpGet("existance")]
+    public async Task<IActionResult> GetDoesUserExist(string email)
+    {
+        var query = new GetDoesUserExistQuery(email);
+        var response = await mediator.Send(query);
+        return OkOrError(response);
+    }
+
     [Authorize]
     [HttpPatch("current-user")]
     public async Task<IActionResult> UpdateUser(UpdateUserCommand command)
