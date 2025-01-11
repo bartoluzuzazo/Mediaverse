@@ -1,12 +1,12 @@
 using AutoMapper;
 using MediatR;
-using MediaVerse.Client.Application.DTOs.AuthorDTOs;
 using MediaVerse.Client.Application.DTOs.UserDTOs;
 using MediaVerse.Client.Application.Specifications.UserSpecifications;
 using MediaVerse.Domain.AggregatesModel;
 using MediaVerse.Domain.Entities;
 using MediaVerse.Domain.Exceptions;
 using MediaVerse.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MediaVerse.Client.Application.Queries.UserQueries;
 
@@ -27,17 +27,9 @@ public class GetUserQueryHandler(IRepository<User> userRepository, IRepository<A
         var userResponse = mapper.Map<GetUserResponse>(user);
         
         var authorSpec = new GetLinkedAuthorSpecification(request.UserId);
-        var response = await authorRepository.FirstOrDefaultAsync(authorSpec, cancellationToken);
+        var response = await authorRepository.ListAsync(authorSpec, cancellationToken);
 
-        if (response is null) return new BaseResponse<GetUserResponse>(userResponse);
-        var author = new GetEntryAuthorResponse()
-        {
-            Id = response.Id,
-            Name = response.Name,
-            Surname = response.Surname,
-            ProfilePicture = response.ProfilePicture.Picture,
-        };
-        userResponse.Author = author;
+        if (!response.IsNullOrEmpty()) userResponse.Authors = response;
 
         return new BaseResponse<GetUserResponse>(userResponse);
     }

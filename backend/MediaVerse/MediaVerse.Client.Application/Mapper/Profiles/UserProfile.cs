@@ -9,7 +9,8 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<User, GetUserResponse>().ForMember(u => u.ProfilePicture,
-            opt => opt.MapFrom(u => Convert.ToBase64String(u.ProfilePicture.Picture)));
+            opt => opt.MapFrom(u => Convert.ToBase64String(u.ProfilePicture.Picture)))
+            .ForMember(u => u.Authors, opt => opt.Ignore());
     }
     
 }

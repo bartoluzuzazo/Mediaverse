@@ -52,11 +52,11 @@ const ArticleCarousel: FunctionComponent<ArticleCarouselProps> = ({
               to="/articles/$id"
               params={{ id: article.id }}
             >
-              <div className="flex w-full flex-col justify-between">
+              <div className="flex w-full flex-col justify-between pl-6 pr-6">
                 <div className="flex min-w-fit">
                   <img
                     src={imgSrc || defaultImgUrl}
-                    className="mr-5 aspect-square h-16 rounded-full border-[1px] border-slate-200 bg-slate-300"
+                    className="mr-5 aspect-square h-16 rounded-full border-[1px] border-slate-200 bg-slate-300 object-cover"
                     alt="cover photo"
                   />
                   <div className="flex flex-col justify-start">

@@ -5,7 +5,7 @@ export interface User {
   username: string
   profilePicture: string
 
-  author?: EntryAuthor
+  authors?: EntryAuthor[]
 }
 
 export interface UserFormData {

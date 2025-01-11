@@ -22,6 +22,7 @@ public class GetLinkedUserQueryHandler(IMapper mapper, IRepository<Author> autho
             return new BaseResponse<GetUserResponse>(new NotFoundException());
         }
         var response = mapper.Map<GetUserResponse>(author.User);
+        response.Authors = null;
         return new BaseResponse<GetUserResponse>(response);
     }
 }
