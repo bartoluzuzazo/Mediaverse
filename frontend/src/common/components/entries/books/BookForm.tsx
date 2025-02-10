@@ -28,12 +28,12 @@ type Props = {
 const BookForm: FunctionComponent<Props> = ({ book }) => {
 
   const getInitialWorkOns = () => {
-    if (book === undefined){
+    if (book === undefined) {
       return []
     }
 
     return book!.entry.authors.flatMap(g => g.authors.map(a => {
-      const workOn : WorkOn = {id: a.id, name: `${a.name} ${a.surname}`, role: g.role, details: a.details}
+      const workOn: WorkOn = { id: a.id, name: `${a.name} ${a.surname}`, role: g.role, details: a.details }
       return workOn
     }))
   }
@@ -48,7 +48,7 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
   } = useForm<BookFormData>({
     defaultValues: book
       ? {
-        entry : book.entry,
+        entry: book.entry,
         isbn: book.isbn,
         genres: book.bookGenres,
         synopsis: book.synopsis
@@ -58,13 +58,12 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
 
   const navigate = useNavigate()
 
-  const [genres, setGenres] = useState<string[]>(getValues('genres')?getValues('genres'):[])
+  const [genres, setGenres] = useState<string[]>(getValues('genres') ? getValues('genres') : [])
   const [authors, setAuthors] = useState<WorkOn[]>(getInitialWorkOns())
 
   const onSubmit: SubmitHandler<BookFormData> = async (data) => {
     data.genres = genres
     data.entry.workOnRequests = authors;
-    console.log(data)
     if (book == null) {
       const response = await BookService.postBook(data)
       const id = response.data.id
@@ -92,7 +91,7 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
           <FormTextArea label={'Description'} register={register} errorValue={errors.entry?.description} registerPath={'entry.description'} />
         </div>
         <div className="flex-1 md:ml-20">
-          <FormTextArea label={'Synopsis'} register={register} errorValue={errors.synopsis} registerPath={'synopsis'}/>
+          <FormTextArea label={'Synopsis'} register={register} errorValue={errors.synopsis} registerPath={'synopsis'} />
           <div className="flex flex-row-reverse">
             <FormButton buttonProps={{ type: 'submit' }} buttonType="purple">
               {isSubmitting ? 'Submitting...' : 'Submit'}
@@ -101,8 +100,8 @@ const BookForm: FunctionComponent<Props> = ({ book }) => {
         </div>
       </form>
       <div className="flex flex-row justify-evenly">
-        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchBookGenres}/>
-        <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors}/>
+        <GenreInputForm label={'Genres'} collection={genres} setCollection={setGenres} searchFunction={GenresServices.searchBookGenres} />
+        <AuthorEntryInputForm label={'Authors'} collection={authors} setCollection={setAuthors} />
       </div>
     </>
   )

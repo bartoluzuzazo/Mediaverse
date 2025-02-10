@@ -19,7 +19,6 @@ export const Route = createFileRoute('/authors/$id')({
   component: () => {
     const author = Route.useLoaderData<Author>()
     const imgSrc = 'data:image/*;base64,' + author.profilePicture
-    console.log(author.userId)
     return (
       <>
         <div className="-mx-[calc(50vw-50%)] h-20 bg-violet-800 md:h-32"></div>
