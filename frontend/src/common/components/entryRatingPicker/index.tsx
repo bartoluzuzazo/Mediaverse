@@ -31,7 +31,7 @@ const EntryRatingPicker = ({ entryId }: Props) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['GET_USERS_RATING', entryId] })
-      queryClient.invalidateQueries({ queryKey: ['GET_BOOK', entryId] })
+      queryClient.invalidateQueries({ queryKey: ['GET_ENTRY', entryId] })
     },
   })
 

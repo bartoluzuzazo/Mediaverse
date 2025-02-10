@@ -18,7 +18,7 @@ interface MovieEntryComponentProps {
 
 const movieQueryOptions = (id: string) => {
   return queryOptions({
-    queryKey: ['GET_MOVIE', id],
+    queryKey: ['GET_ENTRY', id],
     queryFn: async (): Promise<Movie> => {
       const res = await MovieService.getMovie(id)
       return res.data

@@ -19,7 +19,7 @@ interface SeriesEntryComponentProps {
 
 const seriesQueryOptions = (id: string) => {
   return queryOptions({
-    queryKey: ['GET_SERIES', id],
+    queryKey: ['GET_ENTRY', id],
     queryFn: async (): Promise<Series> => {
       const res = await SeriesService.getSeries(id)
       return res.data
@@ -27,7 +27,9 @@ const seriesQueryOptions = (id: string) => {
   })
 }
 
-export const SeriesEntryComponent: FunctionComponent<SeriesEntryComponentProps> = ({id}) => {
+export const SeriesEntryComponent: FunctionComponent<
+  SeriesEntryComponentProps
+> = ({ id }) => {
   const seriesQuery = useSuspenseQuery(seriesQueryOptions(id))
   const series = seriesQuery.data
   const info = [series.entry.release.toString(), ...series.cinematicGenres]
@@ -36,8 +38,14 @@ export const SeriesEntryComponent: FunctionComponent<SeriesEntryComponentProps> 
     <>
       <EntryBanner entry={series.entry} info={info} type={'Series'} />
       <AuthorizedView allowedRoles="ContentCreator">
-        <div className='max-w-32 mt-4 -mb-2'>
-          <LinkButton to={'/entries/series/edit/$id'} params={{id: series.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
+        <div className="-mb-2 mt-4 max-w-32">
+          <LinkButton
+            to={'/entries/series/edit/$id'}
+            params={{ id: series.entry.id }}
+            icon={<FaPen />}
+          >
+            Edit
+          </LinkButton>
         </div>
       </AuthorizedView>
       <AuthorizedView>
@@ -65,7 +73,7 @@ export const SeriesEntryComponent: FunctionComponent<SeriesEntryComponentProps> 
               <SectionHeader title={`Season ${season.seasonNumber}`} />
               {season.episodes.map((ep) => (
                 <div className="p-2" key={ep.id}>
-                  <EntryPreviewTile entry={ep}/>
+                  <EntryPreviewTile entry={ep} />
                 </div>
               ))}
             </div>
