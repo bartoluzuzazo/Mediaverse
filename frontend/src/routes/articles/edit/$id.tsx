@@ -16,7 +16,7 @@ const EditArticle = () => {
   return (
     <AuthorizedView
       notAuthView={<Navigate to={'/'} />}
-      allowedRoles="ContentCreator"
+      allowedRoles="Journalist"
     >
       <ArticleForm article={article} />
     </AuthorizedView>

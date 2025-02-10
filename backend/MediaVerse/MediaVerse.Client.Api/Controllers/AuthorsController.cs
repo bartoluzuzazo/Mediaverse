@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 public class AuthorsController(IMediator mediator) : BaseController
 {
   [HttpPost]
-  [Authorize(Policy = "Admin")]
+  [Authorize("ContentCreator")]
   public async Task<IActionResult> CreateAuthor(CreateAuthorCommand createAuthorCommand)
   {
     var response = await mediator.Send(createAuthorCommand);
@@ -30,6 +30,7 @@ public class AuthorsController(IMediator mediator) : BaseController
   }
 
   [HttpPatch("{id:guid}")]
+  [Authorize("ContentCreator")]
   public async Task<IActionResult> PatchAuthor(Guid id, PatchAuthorDto authorDto)
   {
     var command = new UpdateAuthorCommand(id, authorDto);
