@@ -36,7 +36,9 @@ const RatingPicker = ({ onClick, previousGrade, max = 10 }: Props) => {
         })}
       </div>
       <div className="md:ml-auto">
-        {displayedRating ? `Rating: ${displayedRating}/10` : 'No rating yet'}
+        {displayedRating
+          ? `Rating: ${displayedRating}/${max}`
+          : 'No rating yet'}
       </div>
     </div>
   )
