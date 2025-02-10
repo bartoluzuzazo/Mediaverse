@@ -35,7 +35,7 @@ export const Route = createFileRoute('/authors/$id')({
               <span className="font-italic">{author.surname}</span>
             </div>
             <AuthorsAmasComponent authorId={author.id} />
-            <AuthorizedView allowedRoles="Administrator">
+            <AuthorizedView allowedRoles="ContentCreator">
               <LinkedUser authorId={author.id} />
               <LinkButton
                 to={`/authors/edit/$id`}
@@ -45,9 +45,11 @@ export const Route = createFileRoute('/authors/$id')({
                 Edit author
               </LinkButton>
             </AuthorizedView>
-            <AuthorizedView requiredUserId={author.userId}>
-              <CreateAmaComponent authorId={author.id} />
-            </AuthorizedView>
+            {author.userId && (
+              <AuthorizedView requiredUserId={author.userId}>
+                <CreateAmaComponent authorId={author.id} />
+              </AuthorizedView>
+            )}
           </div>
 
           <div className="flex-1 md:ml-20">{author.bio}</div>

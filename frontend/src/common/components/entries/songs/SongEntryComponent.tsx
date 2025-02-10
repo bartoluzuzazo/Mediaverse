@@ -19,7 +19,7 @@ interface SongEntryComponentProps {
 
 const songQueryOptions = (id: string) => {
   return queryOptions({
-    queryKey: ['GET_SONG', id],
+    queryKey: ['GET_ENTRY', id],
     queryFn: async (): Promise<Song> => {
       const res = await SongService.getSong(id)
       return res.data
@@ -27,7 +27,9 @@ const songQueryOptions = (id: string) => {
   })
 }
 
-export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({id}) => {
+export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
+  id,
+}) => {
   const songQuery = useSuspenseQuery(songQueryOptions(id))
   const song = songQuery.data
   const info = [song.entry.release.toString(), ...song.musicGenres]
@@ -36,8 +38,14 @@ export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
     <>
       <EntryBanner entry={song.entry} info={info} type={'Song'} />
       <AuthorizedView allowedRoles="ContentCreator">
-        <div className='max-w-32 mt-4 -mb-2'>
-          <LinkButton to={'/entries/songs/edit/$id'} params={{ id: song.entry.id }} icon={<FaPen />}>Edit</LinkButton>
+        <div className="-mb-2 mt-4 max-w-32">
+          <LinkButton
+            to={'/entries/songs/edit/$id'}
+            params={{ id: song.entry.id }}
+            icon={<FaPen />}
+          >
+            Edit
+          </LinkButton>
         </div>
       </AuthorizedView>
       <AuthorizedView>
@@ -46,7 +54,7 @@ export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
       <SectionHeader title={'Description'} />
       <div className="p-4">{song.entry.description}</div>
       <SectionHeader title={'Albums'} />
-      {song.albums?.map(album => <EntryPreviewTile entry={album} />)}
+      {song.albums?.map((album) => <EntryPreviewTile entry={album} />)}
       {song.entry.authors.map((group) => (
         <Fragment key={group.role}>
           <SectionHeader title={group.role} />
@@ -60,7 +68,7 @@ export const SongEntryComponent: FunctionComponent<SongEntryComponentProps> = ({
         </Fragment>
       ))}
       <SectionHeader title={'Lyrics'} />
-      <div className="p-4 whitespace-pre-wrap">{song.lyrics}</div>
+      <div className="whitespace-pre-wrap p-4">{song.lyrics}</div>
       <ReviewsCarousel entryId={id} />
       <CommentSection entryId={id} />
     </>

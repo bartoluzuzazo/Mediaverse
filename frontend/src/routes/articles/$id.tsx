@@ -27,7 +27,7 @@ export const ArticleComponent: FunctionComponent = () => {
           <p className="text-lg italic text-slate-800">{article.lede}</p>
           <div>
             <AuthorizedView
-              allowedRoles="ContentCreator"
+              allowedRoles="Journalist"
               requiredUserId={article.userId}
             >
               <div className="my-2 max-w-fit">

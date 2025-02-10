@@ -19,7 +19,7 @@ interface EpisodeEntryComponentProps {
 
 const episodeQueryOptions = (id: string) => {
   return queryOptions({
-    queryKey: ['GET_EPISODE', id],
+    queryKey: ['GET_ENTRY', id],
     queryFn: async (): Promise<Episode> => {
       const res = await EpisodeService.getEpisode(id)
       return res.data
@@ -27,7 +27,9 @@ const episodeQueryOptions = (id: string) => {
   })
 }
 
-export const EpisodeEntryComponent: FunctionComponent<EpisodeEntryComponentProps> = ({id}) => {
+export const EpisodeEntryComponent: FunctionComponent<
+  EpisodeEntryComponentProps
+> = ({ id }) => {
   const episodeQuery = useSuspenseQuery(episodeQueryOptions(id))
   const episode = episodeQuery.data
   const info = [episode.entry.release.toString()]
@@ -36,8 +38,14 @@ export const EpisodeEntryComponent: FunctionComponent<EpisodeEntryComponentProps
     <>
       <EntryBanner entry={episode.entry} info={info} type={'Episode'} />
       <AuthorizedView allowedRoles="ContentCreator">
-        <div className='max-w-32 mt-4 -mb-2'>
-          <LinkButton to={'/entries/episodes/edit/$id'} params={{id: episode.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
+        <div className="-mb-2 mt-4 max-w-32">
+          <LinkButton
+            to={'/entries/episodes/edit/$id'}
+            params={{ id: episode.entry.id }}
+            icon={<FaPen />}
+          >
+            Edit
+          </LinkButton>
         </div>
       </AuthorizedView>
       <AuthorizedView>
@@ -58,7 +66,7 @@ export const EpisodeEntryComponent: FunctionComponent<EpisodeEntryComponentProps
         </Fragment>
       ))}
       <SectionHeader title={'Series'} />
-      <EntryPreviewTile entry={episode.series}/>
+      <EntryPreviewTile entry={episode.series} />
       <ReviewsCarousel entryId={id} />
       <CommentSection entryId={id} />
     </>

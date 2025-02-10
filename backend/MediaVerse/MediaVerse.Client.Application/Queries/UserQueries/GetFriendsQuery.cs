@@ -23,7 +23,6 @@ public class GetFriendsQueryHandler(IRepository<User> userRepository, IRepositor
 
         var spec = new GetFriendsSpecification(user.Id);
         var friends = await friendshipRepository.ListAsync(spec, cancellationToken);
-        var response = mapper.Map<List<GetUserResponse>>(friends);
-        return new BaseResponse<List<GetUserResponse>>(response);
+        return new BaseResponse<List<GetUserResponse>>(friends);
     }
 }

@@ -3,6 +3,7 @@ import { CustomCarousel } from '../../shared/CustomCarousel'
 import { Article } from '../../../../models/article'
 import { Link } from '@tanstack/react-router'
 import defaultImgUrl from '/person-icon.png'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
 interface ArticleCarouselProps {
   articles: Article[]
@@ -71,9 +72,12 @@ const ArticleCarousel: FunctionComponent<ArticleCarouselProps> = ({
                 <div className="flex flex-col">
                   <p className="text-2xl font-semibold">{article.title}</p>
                   <p>{article.lede}</p>
-                  <p
-                    className="overflow-elipsis block"
-                    dangerouslySetInnerHTML={{ __html: article.content }}
+                  <MarkdownPreview
+                    source={article.content}
+                    wrapperElement={{
+                      'data-color-mode': 'light',
+                      className: 'overflow-elipsis',
+                    }}
                   />
                 </div>
               </div>
