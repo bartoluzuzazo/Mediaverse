@@ -19,7 +19,7 @@ interface AlbumEntryComponentProps {
 
 const albumQueryOptions = (id: string) => {
   return queryOptions({
-    queryKey: ['GET_ALBUM', id],
+    queryKey: ['GET_ENTRY', id],
     queryFn: async (): Promise<Album> => {
       const res = await AlbumService.getAlbum(id)
       return res.data
@@ -27,7 +27,9 @@ const albumQueryOptions = (id: string) => {
   })
 }
 
-export const AlbumEntryComponent: FunctionComponent<AlbumEntryComponentProps> = ({id}) => {
+export const AlbumEntryComponent: FunctionComponent<
+  AlbumEntryComponentProps
+> = ({ id }) => {
   const albumQuery = useSuspenseQuery(albumQueryOptions(id))
   const album = albumQuery.data
   const info = [album.entry.release.toString(), ...album.musicGenres]
@@ -36,8 +38,14 @@ export const AlbumEntryComponent: FunctionComponent<AlbumEntryComponentProps> = 
     <>
       <EntryBanner entry={album.entry} info={info} type={'Album'} />
       <AuthorizedView allowedRoles="ContentCreator">
-        <div className='max-w-32 mt-4 -mb-2'>
-          <LinkButton to={'/entries/albums/edit/$id'} params={{id: album.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
+        <div className="-mb-2 mt-4 max-w-32">
+          <LinkButton
+            to={'/entries/albums/edit/$id'}
+            params={{ id: album.entry.id }}
+            icon={<FaPen />}
+          >
+            Edit
+          </LinkButton>
         </div>
       </AuthorizedView>
       <AuthorizedView>
@@ -46,7 +54,7 @@ export const AlbumEntryComponent: FunctionComponent<AlbumEntryComponentProps> = 
       <SectionHeader title={'Description'} />
       <div className="p-4">{album.entry.description}</div>
       <SectionHeader title={'Songs'} />
-      {album.songs?.map(song => <EntryPreviewTile entry={song}/>)}
+      {album.songs?.map((song) => <EntryPreviewTile entry={song} />)}
       {album.entry.authors.map((group) => (
         <Fragment key={group.role}>
           <SectionHeader title={group.role} />

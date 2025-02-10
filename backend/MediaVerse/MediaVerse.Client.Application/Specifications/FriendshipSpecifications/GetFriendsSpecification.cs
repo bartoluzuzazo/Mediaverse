@@ -13,13 +13,13 @@ public class GetFriendsSpecification : Specification<Friendship, GetUserResponse
             ? new GetUserResponse()
             {
                 Id = f.User2.Id,
-                ProfilePicture = Convert.ToBase64String(f.User2.ProfilePicture.Picture),
+                ProfilePicture = f.User2.ProfilePicture != null ? Convert.ToBase64String(f.User2.ProfilePicture.Picture) : null,
                 Username = f.User2.Username
             }
             : new GetUserResponse()
             {
                 Id = f.User.Id,
-                ProfilePicture = Convert.ToBase64String(f.User.ProfilePicture.Picture),
+                ProfilePicture = f.User.ProfilePicture != null ?  Convert.ToBase64String(f.User.ProfilePicture.Picture) : null,
                 Username = f.User.Username
             });
     }

@@ -18,7 +18,7 @@ interface GameEntryComponentProps {
 
 const gameQueryOptions = (id: string) => {
   return queryOptions({
-    queryKey: ['GET_GAME', id],
+    queryKey: ['GET_ENTRY', id],
     queryFn: async (): Promise<Game> => {
       const res = await GameService.getGame(id)
       return res.data
@@ -26,7 +26,9 @@ const gameQueryOptions = (id: string) => {
   })
 }
 
-export const GameEntryComponent: FunctionComponent<GameEntryComponentProps> = ({id}) => {
+export const GameEntryComponent: FunctionComponent<GameEntryComponentProps> = ({
+  id,
+}) => {
   const gameQuery = useSuspenseQuery(gameQueryOptions(id))
   const game = gameQuery.data
   const info = [game.entry.release.toString(), ...game.gameGenres]
@@ -35,8 +37,14 @@ export const GameEntryComponent: FunctionComponent<GameEntryComponentProps> = ({
     <>
       <EntryBanner entry={game.entry} info={info} type={'Game'} />
       <AuthorizedView allowedRoles="ContentCreator">
-        <div className='max-w-32 mt-4 -mb-2'>
-          <LinkButton to={'/entries/games/edit/$id'} params={{id: game.entry.id}} icon={<FaPen/>}>Edit</LinkButton>
+        <div className="-mb-2 mt-4 max-w-32">
+          <LinkButton
+            to={'/entries/games/edit/$id'}
+            params={{ id: game.entry.id }}
+            icon={<FaPen />}
+          >
+            Edit
+          </LinkButton>
         </div>
       </AuthorizedView>
       <AuthorizedView>

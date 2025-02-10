@@ -36,7 +36,7 @@ public class CreateArticleCommandHandler(IUserService userService, IRepository<A
             User = user,
             Timestamp = DateTime.Now
         };
-        articleRepository.AddAsync(article, cancellationToken);
+        await articleRepository.AddAsync(article, cancellationToken);
         var getArticleResponse = mapper.Map<GetArticleResponse>(article);
         return new BaseResponse<GetArticleResponse>(getArticleResponse);
     }

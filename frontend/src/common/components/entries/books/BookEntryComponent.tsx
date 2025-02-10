@@ -18,7 +18,7 @@ interface BookEntryComponentProps {
 
 const bookQueryOptions = (id: string) => {
   return queryOptions({
-    queryKey: ['GET_BOOK', id],
+    queryKey: ['GET_ENTRY', id],
     queryFn: async (): Promise<Book> => {
       const res = await BookService.getBook(id)
       return res.data
