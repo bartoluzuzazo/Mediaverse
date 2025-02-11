@@ -48,24 +48,44 @@ export const Route = createFileRoute('/')({
       { function: SongService.getSongs, entryType: 'Songs' },
       { function: AlbumService.getAlbums, entryType: 'Albums' },
     ]
-    const data = []
+    const promises = []
     for (const item of getPageFunctions) {
-      const top = await queryClient.ensureQueryData({
-        queryKey: ['top', item.entryType.toLowerCase()],
-        queryFn: async () => await item.function(topParams),
-      })
-      data.push({ data: top, title: `Top ${item.entryType}` })
-      const newest = await queryClient.ensureQueryData({
-        queryKey: ['newest', item.entryType.toLowerCase()],
-        queryFn: async () => await item.function(newestParams),
-      })
-      data.push({ data: newest, title: `Newest ${item.entryType}` })
+      const top = queryClient
+        .ensureQueryData({
+          queryKey: ['top', item.entryType.toLowerCase()],
+          queryFn: async () => await item.function(topParams),
+        })
+        .then((res) => {
+          return { data: res, title: `Top ${item.entryType}` }
+        })
+      promises.push(top)
+      const newest = queryClient
+        .ensureQueryData({
+          queryKey: ['newest', item.entryType.toLowerCase()],
+          queryFn: async () => await item.function(newestParams),
+        })
+        .then((res) => {
+          return { data: res, title: `Newest ${item.entryType}` }
+        })
+      promises.push(newest)
     }
+    const dataPromise = Promise.allSettled(promises).then((results) => {
+      return results
+        .filter((res) => res.status === 'fulfilled')
+        .map((res) => res.value)
+    })
 
-    const articles = await queryClient.ensureQueryData({
+    const articlesPromise = queryClient.ensureQueryData({
       queryKey: ['newest', 'articles'],
       queryFn: articleService.getArticles,
     })
-    return { data, articles: articles.data }
+
+    const loadedData = await Promise.all([dataPromise, articlesPromise]).then(
+      (results) => {
+        return { data: results[0], articles: results[1].data }
+      }
+    )
+
+    return loadedData
   },
 })

@@ -47,6 +47,7 @@ public class AuthorsController(IMediator mediator) : BaseController
 
   }
   [HttpPut("{id:guid}/linked-user")]
+  [Authorize("Admin")]
   public async Task<IActionResult> AddLinkToUser(Guid id, AddLinkedUserDto dto)
   {
     var command = new LinkUserToAuthorCommand(id, dto);
