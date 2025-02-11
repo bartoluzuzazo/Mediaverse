@@ -69,16 +69,23 @@ export const Route = createFileRoute('/')({
         })
       promises.push(newest)
     }
-    const data = await Promise.allSettled(promises).then((results) => {
+    const dataPromise = Promise.allSettled(promises).then((results) => {
       return results
         .filter((res) => res.status === 'fulfilled')
         .map((res) => res.value)
     })
 
-    const articles = await queryClient.ensureQueryData({
+    const articlesPromise = queryClient.ensureQueryData({
       queryKey: ['newest', 'articles'],
       queryFn: articleService.getArticles,
     })
-    return { data, articles: articles.data }
+
+    const loadedData = await Promise.all([dataPromise, articlesPromise]).then(
+      (results) => {
+        return { data: results[0], articles: results[1].data }
+      }
+    )
+
+    return loadedData
   },
 })
