@@ -35,8 +35,10 @@ export const Route = createFileRoute('/authors/$id')({
               <span className="font-italic">{author.surname}</span>
             </div>
             <AuthorsAmasComponent authorId={author.id} />
-            <AuthorizedView allowedRoles="ContentCreator">
+            <AuthorizedView allowedRoles="Administrator">
               <LinkedUser authorId={author.id} />
+            </AuthorizedView>
+            <AuthorizedView allowedRoles="ContentCreator">
               <LinkButton
                 to={`/authors/edit/$id`}
                 params={{ id: author.id }}

@@ -26,7 +26,7 @@ public class UserController(IMediator mediator) : BaseController
     public async Task<IActionResult> LoginUser(LoginUserQuery request)
     {
         var response = await mediator.Send(request);
-        return ResolveCode(response.Exception,  Ok(response.Data));
+        return ResolveCode(response.Exception, Ok(response.Data));
     }
 
     [HttpGet("{userId:guid}")]
@@ -45,6 +45,14 @@ public class UserController(IMediator mediator) : BaseController
         return ResolveCode(response.Exception, Ok(response.Data));
     }
 
+    [Authorize]
+    [HttpPatch("current-user")]
+    public async Task<IActionResult> UpdateUser(UpdateUserCommand command)
+    {
+        var response = await mediator.Send(command);
+        return ResolveCode(response.Exception, Ok(response.Data));
+    }
+
     [HttpGet("existance")]
     public async Task<IActionResult> GetDoesUserExist(string email)
     {
@@ -53,13 +61,6 @@ public class UserController(IMediator mediator) : BaseController
         return OkOrError(response);
     }
 
-    [Authorize]
-    [HttpPatch("current-user")]
-    public async Task<IActionResult> UpdateUser(UpdateUserCommand command)
-    {
-        var response = await mediator.Send(command);
-        return ResolveCode(response.Exception, Ok(response.Data));
-    }
 
     [Authorize]
     [HttpGet("current-user/friend-invites")]
@@ -95,7 +96,7 @@ public class UserController(IMediator mediator) : BaseController
     }
 
     [HttpGet("{userId:guid}/role-statuses")]
-    [Authorize]
+    [Authorize("Admin")]
     public async Task<IActionResult> GetRoleStatuses(Guid userId)
     {
         var query = new GetUsersRoleStatusesQuery(userId);
@@ -104,16 +105,17 @@ public class UserController(IMediator mediator) : BaseController
     }
 
     [HttpPost("{userId:guid}/roles")]
-    [Authorize]
-    public async Task<IActionResult> AddRole(Guid userId,PostRoleDto postRoleDto)
+    [Authorize("Admin")]
+    public async Task<IActionResult> AddRole(Guid userId, PostRoleDto postRoleDto)
     {
         var addRoleCommand = new AddUsersRoleCommand(userId, postRoleDto);
         var response = await mediator.Send(addRoleCommand);
-        return ResolveCode(response.Exception, CreatedAtAction(nameof(GetRoleStatuses),new{userId= userId},response.Data));
+        return ResolveCode(response.Exception,
+            CreatedAtAction(nameof(GetRoleStatuses), new { userId = userId }, response.Data));
     }
 
     [HttpDelete("{userId:guid}/roles/{roleId:guid}")]
-    [Authorize]
+    [Authorize("Admin")]
     public async Task<IActionResult> RemoveRole(Guid userId, Guid roleId)
     {
         var deleteRoleCommand = new DeleteUsersRoleCommand(userId, roleId);
